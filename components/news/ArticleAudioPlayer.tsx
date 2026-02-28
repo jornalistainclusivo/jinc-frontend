@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Square, Loader2, Volume2, VolumeX, Brain } from 'lucide-react';
+import { Play, Pause, Square, Loader2, Volume2, VolumeX, Brain, Rewind, FastForward } from 'lucide-react';
 import { GoogleGenAI, Modality } from '@google/genai';
 
 function createWavBlob(pcmData: Uint8Array, sampleRate: number): Blob {
@@ -378,6 +378,18 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
+  const skipBackward = () => {
+    if (audioRef.current && hasAudio) {
+      audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 15);
+    }
+  };
+
+  const skipForward = () => {
+    if (audioRef.current && hasAudio && duration) {
+      audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 15);
+    }
+  };
+
   const [isSticky, setIsSticky] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -399,40 +411,39 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
       {/* Invisible placeholder to maintain layout when sticky */}
       <div ref={containerRef} className="h-0" aria-hidden="true" />
       
-      <div 
-        className={`p-5 z-40 transform-gpu transition-all duration-200 ease-out
-          ${isSticky 
-            ? 'fixed bottom-6 left-4 right-4 md:left-auto md:right-8 md:w-[380px] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-neutral-200/60 bg-white/85 backdrop-blur-xl translate-y-0 opacity-100' 
-            : 'relative rounded-2xl my-8 w-full shadow-sm bg-neutral-50 border border-neutral-200 translate-y-0 opacity-100'
-          }
-        `}
-        onMouseEnter={handleMouseEnter}
-        onTouchStart={handleMouseEnter}
-      >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className={`flex-shrink-0 bg-brand-primary/10 p-3.5 rounded-full text-brand-primary hidden sm:block ${isSticky ? 'hidden sm:hidden' : ''}`}>
-            <Volume2 className="h-6 w-6" aria-hidden="true" />
-          </div>
-          
-          <div className="flex-1 w-full">
-            <h3 className={`font-bold text-neutral-900 mb-1 ${isSticky ? 'text-sm line-clamp-1' : 'text-base'}`}>
-              {isSticky ? title : 'Ouvir este artigo'}
-            </h3>
-            <p className={`text-neutral-500 mb-3 ${isSticky ? 'text-xs mb-2' : 'text-sm'}`}>
-              Áudio gerado por Inteligência Artificial
-            </p>
+      {isSticky ? (
+        /* STICKY PLAYER - Ultra minimalista, horizontal, nativo do navegador */
+        <div className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-neutral-200 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50 px-4 py-3 flex items-center justify-center animate-in slide-in-from-bottom-full duration-300">
+          <div className="w-full max-w-[70ch] flex items-center gap-4 sm:gap-6">
+            <div className="font-serif font-bold text-sm text-neutral-900 truncate max-w-[120px] sm:max-w-[200px]" title={title}>
+              {title}
+            </div>
             
-            {/* Progress Bar */}
-            <div className="w-full mb-2">
-              <label htmlFor="audio-progress" className="sr-only">Progresso do áudio</label>
+            <button 
+              onClick={handlePlayPause}
+              disabled={isLoading}
+              className="w-8 h-8 flex-shrink-0 bg-neutral-900 text-white rounded-full flex items-center justify-center hover:bg-neutral-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:opacity-50"
+              aria-label={isPlaying ? "Pausar áudio" : "Reproduzir áudio"}
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin h-4 w-4" aria-hidden="true" />
+              ) : isPlaying ? (
+                <Pause className="fill-current h-4 w-4" aria-hidden="true" />
+              ) : (
+                <Play className="fill-current ml-0.5 h-4 w-4" aria-hidden="true" />
+              )}
+            </button>
+
+            <div className="flex-1 flex items-center">
+              <label htmlFor="sticky-audio-progress" className="sr-only">Progresso do áudio</label>
               {isStreaming ? (
-                <div className="w-full h-2 bg-neutral-200 rounded-lg overflow-hidden relative">
-                  <div className="absolute top-0 left-0 h-full bg-brand-primary/50 w-full animate-pulse"></div>
-                  <div className="absolute top-0 left-0 h-full bg-brand-primary w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
+                <div className="w-full h-1.5 bg-neutral-200 rounded-lg overflow-hidden relative">
+                  <div className="absolute top-0 left-0 h-full bg-neutral-400 w-full animate-pulse"></div>
+                  <div className="absolute top-0 left-0 h-full bg-neutral-900 w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
                 </div>
               ) : (
                 <input
-                  id="audio-progress"
+                  id="sticky-audio-progress"
                   type="range"
                   min="0"
                   max="100"
@@ -440,122 +451,183 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
                   value={progress}
                   onChange={handleSeek}
                   disabled={!hasAudio}
-                  className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-brand-primary disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 focus:ring-offset-neutral-50"
-                  aria-label="Progresso da reprodução do áudio"
+                  className="w-full h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
                 />
               )}
             </div>
-            
-            {/* Time indicators & Extra Controls */}
-            {(hasAudio || isStreaming) && (
-              <div className="flex flex-wrap items-center justify-between text-xs text-neutral-500 mt-2 gap-4">
-                <div className="flex items-center gap-2 font-mono" aria-live="polite">
+
+            <div className="font-mono text-xs text-neutral-500 flex-shrink-0" aria-live="polite">
+              {isStreaming ? (
+                <span className="animate-pulse">Gerando...</span>
+              ) : (
+                <>
+                  <span>{formatTime(audioRef.current?.currentTime || 0)}</span>
+                  <span className="mx-1">/</span>
+                  <span>{formatTime(duration)}</span>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* INLINE PLAYER - Módulo editorial integrado ao grid (max 70ch) */
+        <div 
+          className="relative w-full max-w-[70ch] mx-auto my-12 bg-neutral-50 border border-neutral-200 p-8 sm:p-10 rounded-none"
+          onMouseEnter={handleMouseEnter}
+          onTouchStart={handleMouseEnter}
+        >
+          <div className="flex flex-col gap-8">
+            {/* Linha 1: Título + Subtítulo */}
+            <div className="text-center sm:text-left">
+              <h3 className="font-serif text-2xl font-bold text-neutral-900 mb-2">
+                Ouvir este artigo
+              </h3>
+              <p className="text-sm font-sans text-neutral-500">
+                Áudio gerado por Inteligência Artificial
+              </p>
+            </div>
+
+            {/* Linha 2: Progresso */}
+            <div className="w-full">
+              <label htmlFor="inline-audio-progress" className="sr-only">Progresso do áudio</label>
+              {isStreaming ? (
+                <div className="w-full h-2 bg-neutral-200 rounded-lg overflow-hidden relative">
+                  <div className="absolute top-0 left-0 h-full bg-neutral-400 w-full animate-pulse"></div>
+                  <div className="absolute top-0 left-0 h-full bg-neutral-900 w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
+                </div>
+              ) : (
+                <input
+                  id="inline-audio-progress"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={progress}
+                  onChange={handleSeek}
+                  disabled={!hasAudio}
+                  className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50"
+                />
+              )}
+            </div>
+
+            {/* Linha 3: Controles | Tempo | Foco Profundo */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-6">
+                {/* Controles Principais */}
+                <div className="flex items-center gap-4">
+                  <button 
+                    onClick={skipBackward}
+                    disabled={!hasAudio}
+                    className="text-neutral-500 hover:text-neutral-900 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-full p-1"
+                    aria-label="Voltar 15 segundos"
+                  >
+                    <Rewind className="h-5 w-5 fill-current" aria-hidden="true" />
+                  </button>
+                  
+                  <button 
+                    onClick={handlePlayPause}
+                    disabled={isLoading}
+                    className="w-14 h-14 bg-neutral-900 text-white rounded-full flex items-center justify-center hover:bg-neutral-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 disabled:opacity-50 shadow-md"
+                    aria-label={isPlaying ? "Pausar áudio" : "Reproduzir áudio"}
+                  >
+                    {isLoading ? (
+                      <Loader2 className="animate-spin h-6 w-6" aria-hidden="true" />
+                    ) : isPlaying ? (
+                      <Pause className="fill-current h-6 w-6" aria-hidden="true" />
+                    ) : (
+                      <Play className="fill-current ml-1 h-6 w-6" aria-hidden="true" />
+                    )}
+                  </button>
+
+                  <button 
+                    onClick={skipForward}
+                    disabled={!hasAudio}
+                    className="text-neutral-500 hover:text-neutral-900 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-full p-1"
+                    aria-label="Avançar 15 segundos"
+                  >
+                    <FastForward className="h-5 w-5 fill-current" aria-hidden="true" />
+                  </button>
+                </div>
+
+                {/* Tempo */}
+                <div className="font-mono text-sm text-neutral-500" aria-live="polite">
                   {isStreaming ? (
-                    <span className="text-brand-primary font-medium animate-pulse">Gerando...</span>
+                    <span className="animate-pulse">Gerando...</span>
                   ) : (
                     <>
-                      <span aria-label="Tempo decorrido">{formatTime(audioRef.current?.currentTime || 0)}</span>
-                      <span aria-hidden="true">/</span>
-                      <span aria-label="Tempo total">{formatTime(duration)}</span>
+                      <span>{formatTime(audioRef.current?.currentTime || 0)}</span>
+                      <span className="mx-1">/</span>
+                      <span>{formatTime(duration)}</span>
                     </>
                   )}
                 </div>
-                
-                <div className={`flex items-center gap-4 ${isSticky ? 'hidden' : 'flex'}`}>
-                  {/* Speed Control */}
-                  <div className="flex items-center gap-1">
-                    <label htmlFor="playback-speed" className="sr-only">Velocidade de reprodução</label>
-                    <select
-                      id="playback-speed"
-                      value={playbackRate}
-                      onChange={handleSpeedChange}
-                      className="bg-transparent border border-neutral-300 text-xs font-medium text-neutral-700 focus:ring-2 focus:ring-brand-primary rounded p-1 cursor-pointer"
-                      aria-label="Ajustar velocidade de reprodução"
-                    >
-                      <option value="0.75">0.75x</option>
-                      <option value="1">1x</option>
-                      <option value="1.25">1.25x</option>
-                      <option value="1.5">1.5x</option>
-                      <option value="2">2x</option>
-                    </select>
-                  </div>
+              </div>
 
-                  {/* Volume Control */}
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={toggleMute}
-                      className="text-neutral-500 hover:text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary rounded p-1"
-                      aria-label={isMuted || volume === 0 ? "Ativar som" : "Silenciar áudio"}
-                    >
-                      {isMuted || volume === 0 ? <VolumeX className="h-4 w-4" aria-hidden="true" /> : <Volume2 className="h-4 w-4" aria-hidden="true" />}
-                    </button>
-                    <label htmlFor="audio-volume" className="sr-only">Volume do áudio</label>
-                    <input
-                      id="audio-volume"
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.05"
-                      value={isMuted ? 0 : volume}
-                      onChange={handleVolumeChange}
-                      className="w-16 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2"
-                      aria-label="Ajustar volume"
-                    />
-                  </div>
+              {/* Foco Profundo */}
+              {onToggleFocusMode && (
+                <button
+                  onClick={onToggleFocusMode}
+                  className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-none border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900
+                    ${isFocusMode 
+                      ? 'bg-neutral-900 text-white border-neutral-900' 
+                      : 'bg-transparent text-neutral-700 border-neutral-300 hover:border-neutral-900 hover:text-neutral-900'
+                    }
+                  `}
+                  aria-label={isFocusMode ? "Desativar Modo Foco Profundo" : "Ativar Modo Foco Profundo"}
+                  aria-pressed={isFocusMode}
+                >
+                  <Brain className="h-4 w-4" aria-hidden="true" />
+                  <span>{isFocusMode ? 'Foco Ativo' : 'Foco Profundo'}</span>
+                </button>
+              )}
+            </div>
+
+            {/* Linha 4: Velocidade + Volume */}
+            {(hasAudio || isStreaming) && (
+              <div className="flex items-center justify-center sm:justify-start gap-8 pt-6 border-t border-neutral-200">
+                {/* Speed Control */}
+                <div className="flex items-center gap-2">
+                  <label htmlFor="playback-speed" className="text-xs font-bold uppercase tracking-widest text-neutral-500">Velocidade</label>
+                  <select
+                    id="playback-speed"
+                    value={playbackRate}
+                    onChange={handleSpeedChange}
+                    className="bg-transparent border-none text-sm font-mono text-neutral-900 focus:ring-0 cursor-pointer p-0"
+                  >
+                    <option value="0.75">0.75x</option>
+                    <option value="1">1.00x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.50x</option>
+                    <option value="2">2.00x</option>
+                  </select>
+                </div>
+
+                {/* Volume Control */}
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={toggleMute}
+                    className="text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded p-1 transition-colors"
+                    aria-label={isMuted || volume === 0 ? "Ativar som" : "Silenciar áudio"}
+                  >
+                    {isMuted || volume === 0 ? <VolumeX className="h-4 w-4" aria-hidden="true" /> : <Volume2 className="h-4 w-4" aria-hidden="true" />}
+                  </button>
+                  <label htmlFor="audio-volume" className="sr-only">Volume do áudio</label>
+                  <input
+                    id="audio-volume"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value={isMuted ? 0 : volume}
+                    onChange={handleVolumeChange}
+                    className="w-20 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
+                  />
                 </div>
               </div>
             )}
           </div>
-
-          <div className={`flex items-center gap-3 w-full sm:w-auto justify-end mt-2 sm:mt-0 ${isSticky ? 'absolute right-4 top-4 mt-0 w-auto' : ''}`}>
-            {onToggleFocusMode && (
-              <button
-                onClick={onToggleFocusMode}
-                className={`p-2.5 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary hidden md:flex items-center gap-2 text-xs font-bold uppercase tracking-widest
-                  ${isFocusMode 
-                    ? 'bg-brand-primary text-white hover:bg-brand-dark' 
-                    : 'text-neutral-500 hover:text-brand-primary hover:bg-brand-primary/10'
-                  }
-                  ${isSticky ? 'hidden md:hidden' : ''}
-                `}
-                aria-label={isFocusMode ? "Desativar Modo Foco Profundo" : "Ativar Modo Foco Profundo"}
-                title="Modo Foco Profundo"
-                aria-pressed={isFocusMode}
-              >
-                <Brain className="h-5 w-5" aria-hidden="true" />
-                <span className="hidden lg:inline">{isFocusMode ? 'Foco Ativo' : 'Foco Profundo'}</span>
-              </button>
-            )}
-            {(hasAudio || isStreaming) && !isSticky && (
-              <button 
-                onClick={handleStop}
-                className="p-2.5 text-neutral-500 hover:text-brand-primary hover:bg-brand-primary/10 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                aria-label="Parar áudio"
-                title="Parar áudio"
-              >
-                <Square className="h-5 w-5 fill-current" aria-hidden="true" />
-              </button>
-            )}
-            <button 
-              onClick={handlePlayPause}
-              disabled={isLoading}
-              className={`flex items-center justify-center bg-brand-primary text-white rounded-full hover:bg-brand-dark transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 disabled:opacity-50 shadow-sm
-                ${isSticky ? 'w-10 h-10' : 'w-12 h-12'}
-              `}
-              aria-label={isPlaying ? "Pausar áudio" : "Reproduzir áudio"}
-              title={isPlaying ? "Pausar áudio" : "Reproduzir áudio"}
-            >
-              {isLoading ? (
-                <Loader2 className={`animate-spin ${isSticky ? 'h-5 w-5' : 'h-6 w-6'}`} aria-hidden="true" />
-              ) : isPlaying ? (
-                <Pause className={`fill-current ${isSticky ? 'h-5 w-5' : 'h-6 w-6'}`} aria-hidden="true" />
-              ) : (
-                <Play className={`fill-current ml-1 ${isSticky ? 'h-5 w-5' : 'h-6 w-6'}`} aria-hidden="true" />
-              )}
-            </button>
-          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
