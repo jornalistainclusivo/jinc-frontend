@@ -72,7 +72,7 @@ export default function ArticlePage({
         <div className="mx-auto max-w-[800px] px-4 sm:px-6 lg:px-8 text-center">
           <Link 
             href="/direitos-pcd" 
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-green hover:text-brand-green/80 mb-8 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-4 rounded-sm transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-900 hover:text-neutral-700 mb-8 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-4 rounded-sm transition-colors"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             {article.category}
@@ -140,19 +140,19 @@ export default function ArticlePage({
           </div>
           
           <div className={`flex items-center gap-2 md:pl-6 md:border-l shrink-0 transition-opacity duration-200 ease-in-out ${isFocusMode ? 'opacity-30 hover:opacity-100 border-neutral-300/50' : 'opacity-100 border-neutral-200'}`}>
-            <button className="p-2.5 text-neutral-400 hover:text-brand-primary hover:bg-brand-primary/5 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary" aria-label="Compartilhar no Twitter">
+            <button className="p-2.5 text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900" aria-label="Compartilhar no Twitter">
               <Twitter className="h-5 w-5" />
             </button>
-            <button className="p-2.5 text-neutral-400 hover:text-brand-primary hover:bg-brand-primary/5 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary" aria-label="Compartilhar no Facebook">
+            <button className="p-2.5 text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900" aria-label="Compartilhar no Facebook">
               <Facebook className="h-5 w-5" />
             </button>
-            <button className="p-2.5 text-neutral-400 hover:text-brand-primary hover:bg-brand-primary/5 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary" aria-label="Compartilhar no LinkedIn">
+            <button className="p-2.5 text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900" aria-label="Compartilhar no LinkedIn">
               <Linkedin className="h-5 w-5" />
             </button>
             <button className="p-2.5 text-neutral-400 hover:text-[#25D366] hover:bg-[#25D366]/5 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]" aria-label="Compartilhar no WhatsApp">
               <MessageCircle className="h-5 w-5" />
             </button>
-            <button className="p-2.5 text-neutral-400 hover:text-brand-primary hover:bg-brand-primary/5 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary" aria-label="Copiar link">
+            <button className="p-2.5 text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900" aria-label="Copiar link">
               <Share2 className="h-5 w-5" />
             </button>
           </div>
@@ -164,7 +164,7 @@ export default function ArticlePage({
           prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight
           prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-8
           prose-h3:text-2xl md:prose-h3:text-3xl prose-h3:mt-12 prose-h3:mb-6
-          prose-a:text-brand-primary hover:prose-a:text-brand-dark prose-a:underline-offset-4 prose-a:decoration-brand-primary/30 hover:prose-a:decoration-brand-primary
+          prose-a:text-neutral-900 hover:prose-a:text-neutral-700 prose-a:underline-offset-4 prose-a:decoration-neutral-300 hover:prose-a:decoration-neutral-900
           prose-li:font-serif prose-li:leading-[1.9]
           prose-strong:font-semibold
           ${isFocusMode 
@@ -181,61 +181,61 @@ export default function ArticlePage({
           </p>
 
           {/* Contextual Layer Toggle */}
-          <div className={`my-12 p-6 sm:p-8 rounded-2xl border transition-all duration-300 ${isContextExpanded ? 'bg-brand-primary/5 border-brand-primary/20 shadow-inner' : 'bg-neutral-50 border-neutral-200 hover:border-brand-primary/30 shadow-sm'}`}>
+          <div className={`my-16 py-8 border-y-2 transition-all duration-300 ${isContextExpanded ? 'border-neutral-900 bg-neutral-50/50' : 'border-neutral-200 hover:border-neutral-400'}`}>
             <button 
               onClick={() => setIsContextExpanded(!isContextExpanded)}
-              className="flex items-center justify-between w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm group"
+              className="flex items-center justify-between w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-4 rounded-sm group"
               aria-expanded={isContextExpanded}
             >
-              <div className="flex items-center gap-4">
-                <div className="bg-brand-primary/10 p-3 rounded-xl text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                  <Search className="h-6 w-6" aria-hidden="true" />
+              <div className="flex items-center gap-6">
+                <div className="text-neutral-900 transition-transform duration-300 group-hover:scale-110">
+                  <Search className="h-8 w-8" aria-hidden="true" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h4 className="font-sans font-bold text-neutral-900 text-lg m-0">Entenda o Contexto: WCAG 2.2</h4>
-                  <p className="font-sans text-sm text-neutral-500 m-0 mt-1">O que significa o nível AAA na prática?</p>
+                  <h4 className="font-serif font-bold text-neutral-900 text-2xl m-0 tracking-tight">Entenda o Contexto: WCAG 2.2</h4>
+                  <p className="font-sans text-sm text-neutral-500 m-0 mt-2 uppercase tracking-widest font-bold">O que significa o nível AAA na prática?</p>
                 </div>
               </div>
-              <span className="text-brand-primary font-sans text-sm font-bold uppercase tracking-widest bg-brand-primary/5 px-4 py-2 rounded-full group-hover:bg-brand-primary/10 transition-colors">
+              <span className="text-neutral-900 font-sans text-xs font-bold uppercase tracking-widest border border-neutral-300 px-4 py-2 rounded-none group-hover:bg-neutral-900 group-hover:text-white transition-colors">
                 {isContextExpanded ? 'Ocultar' : 'Expandir'}
               </span>
             </button>
             
             {isContextExpanded && (
-              <div className="mt-8 pt-8 border-t border-brand-primary/10 font-sans animate-in fade-in slide-in-from-top-4 duration-300">
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="h-px bg-brand-primary/20 flex-1"></div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-primary/60">Contexto editorial preparado pela equipe de acessibilidade</span>
-                  <div className="h-px bg-brand-primary/20 flex-1"></div>
+              <div className="mt-10 pt-10 border-t border-neutral-200 font-sans animate-in fade-in slide-in-from-top-4 duration-300">
+                <div className="flex items-center gap-4 mb-10">
+                  <div className="h-px bg-neutral-200 flex-1"></div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Contexto editorial preparado pela equipe de acessibilidade</span>
+                  <div className="h-px bg-neutral-200 flex-1"></div>
                 </div>
 
-                <div className="space-y-8">
+                <div className="grid sm:grid-cols-3 gap-8 sm:gap-12">
                   {/* Layer 1: Technical Definition */}
                   <div>
-                    <h5 className="text-sm font-bold uppercase tracking-widest text-brand-primary mb-2 m-0 flex items-center gap-2">
-                      <span aria-hidden="true">📌</span> Definição Técnica
+                    <h5 className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-4 m-0 flex items-center gap-3 border-b border-neutral-200 pb-3">
+                      <span className="text-lg" aria-hidden="true">📌</span> Definição Técnica
                     </h5>
-                    <p className="text-base text-neutral-700 m-0 leading-relaxed">
+                    <p className="text-sm text-neutral-700 m-0 leading-relaxed font-serif">
                       A <strong>WCAG (Web Content Accessibility Guidelines)</strong> é o padrão internacional de acessibilidade. O nível <strong>AAA</strong> é o grau máximo de conformidade, exigindo contraste extremo (7:1), linguagem simplificada (nível de ensino fundamental) e alternativas em língua de sinais para todos os vídeos pré-gravados.
                     </p>
                   </div>
 
                   {/* Layer 2: Institutional Relevance */}
                   <div>
-                    <h5 className="text-sm font-bold uppercase tracking-widest text-brand-teal mb-2 m-0 flex items-center gap-2">
-                      <span aria-hidden="true">🏛️</span> Relevância Institucional
+                    <h5 className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-4 m-0 flex items-center gap-3 border-b border-neutral-200 pb-3">
+                      <span className="text-lg" aria-hidden="true">🏛️</span> Relevância Institucional
                     </h5>
-                    <p className="text-base text-neutral-700 m-0 leading-relaxed">
+                    <p className="text-sm text-neutral-700 m-0 leading-relaxed font-serif">
                       Para governos e grandes corporações, atingir o nível AAA deixa de ser apenas uma meta técnica e passa a ser uma <strong>obrigação de direitos civis</strong>. A nova portaria estabelece que a exclusão digital em serviços públicos é passível de judicialização, forçando o Estado a desenhar serviços que não deixem nenhum cidadão para trás.
                     </p>
                   </div>
 
                   {/* Layer 3: Practical Implication */}
                   <div>
-                    <h5 className="text-sm font-bold uppercase tracking-widest text-brand-rose mb-2 m-0 flex items-center gap-2">
-                      <span aria-hidden="true">📊</span> Implicação Prática
+                    <h5 className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-4 m-0 flex items-center gap-3 border-b border-neutral-200 pb-3">
+                      <span className="text-lg" aria-hidden="true">📊</span> Implicação Prática
                     </h5>
-                    <p className="text-base text-neutral-700 m-0 leading-relaxed">
+                    <p className="text-sm text-neutral-700 m-0 leading-relaxed font-serif">
                       Usuários com deficiência visual severa, daltonismo, surdez ou limitações cognitivas (como TDAH e dislexia) poderão navegar em portais de transparência, agendar consultas no SUS e emitir documentos sem depender da ajuda de terceiros. É a garantia de <strong>autonomia plena</strong> no ambiente digital.
                     </p>
                   </div>
@@ -250,7 +250,7 @@ export default function ArticlePage({
             Para os cidadãos, a mudança promete reduzir drasticamente as barreiras históricas de acesso à informação. Um levantamento recente estima que menos de 2% dos sites públicos brasileiros sejam, hoje, totalmente acessíveis. Para reverter esse cenário, a nova lei impõe exigências claras:
           </p>
 
-          <ul className="space-y-4 my-10 pl-6 marker:text-brand-green">
+          <ul className="space-y-4 my-10 pl-6 marker:text-neutral-900">
             <li className="pl-2"><strong>Contraste visual aprimorado:</strong> Relação mínima de 7:1 para textos normais, garantindo uma leitura confortável para pessoas com baixa visão, daltonismo ou sensibilidade à luz.</li>
             <li className="pl-2"><strong>Descrições ricas (Alt Text):</strong> Obrigatoriedade de textos alternativos contextuais para todas as imagens, gráficos e infográficos, permitindo que usuários cegos compreendam o conteúdo visual.</li>
             <li className="pl-2"><strong>Arquitetura de informação acessível:</strong> Uso rigoroso de semântica HTML (como tags <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> e hierarquia lógica de cabeçalhos) para estruturar a página de forma compreensível para tecnologias assistivas.</li>
@@ -258,8 +258,8 @@ export default function ArticlePage({
           </ul>
 
           {/* Pull Quote - Breaking the axis on desktop (Controlled 15%) */}
-          <blockquote className={`relative my-16 font-serif text-2xl md:text-3xl leading-[1.4] italic border-none p-0 mx-0 md:-mx-12 text-left transition-colors duration-200 ease-in-out ${isFocusMode ? 'text-neutral-900' : 'text-brand-dark'}`}>
-            <span className={`absolute -top-10 -left-6 text-8xl font-serif transition-colors duration-200 ease-in-out ${isFocusMode ? 'text-neutral-200' : 'text-brand-green/20'}`} aria-hidden="true">&ldquo;</span>
+          <blockquote className={`relative my-16 font-serif text-2xl md:text-3xl leading-[1.4] italic border-none p-0 mx-0 md:-mx-12 text-left transition-colors duration-200 ease-in-out ${isFocusMode ? 'text-neutral-900' : 'text-neutral-800'}`}>
+            <span className={`absolute -top-10 -left-6 text-8xl font-serif transition-colors duration-200 ease-in-out ${isFocusMode ? 'text-neutral-200' : 'text-neutral-200'}`} aria-hidden="true">&ldquo;</span>
             <p className="relative z-10 m-0">A acessibilidade digital não é um recurso extra, é um direito civil fundamental. Um site público inacessível é o equivalente digital a um prédio governamental construído sem rampas ou elevadores.</p>
             <footer className="mt-6 text-base font-sans font-semibold text-neutral-500 not-italic uppercase tracking-widest">
               &mdash; Ana Costa, especialista em acessibilidade

@@ -17,22 +17,18 @@ const hamburgerMenu = [
   { 
     name: 'Notícias', 
     href: '/noticias',
-    color: 'text-brand-rose',
-    bgHover: 'hover:bg-brand-rose/10',
     subItems: [
       { name: 'Últimas Notícias', href: '/noticias/ultimas-noticias' },
       { name: 'Mercado de Trabalho', href: '/noticias/mercado-trabalho' },
       { name: 'Entrevistas', href: '/noticias/entrevistas' }
     ]
   },
-  { name: 'Neurodiversidade', href: '/neurodiversidade', color: 'text-brand-amber', bgHover: 'hover:bg-brand-amber/10' },
-  { name: 'Saúde', href: '/saude', color: 'text-brand-teal', bgHover: 'hover:bg-brand-teal/10' },
-  { name: 'Educação', href: '/educacao', color: 'text-brand-purple', bgHover: 'hover:bg-brand-purple/10' },
+  { name: 'Neurodiversidade', href: '/neurodiversidade' },
+  { name: 'Saúde', href: '/saude' },
+  { name: 'Educação', href: '/educacao' },
   { 
     name: 'Direitos PCD', 
     href: '/direitos-pcd',
-    color: 'text-brand-green',
-    bgHover: 'hover:bg-brand-green/10',
     subItems: [
       { name: 'Advogada Responde', href: '/direitos-pcd/advogada-responde' },
       { name: 'Direito Inclusivo', href: '/direitos-pcd/direito-inclusivo' }
@@ -41,8 +37,6 @@ const hamburgerMenu = [
   { 
     name: 'Artigos', 
     href: '/artigos',
-    color: 'text-brand-primary',
-    bgHover: 'hover:bg-brand-primary/10',
     subItems: [
       { name: 'Moda Inclusiva', href: '/artigos/moda-inclusiva' },
       { name: 'Sem Barreiras', href: '/artigos/sem-barreiras' },
@@ -69,34 +63,33 @@ export function Header() {
       const hasSubItems = item.subItems && item.subItems.length > 0;
       
       return (
-        <div key={item.name} className="py-1">
-          <div className="flex items-center justify-between">
+        <div key={item.name} className="py-2">
+          <div className="flex items-center justify-between group">
             <Link
               href={item.href}
-              className={`flex-1 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-neutral-900 ${item.bgHover || 'hover:bg-neutral-50'} focus:outline-none focus:ring-2 focus:ring-brand-primary`}
+              className="flex-1 block rounded-none px-3 py-2 text-lg font-serif font-bold text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors"
               onClick={() => setMenuOpen(false)}
             >
-              <span className={`mr-2 ${item.color || 'text-brand-primary'}`}>•</span>
               {item.name}
             </Link>
             {hasSubItems && (
               <button
                 onClick={(e) => toggleExpanded(item.name, e)}
-                className={`p-2 rounded-lg ${item.bgHover || 'hover:bg-neutral-50'} focus:outline-none focus:ring-2 focus:ring-brand-primary`}
+                className="p-2 rounded-none hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors"
                 aria-expanded={isExpanded}
                 aria-label={`Expandir submenu de ${item.name}`}
               >
-                <ChevronDown className={`h-5 w-5 text-neutral-500 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-5 w-5 text-neutral-900 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
               </button>
             )}
           </div>
           {hasSubItems && isExpanded && (
-            <div className="pl-6 mt-1 space-y-1 border-l-2 border-neutral-100 ml-4">
+            <div className="pl-6 mt-2 space-y-1 border-l border-neutral-200 ml-4 animate-in slide-in-from-top-2 duration-200">
               {item.subItems.map((subItem: any) => (
                 <Link
                   key={subItem.name}
                   href={subItem.href}
-                  className={`block rounded-lg px-3 py-2 text-sm font-medium leading-6 text-neutral-600 ${item.bgHover || 'hover:bg-neutral-50'} hover:text-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-primary`}
+                  className="block rounded-none px-3 py-2 text-sm font-sans font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors"
                   onClick={() => setMenuOpen(false)}
                 >
                   {subItem.name}
@@ -201,18 +194,18 @@ export function Header() {
                 <div className="py-6 space-y-2">
                   <Link
                     href="/newsletter"
-                    className="-mx-3 flex items-center gap-2 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-neutral-900 hover:bg-brand-primary/10 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-colors"
+                    className="-mx-3 flex items-center gap-3 rounded-none px-3 py-3 text-sm font-bold uppercase tracking-widest text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors"
                     onClick={() => setMenuOpen(false)}
                   >
-                    <Mail className="h-5 w-5 text-brand-primary" aria-hidden="true" />
+                    <Mail className="h-5 w-5 text-neutral-900" aria-hidden="true" />
                     Assinar Newsletter
                   </Link>
                   <Link
                     href="/acessibilidade"
-                    className="-mx-3 flex items-center gap-2 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-neutral-900 hover:bg-brand-primary/10 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-colors"
+                    className="-mx-3 flex items-center gap-3 rounded-none px-3 py-3 text-sm font-bold uppercase tracking-widest text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors"
                     onClick={() => setMenuOpen(false)}
                   >
-                    <Accessibility className="h-5 w-5 text-brand-primary" aria-hidden="true" />
+                    <Accessibility className="h-5 w-5 text-neutral-900" aria-hidden="true" />
                     Acessibilidade do Site
                   </Link>
                 </div>

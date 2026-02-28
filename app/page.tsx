@@ -15,12 +15,12 @@ export default function Home() {
             <div className="mb-8">
               <Link 
                 href="/direitos-pcd" 
-                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-green hover:text-brand-green/80 mb-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-4 rounded-sm transition-colors"
+                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-900 hover:text-neutral-700 mb-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-4 rounded-sm transition-colors"
               >
                 Direitos PcD
               </Link>
               <h1 id="hero-heading" className="text-5xl sm:text-6xl md:text-7xl font-serif font-medium tracking-tighter text-neutral-900 leading-[1.02] mb-6 text-balance max-w-[20ch]">
-                <Link href="/artigo/novas-regras-acessibilidade" className="hover:text-brand-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm">
+                <Link href="/artigo/novas-regras-acessibilidade" className="hover:text-neutral-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">
                   Governo anuncia novas regras de acessibilidade digital para sites públicos
                 </Link>
               </h1>
@@ -56,19 +56,19 @@ export default function Home() {
                 title: 'Inclusão escolar enfrenta falta de mediadores em escolas públicas',
                 category: 'Educação Inclusiva',
                 date: '25 Fev 2026',
-                color: 'text-brand-purple'
+                color: 'text-neutral-900'
               },
               {
                 title: 'Mercado de trabalho ainda exclui pessoas com deficiência intelectual',
                 category: 'Mercado & Trabalho',
                 date: '24 Fev 2026',
-                color: 'text-brand-teal'
+                color: 'text-neutral-900'
               },
               {
                 title: 'Como a tecnologia assistiva está transformando a mobilidade urbana',
                 category: 'Tecnologia Assistiva',
                 date: '23 Fev 2026',
-                color: 'text-brand-primary'
+                color: 'text-neutral-900'
               }
             ].map((post, idx) => (
               <article key={idx} className="flex flex-col border-b border-neutral-200 pb-8 last:border-0 last:pb-0">
@@ -76,7 +76,7 @@ export default function Home() {
                   <span className={`${post.color}`}>{post.category}</span>
                 </div>
                 <h3 className="text-2xl font-serif font-medium leading-[1.3] tracking-tight text-neutral-900 mb-3">
-                  <Link href={`/artigo/secundario-${idx}`} className="hover:text-brand-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm">
+                  <Link href={`/artigo/secundario-${idx}`} className="hover:text-neutral-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">
                     {post.title}
                   </Link>
                 </h3>
@@ -102,7 +102,7 @@ export default function Home() {
           ].map((title, idx) => (
             <article key={idx} className="flex flex-col">
               <h3 className="text-lg font-serif font-medium leading-[1.4] text-neutral-900">
-                <Link href={`/artigo/curtas-${idx}`} className="hover:text-brand-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm">
+                <Link href={`/artigo/curtas-${idx}`} className="hover:text-neutral-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">
                   {title}
                 </Link>
               </h3>
@@ -187,7 +187,7 @@ export default function Home() {
               />
             </Link>
             <h3 className="text-3xl font-serif font-medium leading-[1.2] tracking-tight text-neutral-900 mb-4">
-              <Link href={`/artigo/acessibilidade-0`} className="hover:text-brand-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm">
+              <Link href={`/artigo/acessibilidade-0`} className="hover:text-neutral-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">
                 O que é WCAG e por que seu site precisa seguir?
               </Link>
             </h3>
@@ -214,7 +214,7 @@ export default function Home() {
                   />
                 </Link>
                 <h3 className="text-xl font-serif font-medium leading-[1.3] tracking-tight text-neutral-900 mb-2">
-                  <Link href={`/artigo/acessibilidade-${idx + 1}`} className="hover:text-brand-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm">
+                  <Link href={`/artigo/acessibilidade-${idx + 1}`} className="hover:text-neutral-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">
                     {item.title}
                   </Link>
                 </h3>
@@ -247,9 +247,9 @@ export default function Home() {
                 { author: 'Carlos Eduardo', title: 'A representatividade PcD na política: onde estamos e para onde vamos' }
               ].map((col, idx) => (
                 <article key={idx} className="flex flex-col">
-                  <span className="text-xs font-bold uppercase tracking-widest text-brand-amber mb-3">{col.author}</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-3">{col.author}</span>
                   <h3 className="text-xl font-serif font-medium leading-[1.4] text-neutral-900">
-                    <Link href={`/artigo/opiniao-${idx}`} className="hover:text-brand-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm">
+                    <Link href={`/artigo/opiniao-${idx}`} className="hover:text-neutral-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">
                       {col.title}
                     </Link>
                   </h3>
@@ -275,7 +275,7 @@ export default function Home() {
                 Hoje, 14:30
               </time>
               <h3 className="text-lg font-serif font-medium leading-[1.4] text-neutral-900">
-                <Link href={`/artigo/ultimas-${idx}`} className="hover:text-brand-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm">
+                <Link href={`/artigo/ultimas-${idx}`} className="hover:text-neutral-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">
                   Exemplo de notícia cronológica mais curta para compor o feed final da página {idx}
                 </Link>
               </h3>

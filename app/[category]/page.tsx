@@ -16,14 +16,14 @@ export default async function CategoryPage({
     .join(' ');
 
   const getCategoryTheme = (cat: string) => {
-    const lower = cat.toLowerCase();
-    if (lower.includes('notícia')) return { bg: 'bg-brand-rose', text: 'text-brand-rose', hover: 'hover:text-brand-rose', hoverBg: 'hover:bg-brand-rose/10', ring: 'focus:ring-brand-rose', border: 'border-brand-rose' };
-    if (lower.includes('neurodiversidade')) return { bg: 'bg-brand-amber', text: 'text-brand-amber', hover: 'hover:text-brand-amber', hoverBg: 'hover:bg-brand-amber/10', ring: 'focus:ring-brand-amber', border: 'border-brand-amber' };
-    if (lower.includes('saúde')) return { bg: 'bg-brand-teal', text: 'text-brand-teal', hover: 'hover:text-brand-teal', hoverBg: 'hover:bg-brand-teal/10', ring: 'focus:ring-brand-teal', border: 'border-brand-teal' };
-    if (lower.includes('educação')) return { bg: 'bg-brand-purple', text: 'text-brand-purple', hover: 'hover:text-brand-purple', hoverBg: 'hover:bg-brand-purple/10', ring: 'focus:ring-brand-purple', border: 'border-brand-purple' };
-    if (lower.includes('direito')) return { bg: 'bg-brand-green', text: 'text-brand-green', hover: 'hover:text-brand-green', hoverBg: 'hover:bg-brand-green/10', ring: 'focus:ring-brand-green', border: 'border-brand-green' };
-    if (lower.includes('trabalho')) return { bg: 'bg-brand-teal', text: 'text-brand-teal', hover: 'hover:text-brand-teal', hoverBg: 'hover:bg-brand-teal/10', ring: 'focus:ring-brand-teal', border: 'border-brand-teal' };
-    return { bg: 'bg-brand-primary', text: 'text-brand-primary', hover: 'hover:text-brand-primary', hoverBg: 'hover:bg-brand-primary/10', ring: 'focus:ring-brand-primary', border: 'border-brand-primary' };
+    return { 
+      bg: 'bg-neutral-900', 
+      text: 'text-neutral-900', 
+      hover: 'hover:text-neutral-700', 
+      hoverBg: 'hover:bg-neutral-100', 
+      ring: 'focus:ring-neutral-900', 
+      border: 'border-neutral-900' 
+    };
   };
 
   const theme = getCategoryTheme(formattedCategory);
@@ -79,7 +79,7 @@ export default async function CategoryPage({
                       25 Fev 2026
                     </time>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-serif font-medium leading-tight text-neutral-900 group-hover:text-brand-primary transition-colors mb-4">
+                  <h2 className="text-2xl sm:text-3xl font-serif font-medium leading-tight text-neutral-900 group-hover:text-neutral-700 transition-colors mb-4">
                     <Link href={`/artigo/exemplo-categoria-${item}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm before:absolute before:inset-0">
                       Título impactante sobre {formattedCategory.toLowerCase()} demonstrando a importância do tema
                     </Link>
@@ -97,7 +97,7 @@ export default async function CategoryPage({
                 <ArrowLeft className="h-4 w-4" /> Anterior
               </button>
               <span className="text-xs font-bold uppercase tracking-widest text-neutral-900">Página 1 de 12</span>
-              <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-900 hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm px-2 py-1 transition-colors">
+              <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-900 hover:text-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm px-2 py-1 transition-colors">
                 Próxima <ArrowRight className="h-4 w-4" />
               </button>
             </div>

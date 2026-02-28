@@ -40,9 +40,9 @@ export default function ContatoPage() {
                 <div>
                   <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-500 mb-2">E-mail</h3>
                   <p className="mt-1 text-neutral-900 font-serif">Para pautas e redação:</p>
-                  <a href="mailto:redacao@jornalistainclusivo.com.br" className="text-neutral-600 font-serif hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm transition-colors">redacao@jornalistainclusivo.com.br</a>
+                  <a href="mailto:redacao@jornalistainclusivo.com.br" className="text-neutral-600 font-serif hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm transition-colors">redacao@jornalistainclusivo.com.br</a>
                   <p className="mt-4 text-neutral-900 font-serif">Para parcerias e comercial:</p>
-                  <a href="mailto:contato@jornalistainclusivo.com.br" className="text-neutral-600 font-serif hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm transition-colors">contato@jornalistainclusivo.com.br</a>
+                  <a href="mailto:contato@jornalistainclusivo.com.br" className="text-neutral-600 font-serif hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm transition-colors">contato@jornalistainclusivo.com.br</a>
                 </div>
               </div>
 
@@ -53,7 +53,7 @@ export default function ContatoPage() {
                 <div>
                   <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-500 mb-2">Telefone / WhatsApp</h3>
                   <p className="mt-1 text-neutral-900 font-serif">Atendimento exclusivo para mensagens de texto e áudio.</p>
-                  <a href="tel:+5511999999999" className="text-neutral-600 font-serif hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm transition-colors">+55 (11) 99999-9999</a>
+                  <a href="tel:+5511999999999" className="text-neutral-600 font-serif hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm transition-colors">+55 (11) 99999-9999</a>
                 </div>
               </div>
 
@@ -80,7 +80,7 @@ export default function ContatoPage() {
             <form className="space-y-8" action="#" method="POST">
               <div>
                 <label htmlFor="nome" className="block text-xs font-bold uppercase tracking-widest text-neutral-900 mb-2">
-                  Nome Completo <span className="text-brand-primary" aria-hidden="true">*</span>
+                  Nome Completo <span className="text-neutral-900" aria-hidden="true">*</span>
                 </label>
                 <input
                   type="text"
@@ -96,7 +96,7 @@ export default function ContatoPage() {
 
               <div>
                 <label htmlFor="email" className="block text-xs font-bold uppercase tracking-widest text-neutral-900 mb-2">
-                  E-mail <span className="text-brand-primary" aria-hidden="true">*</span>
+                  E-mail <span className="text-neutral-900" aria-hidden="true">*</span>
                 </label>
                 <input
                   type="email"
@@ -112,7 +112,7 @@ export default function ContatoPage() {
 
               <div>
                 <label htmlFor="assunto" className="block text-xs font-bold uppercase tracking-widest text-neutral-900 mb-2">
-                  Assunto <span className="text-brand-primary" aria-hidden="true">*</span>
+                  Assunto <span className="text-neutral-900" aria-hidden="true">*</span>
                 </label>
                 <select
                   id="assunto"
@@ -132,7 +132,7 @@ export default function ContatoPage() {
 
               <div>
                 <label htmlFor="mensagem" className="block text-xs font-bold uppercase tracking-widest text-neutral-900 mb-2">
-                  Mensagem <span className="text-brand-primary" aria-hidden="true">*</span>
+                  Mensagem <span className="text-neutral-900" aria-hidden="true">*</span>
                 </label>
                 <textarea
                   id="mensagem"
@@ -158,7 +158,7 @@ export default function ContatoPage() {
                 </div>
                 <div className="ml-3 text-sm leading-6">
                   <label htmlFor="privacidade" className="text-neutral-600">
-                    Concordo com a <Link href="/privacidade" className="font-bold text-neutral-900 hover:underline underline-offset-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">Política de Privacidade</Link> e autorizo o uso dos meus dados para retorno do contato. <span className="text-brand-primary" aria-hidden="true">*</span>
+                    Concordo com a <Link href="/privacidade" className="font-bold text-neutral-900 hover:underline underline-offset-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">Política de Privacidade</Link> e autorizo o uso dos meus dados para retorno do contato. <span className="text-neutral-900" aria-hidden="true">*</span>
                   </label>
                 </div>
               </div>

@@ -23,7 +23,7 @@ export default function AcessibilidadePage() {
           prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-neutral-900
           prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-8
           prose-h3:text-2xl md:prose-h3:text-3xl prose-h3:mt-12 prose-h3:mb-6
-          prose-a:text-brand-primary hover:prose-a:text-brand-dark prose-a:underline-offset-4 prose-a:decoration-brand-primary/30 hover:prose-a:decoration-brand-primary
+          prose-a:text-neutral-900 hover:prose-a:text-neutral-700 prose-a:underline-offset-4 prose-a:decoration-neutral-300 hover:prose-a:decoration-neutral-900
           prose-li:font-serif prose-li:leading-[1.9] prose-li:text-neutral-800
           prose-strong:font-semibold prose-strong:text-neutral-900
         ">

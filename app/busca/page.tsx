@@ -53,15 +53,9 @@ export default async function BuscaPage({
           <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:gap-x-16">
             {results.map((post) => {
               // Determina a cor baseada na categoria
-              let colorClass = 'text-brand-primary';
-              let textHoverClass = 'group-hover:text-brand-primary';
+              let colorClass = 'text-neutral-900';
+              let textHoverClass = 'group-hover:text-neutral-700';
               const catLower = post.category.toLowerCase();
-              
-              if (catLower.includes('notícia')) { colorClass = 'text-brand-rose'; textHoverClass = 'group-hover:text-brand-rose'; }
-              else if (catLower.includes('neurodiversidade') || catLower.includes('paradesporto')) { colorClass = 'text-brand-amber'; textHoverClass = 'group-hover:text-brand-amber'; }
-              else if (catLower.includes('saúde') || catLower.includes('trabalho')) { colorClass = 'text-brand-teal'; textHoverClass = 'group-hover:text-brand-teal'; }
-              else if (catLower.includes('educação')) { colorClass = 'text-brand-purple'; textHoverClass = 'group-hover:text-brand-purple'; }
-              else if (catLower.includes('direito')) { colorClass = 'text-brand-green'; textHoverClass = 'group-hover:text-brand-green'; }
 
               return (
                 <article key={post.id} className="flex flex-col sm:flex-row gap-8 group relative border-b border-neutral-100 pb-12 lg:border-b-0 lg:pb-0">
