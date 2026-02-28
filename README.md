@@ -3,13 +3,14 @@
 > Infraestrutura cultural e jornalismo de equidade, focado em acessibilidade digital e neuroergonomia.
 
 ## Visão Geral
-O Jornalista Inclusivo é um portal de notícias Headless construído com Next.js 15, focado em entregar a melhor experiência de leitura possível, aderindo estritamente aos padrões **WCAG 2.2 AAA**. O projeto utiliza IA Generativa (Google Gemini) de forma nativa para recursos de acessibilidade, como geração de áudio (TTS) e contextualização de leitura.
+O Jornalista Inclusivo é um portal de notícias Headless construído com Next.js 16 e React 19, focado em entregar a melhor experiência de leitura possível, aderindo estritamente aos padrões **WCAG 2.2 AAA**. O projeto utiliza IA Generativa (Google Gemini) de forma nativa para recursos de acessibilidade, como geração de áudio (TTS) e contextualização de leitura.
 
 ## Propósito Editorial
 O portal visa ser a principal fonte de informação sobre inclusão, acessibilidade, neurodiversidade e direitos PcD no Brasil, com uma abordagem jornalística rigorosa e uma plataforma tecnológica que serve como exemplo prático de design universal.
 
 ## Stack Tecnológica
-- **Framework:** Next.js 15 (App Router, Server Components)
+- **Framework:** Next.js 16 (App Router, Server Components)
+- **UI Library:** React 19
 - **Styling:** Tailwind CSS v4
 - **IA / LLM:** Google GenAI SDK (`@google/genai`)
 - **Ícones:** Lucide React
