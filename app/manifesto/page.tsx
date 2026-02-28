@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { ArrowLeft, BookOpen, Eye, Brain, Code2 } from 'lucide-react';
+import { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Manifesto de Leitura e Acessibilidade | Jornalista Inclusivo',
   description: 'Nosso compromisso institucional com a neuroergonomia, acessibilidade digital (WCAG 2.2) e a redução do ruído cognitivo no jornalismo.',
 };
@@ -50,7 +51,7 @@ export default function ManifestoPage() {
           </p>
 
           <h2>
-            <Eye className="h-8 w-8 text-brand-primary" aria-hidden="true" />
+            <Eye className="h-8 w-8 text-neutral-900" aria-hidden="true" />
             1. Acessibilidade como Fundação (WCAG 2.2)
           </h2>
           <p>
@@ -58,7 +59,7 @@ export default function ManifestoPage() {
           </p>
 
           <h2>
-            <Brain className="h-8 w-8 text-brand-purple" aria-hidden="true" />
+            <Brain className="h-8 w-8 text-neutral-900" aria-hidden="true" />
             2. Neuroergonomia e Redução de Ruído
           </h2>
           <p>
@@ -67,11 +68,11 @@ export default function ManifestoPage() {
           <ul>
             <li><strong>Controle de Largura:</strong> Nossas colunas de texto são estritamente limitadas a 65-70 caracteres por linha, o padrão ouro para conforto ocular e retenção de leitura.</li>
             <li><strong>Modo Foco Profundo:</strong> Uma infraestrutura cognitiva opcional que reduz o contraste periférico, ajusta a temperatura da cor da tela e elimina distrações para leituras analíticas.</li>
-            <li><strong>Hierarquia Inquestionável:</strong> Eliminamos o "paradoxo da escolha" através de uma curadoria editorial clara, onde o design dita o que é urgente e o que é perene.</li>
+            <li><strong>Hierarquia Inquestionável:</strong> Eliminamos o &quot;paradoxo da escolha&quot; através de uma curadoria editorial clara, onde o design dita o que é urgente e o que é perene.</li>
           </ul>
 
           <h2>
-            <BookOpen className="h-8 w-8 text-brand-teal" aria-hidden="true" />
+            <BookOpen className="h-8 w-8 text-neutral-900" aria-hidden="true" />
             3. Contexto Estruturado
           </h2>
           <p>
@@ -79,7 +80,7 @@ export default function ManifestoPage() {
           </p>
 
           <h2>
-            <Code2 className="h-8 w-8 text-brand-rose" aria-hidden="true" />
+            <Code2 className="h-8 w-8 text-neutral-900" aria-hidden="true" />
             4. O Futuro: Um Padrão Aberto (Open-Source)
           </h2>
           <p>

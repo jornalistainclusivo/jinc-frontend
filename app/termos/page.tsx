@@ -8,14 +8,30 @@ export const metadata: Metadata = {
 
 export default function TermosPage() {
   return (
-    <div className="bg-white min-h-screen py-16 sm:py-24">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <div className="prose prose-lg md:prose-xl prose-neutral prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-4xl sm:prose-h1:text-5xl prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-p:leading-[1.8] prose-p:text-neutral-800 prose-p:mb-6 prose-li:leading-[1.8] prose-li:text-neutral-800 prose-a:text-brand-primary hover:prose-a:text-brand-dark prose-a:underline-offset-4 max-w-none">
-          
-          <h1>Termos de Uso</h1>
-          <p className="text-sm text-neutral-500 font-mono mb-12">Última atualização: 26 de Fevereiro de 2026</p>
+    <div className="bg-white min-h-screen pb-32">
+      {/* Header */}
+      <header className="pt-16 pb-12 sm:pt-24 sm:pb-16 bg-neutral-950 text-neutral-50">
+        <div className="mx-auto max-w-[800px] px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-medium tracking-tighter text-white leading-[1.1] mb-6 text-balance mx-auto">
+            Termos de Uso
+          </h1>
+          <p className="text-sm font-bold uppercase tracking-widest text-neutral-500 mb-8">
+            Última atualização: 26 de Fevereiro de 2026
+          </p>
+        </div>
+      </header>
 
-          <p className="lead text-xl md:text-2xl text-neutral-800 font-medium leading-[1.7] mb-8">
+      <main className="mx-auto max-w-[70ch] px-4 sm:px-6 lg:px-8 pt-16">
+        <div className="prose prose-lg md:prose-xl prose-neutral max-w-none
+          prose-p:font-serif prose-p:leading-[1.9] prose-p:text-neutral-800 prose-p:mb-8
+          prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-neutral-900
+          prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-8
+          prose-a:text-brand-primary hover:prose-a:text-brand-dark prose-a:underline-offset-4 prose-a:decoration-brand-primary/30 hover:prose-a:decoration-brand-primary
+          prose-li:font-serif prose-li:leading-[1.9] prose-li:text-neutral-800
+          prose-strong:font-semibold prose-strong:text-neutral-900
+        ">
+          
+          <p className="lead font-sans text-2xl md:text-3xl text-neutral-600 font-light leading-[1.6] mb-12">
             Bem-vindo ao <strong>Jornalista Inclusivo</strong>. Ao acessar e utilizar nosso portal, você concorda em cumprir e estar vinculado aos seguintes Termos de Uso. Por favor, leia-os atentamente antes de continuar a navegação.
           </p>
 
@@ -68,7 +84,7 @@ export default function TermosPage() {
           </p>
 
         </div>
-      </div>
+      </main>
     </div>
   );
 }

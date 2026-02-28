@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Type, Contrast, Volume2 } from 'lucide-react';
+import { Contrast } from 'lucide-react';
 
 export function AccessibilityToolbar() {
   const [isHighContrast, setIsHighContrast] = useState(false);
@@ -19,7 +19,6 @@ export function AccessibilityToolbar() {
     }
     
     if (savedFontScale !== 1) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFontScale(savedFontScale);
       document.documentElement.style.setProperty('--font-scale', String(savedFontScale));
     }
@@ -57,43 +56,43 @@ export function AccessibilityToolbar() {
 
   return (
     <div 
-      className="bg-neutral-100 border-b border-neutral-200 py-2 px-4 flex justify-end items-center gap-4 text-sm"
+      className="bg-neutral-950 border-b border-neutral-900 py-1.5 px-4 flex justify-end items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-neutral-400"
       role="toolbar"
       aria-label="Ferramentas de acessibilidade"
     >
       <div className="flex items-center gap-2">
-        <span className="sr-only md:not-sr-only md:text-neutral-700 font-medium mr-2" aria-hidden="true">Tamanho do texto:</span>
+        <span className="sr-only md:not-sr-only mr-2" aria-hidden="true">Tamanho do texto:</span>
         <button 
           onClick={decreaseFont}
-          className="p-1.5 rounded hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-neutral-900 font-bold"
+          className="p-1 rounded hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 transition-colors"
           aria-label="Diminuir tamanho do texto"
         >
           A-
         </button>
         <button 
           onClick={resetFont}
-          className="p-1.5 rounded hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-neutral-900 font-bold"
+          className="p-1 rounded hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 transition-colors"
           aria-label="Tamanho do texto original"
         >
           A
         </button>
         <button 
           onClick={increaseFont}
-          className="p-1.5 rounded hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-neutral-900 font-bold text-lg"
+          className="p-1 rounded hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 transition-colors text-xs"
           aria-label="Aumentar tamanho do texto"
         >
           A+
         </button>
       </div>
 
-      <div className="w-px h-6 bg-neutral-300 mx-1" aria-hidden="true"></div>
+      <div className="w-px h-4 bg-neutral-800 mx-1" aria-hidden="true"></div>
 
       <button
         onClick={() => toggleHighContrast()}
-        className="flex items-center gap-2 p-1.5 rounded hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-neutral-900 font-medium"
+        className="flex items-center gap-2 p-1 rounded hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 transition-colors"
         aria-pressed={isHighContrast}
       >
-        <Contrast size={18} aria-hidden="true" />
+        <Contrast size={14} aria-hidden="true" />
         <span className="hidden sm:inline">Alto Contraste</span>
       </button>
     </div>

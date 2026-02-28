@@ -19,6 +19,7 @@ export default function ArticlePage({
   useEffect(() => {
     const savedFocusMode = localStorage.getItem('ji_focus_mode');
     if (savedFocusMode === 'true') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsFocusMode(true);
     }
   }, []);

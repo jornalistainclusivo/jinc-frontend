@@ -11,6 +11,7 @@ const navigation = {
     { name: 'Artigos', href: '/artigos' },
   ],
   institucional: [
+    { name: 'Manifesto Editorial', href: '/manifesto' },
     { name: 'Sobre Nós', href: '/sobre' },
     { name: 'Política de Privacidade', href: '/privacidade' },
     { name: 'Termos de Uso', href: '/termos' },
@@ -42,7 +43,7 @@ const navigation = {
 
 export function Footer() {
   return (
-    <footer className="bg-neutral-900" aria-labelledby="footer-heading">
+    <footer className="bg-neutral-950 border-t border-neutral-900" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Rodapé
       </h2>
@@ -51,11 +52,11 @@ export function Footer() {
           <div className="space-y-8">
             <Link 
               href="/" 
-              className="text-2xl font-bold text-white tracking-tight focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 focus:ring-offset-neutral-900 rounded-sm inline-block"
+              className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 rounded-sm inline-block"
             >
-              Jornalista Inclusivo
+              Jornalista Inclusivo.
             </Link>
-            <p className="text-sm leading-6 text-neutral-300 max-w-xs">
+            <p className="text-sm leading-6 text-neutral-400 max-w-xs font-light">
               Produzir jornalismo independente, acessível e comprometido com os direitos das pessoas com deficiência no Brasil.
             </p>
             <div className="flex space-x-6">
@@ -63,7 +64,7 @@ export function Footer() {
                 <a 
                   key={item.name} 
                   href={item.href} 
-                  className="text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 focus:ring-offset-neutral-900 rounded-sm p-1 transition-colors"
+                  className="text-neutral-500 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 rounded-sm p-1 transition-colors"
                 >
                   <span className="sr-only">{item.name}</span>
                   <item.icon className="h-6 w-6" aria-hidden="true" />
@@ -74,13 +75,13 @@ export function Footer() {
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 xl:col-span-2 xl:mt-0">
             <div className="grid grid-cols-2 gap-8">
               <div>
-                <h3 className="text-sm font-semibold leading-6 text-white uppercase tracking-wider">Editorial</h3>
+                <h3 className="text-xs font-bold leading-6 text-white uppercase tracking-widest">Editorial</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.editorial.map((item) => (
                     <li key={item.name}>
                       <Link 
                         href={item.href} 
-                        className="text-sm leading-6 text-neutral-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 focus:ring-offset-neutral-900 rounded-sm px-1 transition-colors"
+                        className="text-sm leading-6 text-neutral-400 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 rounded-sm px-1 transition-colors"
                       >
                         {item.name}
                       </Link>
@@ -89,13 +90,13 @@ export function Footer() {
                 </ul>
               </div>
               <div>
-                <h3 className="text-sm font-semibold leading-6 text-white uppercase tracking-wider">Institucional</h3>
+                <h3 className="text-xs font-bold leading-6 text-white uppercase tracking-widest">Institucional</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.institucional.map((item) => (
                     <li key={item.name}>
                       <Link 
                         href={item.href} 
-                        className="text-sm leading-6 text-neutral-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 focus:ring-offset-neutral-900 rounded-sm px-1 transition-colors"
+                        className="text-sm leading-6 text-neutral-400 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 rounded-sm px-1 transition-colors"
                       >
                         {item.name}
                       </Link>
@@ -105,8 +106,8 @@ export function Footer() {
               </div>
             </div>
             <div className="mt-10 md:mt-0">
-                <h3 className="text-sm font-semibold leading-6 text-white uppercase tracking-wider">Assine nossa Newsletter</h3>
-                <p className="mt-2 text-sm leading-6 text-neutral-300">
+                <h3 className="text-xs font-bold leading-6 text-white uppercase tracking-widest">Assine nossa Newsletter</h3>
+                <p className="mt-2 text-sm leading-6 text-neutral-400">
                   Inclusão em foco, toda semana no seu e-mail.
                 </p>
                 <form className="mt-6 sm:flex sm:max-w-md">
@@ -119,13 +120,13 @@ export function Footer() {
                     id="email-address"
                     autoComplete="email"
                     required
-                    className="w-full min-w-0 appearance-none rounded-md border-0 bg-white/5 px-3 py-1.5 text-base text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-neutral-400 focus:ring-2 focus:ring-inset focus:ring-brand-primary sm:w-64 sm:text-sm sm:leading-6"
+                    className="w-full min-w-0 appearance-none rounded-none border-0 border-b border-neutral-700 bg-transparent px-3 py-2 text-base text-white placeholder:text-neutral-500 focus:border-white focus:ring-0 sm:w-64 sm:text-sm sm:leading-6 transition-colors"
                     placeholder="Seu melhor e-mail"
                   />
                   <div className="mt-4 sm:ml-4 sm:mt-0 sm:flex-shrink-0">
                     <button
                       type="submit"
-                      className="flex w-full items-center justify-center rounded-md bg-brand-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors"
+                      className="flex w-full items-center justify-center rounded-full bg-white px-6 py-2 text-sm font-bold text-neutral-950 hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-colors"
                     >
                       Assinar
                     </button>

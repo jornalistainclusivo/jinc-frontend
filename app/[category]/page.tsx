@@ -31,23 +31,23 @@ export default async function CategoryPage({
   return (
     <div className="bg-white min-h-screen pb-24">
       {/* Category Header */}
-      <div className="bg-neutral-50 border-b border-neutral-200 py-12 sm:py-20">
+      <header className="pt-16 pb-12 sm:pt-24 sm:pb-16 bg-neutral-950 text-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Link 
             href="/" 
-            className={`inline-flex items-center gap-2 text-sm font-medium text-neutral-500 ${theme.hover} mb-6 focus:outline-none focus:ring-2 ${theme.ring} rounded-sm px-1`}
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-400 hover:text-white mb-8 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-neutral-950 rounded-sm transition-colors"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Voltar para a Home
           </Link>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-brand-dark">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-medium tracking-tighter text-white leading-[1.1] mb-6">
             {formattedCategory}
           </h1>
-          <p className="mt-4 text-lg text-neutral-600 max-w-2xl">
+          <p className="text-xl text-neutral-400 leading-[1.6] font-light max-w-[55ch]">
             Acompanhe as últimas reportagens, análises e entrevistas sobre {formattedCategory.toLowerCase()} no Brasil e no mundo.
           </p>
         </div>
-      </div>
+      </header>
 
       {/* Articles Feed */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-16">
@@ -58,32 +58,33 @@ export default async function CategoryPage({
             {[1, 2, 3, 4, 5].map((item) => (
               <article key={item} className="flex flex-col sm:flex-row gap-6 group relative border-b border-neutral-100 pb-12 last:border-0 last:pb-0">
                 <div className="w-full sm:w-2/5 shrink-0">
-                  <div className="relative w-full aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100">
+                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-100">
                     <AutoAltImage
                       src={`https://picsum.photos/800/600?random=${item + 10}`}
                       alt=""
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 40vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
                       referrerPolicy="no-referrer"
                     />
                   </div>
                 </div>
                 <div className="flex flex-col justify-center flex-1">
-                  <div className="flex items-center gap-x-3 text-xs mb-3">
-                    <time dateTime="2026-02-25" className="text-neutral-500 font-mono uppercase tracking-wider">
-                      25 Fev 2026
-                    </time>
-                    <span className={`relative z-10 rounded-full ${theme.bg} px-2.5 py-0.5 font-bold text-white shadow-sm`}>
+                  <div className="flex items-center gap-x-3 mb-4">
+                    <span className={`text-[10px] font-bold uppercase tracking-widest ${theme.text}`}>
                       {formattedCategory}
                     </span>
+                    <span className="text-xs text-neutral-300">&bull;</span>
+                    <time dateTime="2026-02-25" className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+                      25 Fev 2026
+                    </time>
                   </div>
-                  <h2 className={`text-xl sm:text-2xl font-bold leading-tight text-neutral-900 group-hover:${theme.text} transition-colors mb-3`}>
-                    <Link href={`/artigo/exemplo-categoria-${item}`} className={`focus:outline-none focus:ring-2 ${theme.ring} rounded-sm before:absolute before:inset-0`}>
+                  <h2 className="text-2xl sm:text-3xl font-serif font-medium leading-tight text-neutral-900 group-hover:text-brand-primary transition-colors mb-4">
+                    <Link href={`/artigo/exemplo-categoria-${item}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm before:absolute before:inset-0">
                       Título impactante sobre {formattedCategory.toLowerCase()} demonstrando a importância do tema
                     </Link>
                   </h2>
-                  <p className="text-neutral-600 line-clamp-3 text-sm sm:text-base leading-relaxed">
+                  <p className="text-neutral-600 line-clamp-3 text-base leading-relaxed font-serif">
                     Um resumo detalhado da matéria que explica o contexto, os principais desafios e as possíveis soluções para a questão abordada, garantindo que o leitor entenda o valor da informação antes de clicar.
                   </p>
                 </div>
@@ -91,12 +92,12 @@ export default async function CategoryPage({
             ))}
             
             {/* Pagination (Simulated) */}
-            <div className="mt-8 flex items-center justify-between border-t border-neutral-200 pt-8">
-              <button className={`flex items-center gap-2 text-sm font-medium text-neutral-500 ${theme.hover} focus:outline-none focus:ring-2 ${theme.ring} rounded-md px-3 py-2`} disabled>
+            <div className="mt-12 flex items-center justify-between border-t border-neutral-200 pt-8">
+              <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm px-2 py-1" disabled>
                 <ArrowLeft className="h-4 w-4" /> Anterior
               </button>
-              <span className="text-sm text-neutral-700 font-mono">Página 1 de 12</span>
-              <button className={`flex items-center gap-2 text-sm font-medium text-neutral-900 ${theme.hover} focus:outline-none focus:ring-2 ${theme.ring} rounded-md px-3 py-2`}>
+              <span className="text-xs font-bold uppercase tracking-widest text-neutral-900">Página 1 de 12</span>
+              <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-900 hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm px-2 py-1 transition-colors">
                 Próxima <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -104,16 +105,16 @@ export default async function CategoryPage({
 
           {/* Sidebar */}
           <aside className="lg:col-span-1">
-            <div className="sticky top-28 space-y-12">
+            <div className="sticky top-28 space-y-16">
               {/* Destaque Sidebar */}
-              <div className={`${theme.bg} rounded-2xl p-6 text-white shadow-lg`}>
-                <h3 className="text-xl font-bold mb-4">Assine a Newsletter</h3>
-                <p className="text-neutral-300 text-sm mb-6">
+              <div className="bg-white rounded-none p-8 border border-neutral-200 shadow-xl">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-4">Assine a Newsletter</h3>
+                <p className="text-neutral-600 text-sm mb-8 leading-relaxed font-serif">
                   Receba os melhores conteúdos sobre {formattedCategory.toLowerCase()} diretamente no seu e-mail.
                 </p>
                 <Link
                   href="/newsletter"
-                  className="block w-full text-center rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-brand-dark shadow-sm hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-dark transition-colors"
+                  className="flex w-full items-center justify-center rounded-full bg-neutral-950 px-6 py-4 text-xs font-bold uppercase tracking-widest text-white hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 transition-colors"
                 >
                   Inscrever-se
                 </Link>
@@ -121,8 +122,7 @@ export default async function CategoryPage({
 
               {/* Tópicos Relacionados */}
               <div>
-                <h3 className="text-lg font-bold tracking-tight text-neutral-900 mb-4 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-brand-primary" aria-hidden="true"></span>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-500 mb-6 border-b border-neutral-200 pb-4">
                   Tópicos Relacionados
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -130,7 +130,7 @@ export default async function CategoryPage({
                     <Link
                       key={tag}
                       href={`/tag/${tag.toLowerCase()}`}
-                      className={`inline-flex items-center rounded-full bg-neutral-100 px-3 py-1 text-sm font-medium text-neutral-700 hover:bg-neutral-200 focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
+                      className="inline-flex items-center rounded-full bg-neutral-50 border border-neutral-200 px-4 py-2 text-xs font-bold uppercase tracking-widest text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors"
                     >
                       {tag}
                     </Link>

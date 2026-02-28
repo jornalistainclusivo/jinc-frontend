@@ -116,15 +116,15 @@ export function Header() {
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Navegação principal">
         <div className="flex h-20 items-center justify-between">
           {/* Logo / h1 */}
-          <h1 className="flex shrink-0 items-center m-0">
+          <div className="flex shrink-0 items-center m-0">
             <Link 
               href="/" 
-              className="text-lg font-bold text-brand-primary tracking-tight focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 rounded-sm"
+              className="text-xl sm:text-2xl font-serif font-bold text-neutral-900 tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-sm"
               aria-label="Jornalista Inclusivo - Página Inicial"
             >
-              Jornalista Inclusivo
+              Jornalista Inclusivo.
             </Link>
-          </h1>
+          </div>
           
           {/* Desktop Menu */}
           <div className="hidden lg:flex lg:gap-x-8">
@@ -132,7 +132,7 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-semibold leading-6 text-neutral-900 hover:text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 rounded-sm px-2 py-1 transition-colors"
+                className="text-xs font-bold uppercase tracking-widest text-neutral-600 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-sm px-2 py-1 transition-colors"
               >
                 {item.name}
               </Link>
@@ -143,7 +143,7 @@ export function Header() {
           <div className="flex items-center gap-4 lg:gap-6">
             <button 
               type="button" 
-              className="text-neutral-700 hover:text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 rounded-full p-2 transition-colors"
+              className="text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-full p-2 transition-colors"
               aria-label="Buscar no site"
               onClick={() => setSearchOpen(true)}
             >
@@ -151,14 +151,14 @@ export function Header() {
             </button>
             <Link
               href="/newsletter"
-              className="hidden sm:flex items-center gap-2 rounded-md bg-brand-primary px-4 py-2 text-sm font-semibold uppercase tracking-wider text-white shadow-sm hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 transition-colors"
+              className="hidden sm:flex items-center gap-2 rounded-full bg-neutral-900 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 transition-colors"
             >
               <Mail className="h-4 w-4" aria-hidden="true" />
               Newsletter
             </Link>
             <button
               type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-neutral-700 hover:text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 transition-colors"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 transition-colors"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-expanded={menuOpen}
               aria-controls="universal-menu"
@@ -180,12 +180,12 @@ export function Header() {
           <div className="fixed inset-0 z-40 bg-black/20" aria-hidden="true" onClick={() => setMenuOpen(false)} />
           <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-neutral-900/10">
             <div className="flex items-center justify-between">
-              <Link href="/" className="-m-1.5 p-1.5 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 rounded-sm" onClick={() => setMenuOpen(false)}>
-                <span className="text-lg font-bold text-brand-primary">Jornalista Inclusivo</span>
+              <Link href="/" className="-m-1.5 p-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-sm" onClick={() => setMenuOpen(false)}>
+                <span className="text-xl font-serif font-bold text-neutral-900">Jornalista Inclusivo.</span>
               </Link>
               <button
                 type="button"
-                className="-m-2.5 rounded-md p-2.5 text-neutral-700 hover:text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 transition-colors"
+                className="-m-2.5 rounded-md p-2.5 text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
                 <span className="sr-only">Fechar menu</span>
