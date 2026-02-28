@@ -26,7 +26,7 @@ const lora = Lora({
 export const metadata: Metadata = {
   title: {
     template: '%s | Jornalista Inclusivo',
-    default: 'Jornalista Inclusivo - Jornalismo sobre Equidade, Inclusão e Direitos',
+    default: 'Jornalista Inclusivo - Jornalismo de Equidade, Inclusão e Direitos',
   },
   description: 'Portal de jornalismo focado em inclusão, acessibilidade, direitos das pessoas com deficiência, paradesporto e diversidade no Brasil.',
   keywords: ['inclusão', 'acessibilidade', 'direitos pcd', 'paradesporto', 'jornalismo', 'brasil'],
