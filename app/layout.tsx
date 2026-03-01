@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${jetbrainsMono.variable} ${lora.variable}`}>
+    <html lang="pt-BR" className={`${inter.variable} ${jetbrainsMono.variable} ${lora.variable}`} suppressHydrationWarning>
       <body className="min-h-screen flex flex-col" suppressHydrationWarning>
         <SkipLink />
         <Header />
