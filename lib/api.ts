@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 export function getStrapiURL(path = '') {
     return `${process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://127.0.0.1:1337'
         }${path}`;
@@ -22,7 +24,7 @@ export async function fetchAPI(path: string, urlParamsObject = {}, options = {})
         };
 
         // Build request URL
-        const queryString = new URLSearchParams(urlParamsObject).toString();
+        const queryString = qs.stringify(urlParamsObject, { encodeValuesOnly: true });
         const requestUrl = `${getStrapiURL(
             `/api${path}${queryString ? `?${queryString}` : ''}`
         )}`;
