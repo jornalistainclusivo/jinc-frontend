@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Search, ArrowRight, ArrowLeft } from 'lucide-react';
-import { articles } from '@/lib/mockData';
+import { fetchAPI, getStrapiURL } from '@/lib/api';
 import { Metadata } from 'next';
 import { AutoAltImage } from '@/components/ui/AutoAltImage';
 
@@ -14,23 +14,34 @@ export default async function BuscaPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { q = '' } = await searchParams;
-  
-  const query = q.toLowerCase();
-  const results = query.trim() === '' 
-    ? [] 
-    : articles.filter(a => 
-        a.title.toLowerCase().includes(query) || 
-        a.description.toLowerCase().includes(query) ||
-        a.category.toLowerCase().includes(query)
-      );
+
+  const query = q.trim();
+  let results: any[] = [];
+
+  if (query) {
+    try {
+      const response = await fetchAPI('/artigos', {
+        filters: {
+          $or: [
+            { titulo: { $containsi: query } },
+            { resumo_simples: { $containsi: query } }
+          ]
+        },
+        populate: '*',
+      });
+      results = response.data || [];
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   return (
     <div className="bg-white min-h-screen pb-24">
       {/* Header da Busca */}
       <header className="pt-16 pb-12 sm:pt-24 sm:pb-16 bg-neutral-950 text-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-400 hover:text-white mb-8 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-neutral-950 rounded-sm transition-colors"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
@@ -51,18 +62,26 @@ export default async function BuscaPage({
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-16">
         {results.length > 0 ? (
           <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:gap-x-16">
-            {results.map((post) => {
-              // Determina a cor baseada na categoria
+            {results.map((postData: any) => {
+              const post = {
+                id: postData.id || postData.documentId,
+                slug: postData.slug,
+                title: postData.titulo || 'Sem título',
+                description: postData.resumo_simples || '',
+                category: postData.categoria?.nome || 'Geral',
+                date: postData.publishedAt ? new Date(postData.publishedAt).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }) : '',
+                image: postData.capa?.url ? getStrapiURL(postData.capa.url) : `https://picsum.photos/800/600?random=${postData.id || postData.documentId}`
+              };
+
               let colorClass = 'text-neutral-900';
               let textHoverClass = 'group-hover:text-neutral-700';
-              const catLower = post.category.toLowerCase();
 
               return (
                 <article key={post.id} className="flex flex-col sm:flex-row gap-8 group relative border-b border-neutral-100 pb-12 lg:border-b-0 lg:pb-0">
                   <div className="w-full sm:w-2/5 shrink-0">
                     <div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-100">
                       <AutoAltImage
-                        src={`https://picsum.photos/800/600?random=${post.id}`}
+                        src={post.image}
                         alt=""
                         fill
                         sizes="(max-width: 640px) 100vw, 40vw"
