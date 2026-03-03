@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Image, { ImageProps } from 'next/image';
-import { GoogleGenAI } from '@google/genai';
 
 // Cache em memória para evitar requisições repetidas para a mesma imagem durante a sessão
 const altCache = new Map<string, string>();
@@ -25,48 +24,18 @@ export function AutoAltImage({ src, alt, autoAlt = true, ...props }: AutoAltImag
       }
 
       try {
-        const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-        if (!apiKey) return;
-
-        const ai = new GoogleGenAI({ apiKey });
-        
-        const response = await fetch(imageUrl);
-        if (!response.ok) throw new Error("Failed to fetch image");
-        
-        const blob = await response.blob();
-        const base64Data = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const dataUrl = reader.result as string;
-            const base64 = dataUrl.split(',')[1];
-            resolve(base64);
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-        
-        const mimeType = response.headers.get('content-type') || 'image/jpeg';
-
-        const result = await ai.models.generateContent({
-          model: 'gemini-3-flash-preview',
-          contents: [
-            {
-              parts: [
-                { text: 'Crie um texto alternativo (alt text) acessível e descritivo para esta imagem, voltado para pessoas com deficiência visual. Seja direto, objetivo e descreva os elementos principais. Não use frases como "A imagem mostra" ou "Foto de". Máximo de 2 frases curtas.' },
-                {
-                  inlineData: {
-                    data: base64Data,
-                    mimeType: mimeType
-                  }
-                }
-              ]
-            }
-          ]
+        const response = await fetch('/api/ai/alt-text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imageUrl })
         });
 
-        const altText = result.text?.trim() || "Imagem ilustrativa";
+        if (!response.ok) throw new Error("API request failed");
+
+        const data = await response.json();
+        const altText = data.altText || "Imagem ilustrativa";
+
         altCache.set(imageUrl, altText);
-        
         if (isMounted) {
           setFinalAlt(altText);
         }

@@ -14,8 +14,8 @@ const navigation = [
 ];
 
 const hamburgerMenu = [
-  { 
-    name: 'Notícias', 
+  {
+    name: 'Notícias',
     href: '/noticias',
     subItems: [
       { name: 'Últimas Notícias', href: '/noticias/ultimas-noticias' },
@@ -26,16 +26,16 @@ const hamburgerMenu = [
   { name: 'Neurodiversidade', href: '/neurodiversidade' },
   { name: 'Saúde', href: '/saude' },
   { name: 'Educação', href: '/educacao' },
-  { 
-    name: 'Direitos PCD', 
+  {
+    name: 'Direitos PCD',
     href: '/direitos-pcd',
     subItems: [
       { name: 'Advogada Responde', href: '/direitos-pcd/advogada-responde' },
       { name: 'Direito Inclusivo', href: '/direitos-pcd/direito-inclusivo' }
     ]
   },
-  { 
-    name: 'Artigos', 
+  {
+    name: 'Artigos',
     href: '/artigos',
     subItems: [
       { name: 'Moda Inclusiva', href: '/artigos/moda-inclusiva' },
@@ -61,7 +61,7 @@ export function Header() {
     return items.map((item) => {
       const isExpanded = expandedItems[item.name] || false;
       const hasSubItems = item.subItems && item.subItems.length > 0;
-      
+
       return (
         <div key={item.name} className="py-2">
           <div className="flex items-center justify-between group">
@@ -105,20 +105,20 @@ export function Header() {
   return (
     <header className="bg-white border-b border-neutral-200 sticky top-0 z-40">
       <AccessibilityToolbar />
-      
+
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Navegação principal">
         <div className="flex h-20 items-center justify-between">
           {/* Logo / h1 */}
           <div className="flex shrink-0 items-center m-0">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="text-xl sm:text-2xl font-serif font-bold text-neutral-900 tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-sm"
               aria-label="Jornalista Inclusivo - Página Inicial"
             >
               Jornalista Inclusivo.
             </Link>
           </div>
-          
+
           {/* Desktop Menu */}
           <div className="hidden lg:flex lg:gap-x-8">
             {navigation.map((item) => (
@@ -134,21 +134,15 @@ export function Header() {
 
           {/* Actions (Universal) */}
           <div className="flex items-center gap-4 lg:gap-6">
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-full p-2 transition-colors"
               aria-label="Buscar no site"
               onClick={() => setSearchOpen(true)}
             >
               <Search className="h-5 w-5" aria-hidden="true" />
             </button>
-            <Link
-              href="/newsletter"
-              className="hidden sm:flex items-center gap-2 rounded-full bg-neutral-900 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 transition-colors"
-            >
-              <Mail className="h-4 w-4" aria-hidden="true" />
-              Newsletter
-            </Link>
+
             <button
               type="button"
               className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 transition-colors"
@@ -187,7 +181,7 @@ export function Header() {
             </div>
             <div className="mt-6 flow-root">
               <div className="-my-6 divide-y divide-neutral-200">
-                
+
                 <div className="space-y-1 py-6">
                   {renderMenuItems(hamburgerMenu)}
                 </div>

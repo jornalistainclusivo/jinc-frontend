@@ -30,6 +30,14 @@ export const metadata: Metadata = {
   },
   description: 'Portal de jornalismo focado em inclusão, acessibilidade, direitos das pessoas com deficiência, paradesporto e diversidade no Brasil.',
   keywords: ['inclusão', 'acessibilidade', 'direitos pcd', 'paradesporto', 'jornalismo', 'brasil'],
+  openGraph: {
+    title: 'Jornalista Inclusivo',
+    description: 'Portal de jornalismo focado em inclusão, acessibilidade, direitos das pessoas com deficiência.',
+    url: 'https://jornalistainclusivo.com.br',
+    siteName: 'Jornalista Inclusivo',
+    locale: 'pt_BR',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({

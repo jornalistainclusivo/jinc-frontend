@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Square, Loader2, Volume2, VolumeX, Brain, Rewind, FastForward } from 'lucide-react';
-import { GoogleGenAI, Modality } from '@google/genai';
 
 function createWavBlob(pcmData: Uint8Array, sampleRate: number): Blob {
   const numChannels = 1;
@@ -50,7 +49,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
   const [isMuted, setIsMuted] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [elapsedTime, setElapsedTime] = useState(0);
-  
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
@@ -58,7 +57,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
   const sourceNodesRef = useRef<AudioBufferSourceNode[]>([]);
   const pcmChunksRef = useRef<Uint8Array[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
-  
+
   const prefetchStartedRef = useRef(false);
   const streamFinishedRef = useRef(false);
 
@@ -76,15 +75,15 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
 
   useEffect(() => {
     audioRef.current = new Audio();
-    
+
     const audio = audioRef.current;
-    
+
     const updateProgress = () => {
       if (audio.duration) {
         setProgress((audio.currentTime / audio.duration) * 100);
       }
     };
-    
+
     const handleEnded = () => {
       setIsPlaying(false);
       setProgress(0);
@@ -104,7 +103,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.pause();
       audio.src = '';
-      
+
       if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
         audioCtxRef.current.close();
       }
@@ -129,26 +128,26 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
 
   const playPcmChunk = (bytes: Uint8Array) => {
     if (!audioCtxRef.current || !gainNodeRef.current) return;
-    
+
     const float32Array = new Float32Array(bytes.length / 2);
     const dataView = new DataView(bytes.buffer);
     for (let i = 0; i < float32Array.length; i++) {
       float32Array[i] = dataView.getInt16(i * 2, true) / 32768;
     }
-    
+
     const audioBuffer = audioCtxRef.current.createBuffer(1, float32Array.length, 24000);
     audioBuffer.getChannelData(0).set(float32Array);
-    
+
     const source = audioCtxRef.current.createBufferSource();
     source.buffer = audioBuffer;
     source.playbackRate.value = playbackRate;
     source.connect(gainNodeRef.current);
-    
+
     const currentTime = audioCtxRef.current.currentTime;
     if (nextStartTimeRef.current < currentTime) {
       nextStartTimeRef.current = currentTime;
     }
-    
+
     source.start(nextStartTimeRef.current);
     nextStartTimeRef.current += audioBuffer.duration;
     sourceNodesRef.current.push(source);
@@ -161,55 +160,60 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
     streamFinishedRef.current = false;
     pcmChunksRef.current = [];
     sourceNodesRef.current = [];
-    
-    abortControllerRef.current = new AbortController();
-    
-    try {
-      const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error("Chave da API do Gemini não configurada.");
-      }
-      
-      const ai = new GoogleGenAI({ apiKey });
-      const prompt = `Leia o seguinte texto de forma clara, profissional e acolhedora, como um âncora de jornal. Faça pausas adequadas na pontuação.\n\nTítulo: ${title}\n\n${text}`;
 
-      const responseStream = await ai.models.generateContentStream({
-        model: "gemini-2.5-flash-preview-tts",
-        contents: [{ parts: [{ text: prompt }] }],
-        config: {
-          responseModalities: [Modality.AUDIO],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: { voiceName: 'Kore' },
-            },
-          },
-        },
+    abortControllerRef.current = new AbortController();
+
+    try {
+      const response = await fetch('/api/ai/audio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, title }),
+        signal: abortControllerRef.current.signal
       });
 
-      for await (const chunk of responseStream) {
+      if (!response.body) throw new Error("No response body");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
         if (abortControllerRef.current?.signal.aborted) break;
-        
-        const base64Audio = chunk.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-        if (base64Audio) {
-          const binaryString = window.atob(base64Audio);
-          const len = binaryString.length;
-          const bytes = new Uint8Array(len);
-          for (let i = 0; i < len; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-          }
-          
-          pcmChunksRef.current.push(bytes);
-          
-          // Se o usuário já clicou em play, toca o chunk imediatamente
-          if (audioCtxRef.current && audioCtxRef.current.state === 'running') {
-            playPcmChunk(bytes);
+
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        // Separa os pacotes SSE
+        const lines = buffer.split('\n\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const base64Audio = line.replace('data: ', '').trim();
+            if (base64Audio) {
+              const binaryString = window.atob(base64Audio);
+              const len = binaryString.length;
+              const bytes = new Uint8Array(len);
+              for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+              }
+
+              pcmChunksRef.current.push(bytes);
+
+              // Se o usuário já clicou em play, toca o chunk imediatamente
+              if (audioCtxRef.current && audioCtxRef.current.state === 'running') {
+                playPcmChunk(bytes);
+              }
+            }
           }
         }
       }
 
       if (!abortControllerRef.current?.signal.aborted) {
         streamFinishedRef.current = true;
-        
+
         const totalLength = pcmChunksRef.current.reduce((acc, chunk) => acc + chunk.length, 0);
         const allPcmData = new Uint8Array(totalLength);
         let offset = 0;
@@ -217,10 +221,10 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
           allPcmData.set(chunk, offset);
           offset += chunk.length;
         }
-        
+
         const wavBlob = createWavBlob(allPcmData, 24000);
         const audioUrl = URL.createObjectURL(wavBlob);
-        
+
         if (audioRef.current) {
           audioRef.current.src = audioUrl;
           audioRef.current.volume = isMuted ? 0 : volume;
@@ -253,7 +257,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
       startPrefetch();
       initWebAudio();
       setIsPlaying(true);
-      
+
       // Toca os chunks que já chegaram (se houver algum muito rápido)
       pcmChunksRef.current.forEach(chunk => playPcmChunk(chunk));
       return;
@@ -264,7 +268,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
         const wasUninitialized = !audioCtxRef.current || audioCtxRef.current.state === 'closed';
         initWebAudio();
         setIsPlaying(true);
-        
+
         if (wasUninitialized) {
           pcmChunksRef.current.forEach(chunk => playPcmChunk(chunk));
         } else {
@@ -283,8 +287,8 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
         setIsPlaying(false);
       } else {
         if (audioCtxRef.current && audioCtxRef.current.state === 'running') {
-           audioCtxRef.current.suspend();
-           audioRef.current.currentTime = audioCtxRef.current.currentTime;
+          audioCtxRef.current.suspend();
+          audioRef.current.currentTime = audioCtxRef.current.currentTime;
         }
         audioRef.current.play();
         setIsPlaying(true);
@@ -367,7 +371,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
     sourceNodesRef.current.forEach(source => {
       try {
         source.playbackRate.value = newRate;
-      } catch (e) {}
+      } catch (e) { }
     });
   };
 
@@ -410,7 +414,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
     <>
       {/* Invisible placeholder to maintain layout when sticky */}
       <div ref={containerRef} className="h-0" aria-hidden="true" />
-      
+
       {isSticky ? (
         /* STICKY PLAYER - Ultra minimalista, horizontal, nativo do navegador */
         <div className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-neutral-200 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50 px-4 py-3 flex items-center justify-center animate-in slide-in-from-bottom-full duration-300">
@@ -418,11 +422,11 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
             <div className="font-serif font-bold text-sm text-neutral-900 truncate max-w-[120px] sm:max-w-[200px]" title={title}>
               {title}
             </div>
-            
-            <button 
+
+            <button
               onClick={handlePlayPause}
               disabled={isLoading}
-              className="w-8 h-8 flex-shrink-0 bg-neutral-900 text-white rounded-full flex items-center justify-center hover:bg-neutral-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:opacity-50"
+              className="w-8 h-8 flex-shrink-0 bg-[#1F3FA3] text-white rounded-full flex items-center justify-center hover:bg-[#152e7a] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] focus-visible:ring-offset-2 disabled:opacity-50"
               aria-label={isPlaying ? "Pausar áudio" : "Reproduzir áudio"}
             >
               {isLoading ? (
@@ -438,8 +442,8 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
               <label htmlFor="sticky-audio-progress" className="sr-only">Progresso do áudio</label>
               {isStreaming ? (
                 <div className="w-full h-1.5 bg-neutral-200 rounded-lg overflow-hidden relative">
-                  <div className="absolute top-0 left-0 h-full bg-neutral-400 w-full animate-pulse"></div>
-                  <div className="absolute top-0 left-0 h-full bg-neutral-900 w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
+                  <div className="absolute top-0 left-0 h-full bg-[#1F3FA3]/40 w-full animate-pulse"></div>
+                  <div className="absolute top-0 left-0 h-full bg-[#1F3FA3] w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
                 </div>
               ) : (
                 <input
@@ -451,7 +455,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
                   value={progress}
                   onChange={handleSeek}
                   disabled={!hasAudio}
-                  className="w-full h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
+                  className="w-full h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-[#1F3FA3] disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3]"
                 />
               )}
             </div>
@@ -471,7 +475,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
         </div>
       ) : (
         /* INLINE PLAYER - Módulo editorial integrado ao grid (max 70ch) */
-        <div 
+        <div
           className="relative w-full max-w-[70ch] mx-auto my-12 bg-neutral-50 border border-neutral-200 p-8 sm:p-10 rounded-none"
           onMouseEnter={handleMouseEnter}
           onTouchStart={handleMouseEnter}
@@ -492,8 +496,8 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
               <label htmlFor="inline-audio-progress" className="sr-only">Progresso do áudio</label>
               {isStreaming ? (
                 <div className="w-full h-2 bg-neutral-200 rounded-lg overflow-hidden relative">
-                  <div className="absolute top-0 left-0 h-full bg-neutral-400 w-full animate-pulse"></div>
-                  <div className="absolute top-0 left-0 h-full bg-neutral-900 w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
+                  <div className="absolute top-0 left-0 h-full bg-[#1F3FA3]/40 w-full animate-pulse"></div>
+                  <div className="absolute top-0 left-0 h-full bg-[#1F3FA3] w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
                 </div>
               ) : (
                 <input
@@ -505,7 +509,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
                   value={progress}
                   onChange={handleSeek}
                   disabled={!hasAudio}
-                  className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50"
+                  className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-[#1F3FA3] disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50"
                 />
               )}
             </div>
@@ -515,19 +519,19 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
               <div className="flex items-center gap-6">
                 {/* Controles Principais */}
                 <div className="flex items-center gap-4">
-                  <button 
+                  <button
                     onClick={skipBackward}
                     disabled={!hasAudio}
-                    className="text-neutral-500 hover:text-neutral-900 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-full p-1"
+                    className="text-[#1F3FA3]/70 hover:text-[#1F3FA3] transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] rounded-full p-1"
                     aria-label="Voltar 15 segundos"
                   >
                     <Rewind className="h-5 w-5 fill-current" aria-hidden="true" />
                   </button>
-                  
-                  <button 
+
+                  <button
                     onClick={handlePlayPause}
                     disabled={isLoading}
-                    className="w-14 h-14 bg-neutral-900 text-white rounded-full flex items-center justify-center hover:bg-neutral-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 disabled:opacity-50 shadow-md"
+                    className="w-14 h-14 bg-[#1F3FA3] text-white rounded-full flex items-center justify-center hover:bg-[#152e7a] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 disabled:opacity-50 shadow-md"
                     aria-label={isPlaying ? "Pausar áudio" : "Reproduzir áudio"}
                   >
                     {isLoading ? (
@@ -539,10 +543,10 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
                     )}
                   </button>
 
-                  <button 
+                  <button
                     onClick={skipForward}
                     disabled={!hasAudio}
-                    className="text-neutral-500 hover:text-neutral-900 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-full p-1"
+                    className="text-[#1F3FA3]/70 hover:text-[#1F3FA3] transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] rounded-full p-1"
                     aria-label="Avançar 15 segundos"
                   >
                     <FastForward className="h-5 w-5 fill-current" aria-hidden="true" />
@@ -567,10 +571,10 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
               {onToggleFocusMode && (
                 <button
                   onClick={onToggleFocusMode}
-                  className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-none border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900
-                    ${isFocusMode 
-                      ? 'bg-neutral-900 text-white border-neutral-900' 
-                      : 'bg-transparent text-neutral-700 border-neutral-300 hover:border-neutral-900 hover:text-neutral-900'
+                  className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-none border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3]
+                    ${isFocusMode
+                      ? 'bg-[#1F3FA3] text-white border-[#1F3FA3]'
+                      : 'bg-transparent text-[#1F3FA3] border-neutral-300 hover:border-[#1F3FA3]'
                     }
                   `}
                   aria-label={isFocusMode ? "Desativar Modo Foco Profundo" : "Ativar Modo Foco Profundo"}
@@ -606,7 +610,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
                 <div className="flex items-center gap-3">
                   <button
                     onClick={toggleMute}
-                    className="text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded p-1 transition-colors"
+                    className="text-[#1F3FA3]/70 hover:text-[#1F3FA3] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] rounded p-1 transition-colors"
                     aria-label={isMuted || volume === 0 ? "Ativar som" : "Silenciar áudio"}
                   >
                     {isMuted || volume === 0 ? <VolumeX className="h-4 w-4" aria-hidden="true" /> : <Volume2 className="h-4 w-4" aria-hidden="true" />}
@@ -620,7 +624,7 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
                     step="0.05"
                     value={isMuted ? 0 : volume}
                     onChange={handleVolumeChange}
-                    className="w-20 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
+                    className="w-20 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-[#1F3FA3] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3]"
                   />
                 </div>
               </div>
