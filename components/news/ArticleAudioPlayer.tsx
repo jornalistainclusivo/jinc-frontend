@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Square, Loader2, Volume2, VolumeX, Brain, Rewind, FastForward } from 'lucide-react';
+import { useReaderIntelligence } from '@/components/news/ReaderIntelligenceProvider';
 
 function createWavBlob(pcmData: Uint8Array, sampleRate: number): Blob {
   const numChannels = 1;
@@ -38,7 +39,8 @@ function createWavBlob(pcmData: Uint8Array, sampleRate: number): Blob {
   return new Blob([buffer], { type: 'audio/wav' });
 }
 
-export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode }: { text: string, title: string, onToggleFocusMode?: () => void, isFocusMode?: boolean }) {
+export function ArticleAudioPlayer({ text, title }: { text: string, title: string }) {
+  const { isFocusMode, toggleFocusMode } = useReaderIntelligence();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -568,22 +570,20 @@ export function ArticleAudioPlayer({ text, title, onToggleFocusMode, isFocusMode
               </div>
 
               {/* Foco Profundo */}
-              {onToggleFocusMode && (
-                <button
-                  onClick={onToggleFocusMode}
-                  className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-none border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3]
-                    ${isFocusMode
-                      ? 'bg-[#1F3FA3] text-white border-[#1F3FA3]'
-                      : 'bg-transparent text-[#1F3FA3] border-neutral-300 hover:border-[#1F3FA3]'
-                    }
-                  `}
-                  aria-label={isFocusMode ? "Desativar Modo Foco Profundo" : "Ativar Modo Foco Profundo"}
-                  aria-pressed={isFocusMode}
-                >
-                  <Brain className="h-4 w-4" aria-hidden="true" />
-                  <span>{isFocusMode ? 'Foco Ativo' : 'Foco Profundo'}</span>
-                </button>
-              )}
+              <button
+                onClick={toggleFocusMode}
+                className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-none border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3]
+                  ${isFocusMode
+                    ? 'bg-[#1F3FA3] text-white border-[#1F3FA3]'
+                    : 'bg-transparent text-[#1F3FA3] border-neutral-300 hover:border-[#1F3FA3]'
+                  }
+                `}
+                aria-label={isFocusMode ? "Desativar Modo Foco Profundo" : "Ativar Modo Foco Profundo"}
+                aria-pressed={isFocusMode}
+              >
+                <Brain className="h-4 w-4" aria-hidden="true" />
+                <span>{isFocusMode ? 'Foco Ativo' : 'Foco Profundo'}</span>
+              </button>
             </div>
 
             {/* Linha 4: Velocidade + Volume */}
