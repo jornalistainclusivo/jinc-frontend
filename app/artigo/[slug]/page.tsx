@@ -47,22 +47,22 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
       <article className="max-w-4xl mx-auto px-4 py-12">
         <header className="mb-12 border-b border-neutral-200 pb-8">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <span className="bg-neutral-900 text-white text-xs font-bold px-3 py-1 rounded-sm uppercase tracking-tighter">
+            <span className="bg-[#1F3FA3] text-white text-xs font-bold px-3 py-1 rounded-sm uppercase tracking-tighter shadow-sm">
               {article.category}
             </span>
             <time className="text-neutral-500 text-sm font-medium">{article.date}</time>
           </div>
-          <h1 className="text-5xl font-black mb-6 text-gray-900 leading-tight tracking-tight text-center">
+          <h1 className="text-5xl font-serif font-bold mb-6 text-neutral-900 leading-tight tracking-tight text-center">
             {article.title}
           </h1>
           {article.subtitle && (
-            <p className="text-xl text-gray-500 font-medium text-center max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-neutral-600 font-medium text-center max-w-2xl mx-auto leading-relaxed">
               {article.subtitle}
             </p>
           )}
         </header>
 
-        <div className="aspect-video relative mb-16 rounded-sm overflow-hidden shadow-xl ring-1 ring-black/5 bg-neutral-100">
+        <div className="aspect-video relative mb-16 rounded-sm overflow-hidden shadow-xl ring-1 ring-neutral-900/5 bg-neutral-100">
           <img src={article.image} alt={article.title} className="object-cover w-full h-full" />
         </div>
 

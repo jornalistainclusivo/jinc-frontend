@@ -4,7 +4,10 @@ import { GoogleGenAI } from '@google/genai';
 export async function POST(req: NextRequest) {
     try {
         const { imageUrl } = await req.json();
-        if (!imageUrl) return NextResponse.json({ error: 'Missing imageUrl' }, { status: 400 });
+
+        // Security: Validação de Payload
+        if (!imageUrl || typeof imageUrl !== 'string') return NextResponse.json({ error: 'Missing or invalid imageUrl' }, { status: 400 });
+        if (imageUrl.length > 2000) return NextResponse.json({ error: 'URL payload too large' }, { status: 413 });
 
         const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) return NextResponse.json({ error: 'API Key not configured' }, { status: 500 });

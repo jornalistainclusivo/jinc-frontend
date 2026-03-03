@@ -7,10 +7,10 @@ export default function StrapiBlocks({ content }: { content: BlocksContent }) {
   if (!content) return null;
 
   return (
-    <div className="prose prose-lg max-w-[70ch]
+    <div className="prose prose-lg max-w-[70ch] mx-auto
                     font-serif leading-[1.9] text-neutral-700
                     prose-headings:text-neutral-900 
-                    prose-a:text-neutral-900 hover:prose-a:text-neutral-700">
+                    prose-a:text-[#1F3FA3] hover:prose-a:text-[#152e7a]">
       <BlocksRenderer
         content={content}
         blocks={{
