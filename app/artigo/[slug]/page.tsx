@@ -33,6 +33,27 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
       simpleSummary: articleData.resumo_simples || null
     };
 
+    // Divisão do array para inserir o ContextualLayer (mock dinâmico) após o parágrafo-alvo
+    let mockInsertIndex = -1;
+    if (Array.isArray(article.content)) {
+      mockInsertIndex = article.content.findIndex((block: any) => {
+        if (block.type === 'paragraph' && block.children) {
+          return block.children.some((child: any) =>
+            child.text && child.text.includes('O Jornalista Inclusivo foi reestruturado para ser')
+          );
+        }
+        return false;
+      });
+    }
+
+    let contentPart1 = article.content;
+    let contentPart2 = null;
+
+    if (mockInsertIndex !== -1 && Array.isArray(article.content)) {
+      contentPart1 = article.content.slice(0, mockInsertIndex + 1);
+      contentPart2 = article.content.slice(mockInsertIndex + 1);
+    }
+
     // Extrai o texto limpo dos blocos para o TTS
     let plainTextContent = '';
     if (Array.isArray(article.content)) {
@@ -85,16 +106,18 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
               </div>
             )}
 
+            <StrapiBlocks content={contentPart1} />
+
             <ContextualLayer
-              title="O que muda com a Nova Lei de Cotas?"
+              title="Design Universal (v2.0)"
               columns={[
-                { icon: 'brain', title: 'O Conceito', content: 'A Lei de Cotas exige que empresas com mais de 100 funcionários destinem vagas para PcDs.' },
-                { icon: 'scale', title: 'A Regra', content: 'Art. 93 da Lei nº 8.213/91, atualizada em 2024.' },
-                { icon: 'target', title: 'Na Prática', content: 'Isso abre 30 mil novas vagas e pressiona as empresas a adaptarem sua infraestrutura.' }
+                { icon: 'brain', title: 'O Conceito', content: 'A neuroergonomia aplica a neurociência para projetar interfaces adaptadas à diversidade cognitiva humana.' },
+                { icon: 'scale', title: 'A Regra', content: 'Diretrizes rigorosas baseadas nos pilares de aprovação do consórcio W3C (WCAG nível AAA).' },
+                { icon: 'target', title: 'O Impacto', content: 'Reduz a sobrecarga mental. O Modo Foco isola o layout, priorizando uma leitura linear sem vazamento cognitivo.' }
               ]}
             />
 
-            <StrapiBlocks content={article.content} />
+            {contentPart2 && <StrapiBlocks content={contentPart2} />}
 
             {article.simpleSummary && (
               <section className="mt-20 p-10 bg-neutral-50 rounded-sm border border-neutral-200 shadow-sm">
