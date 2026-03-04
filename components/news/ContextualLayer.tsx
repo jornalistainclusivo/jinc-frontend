@@ -1,17 +1,42 @@
 'use client';
 
 import React, { useState, useId } from 'react';
-import { Plus, Minus, Info } from 'lucide-react';
+import { Plus, Minus, Info, Brain, Scale, Target } from 'lucide-react';
+
+export interface ContextualColumn {
+    title: string;
+    content: string;
+    icon: 'brain' | 'scale' | 'target';
+}
 
 interface ContextualLayerProps {
     title: string;
-    content: string | React.ReactNode;
+    content?: string | React.ReactNode;
+    columns?: ContextualColumn[];
 }
 
-export function ContextualLayer({ title, content }: ContextualLayerProps) {
+export function ContextualLayer({ title, content, columns }: ContextualLayerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const baseId = useId();
     const contentId = `context-layer-${baseId}`;
+
+    const renderIcon = (iconType: string) => {
+        switch (iconType) {
+            case 'brain': return <Brain className="w-6 h-6 text-neutral-900 mb-3" aria-hidden="true" />;
+            case 'scale': return <Scale className="w-6 h-6 text-neutral-900 mb-3" aria-hidden="true" />;
+            case 'target': return <Target className="w-6 h-6 text-neutral-900 mb-3" aria-hidden="true" />;
+            default: return null;
+        }
+    };
+
+    const getColumnContentStyle = (iconType: string) => {
+        switch (iconType) {
+            case 'brain': return "font-serif text-neutral-700 leading-relaxed";
+            case 'scale': return "font-mono text-xs text-neutral-600 leading-relaxed";
+            case 'target': return "font-sans text-neutral-700 leading-relaxed";
+            default: return "font-serif text-neutral-700 leading-relaxed";
+        }
+    };
 
     return (
         <div className="my-12 border-y-2 border-neutral-900 bg-neutral-50 px-4 sm:px-6">
@@ -50,13 +75,28 @@ export function ContextualLayer({ title, content }: ContextualLayerProps) {
             >
                 <div className="overflow-hidden">
                     <div className="pb-8 pt-2">
-                        <div className="prose prose-neutral max-w-none font-serif text-neutral-800 leading-relaxed text-lg">
-                            {typeof content === 'string' ? (
-                                <div dangerouslySetInnerHTML={{ __html: content }} />
-                            ) : (
-                                content
-                            )}
-                        </div>
+                        {columns && columns.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
+                                {columns.map((col, idx) => (
+                                    <div key={idx} className="border-l-2 border-neutral-200 pl-6">
+                                        {renderIcon(col.icon)}
+                                        <h4 className="font-bold text-sm uppercase tracking-widest text-neutral-900 mb-2">{col.title}</h4>
+                                        <div
+                                            className={getColumnContentStyle(col.icon)}
+                                            dangerouslySetInnerHTML={{ __html: col.content }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="prose prose-neutral max-w-none font-serif text-neutral-800 leading-relaxed text-lg">
+                                {typeof content === 'string' ? (
+                                    <div dangerouslySetInnerHTML={{ __html: content }} />
+                                ) : (
+                                    content
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

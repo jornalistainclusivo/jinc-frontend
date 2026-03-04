@@ -86,8 +86,12 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
             )}
 
             <ContextualLayer
-              title="O que é o BPC/LOAS?"
-              content="<p>O <strong>Benefício de Prestação Continuada (BPC)</strong>, previsto na Lei Orgânica da Assistência Social (LOAS), é a garantia de um salário mínimo mensal à pessoa com deficiência e ao idoso com 65 anos ou mais que comprovem não possuir meios de prover a própria manutenção.</p><p>Para ter direito, é necessário que a renda por pessoa do grupo familiar seja igual ou inferior a 1/4 do salário-mínimo.</p>"
+              title="O que muda com a Nova Lei de Cotas?"
+              columns={[
+                { icon: 'brain', title: 'O Conceito', content: 'A Lei de Cotas exige que empresas com mais de 100 funcionários destinem vagas para PcDs.' },
+                { icon: 'scale', title: 'A Regra', content: 'Art. 93 da Lei nº 8.213/91, atualizada em 2024.' },
+                { icon: 'target', title: 'Na Prática', content: 'Isso abre 30 mil novas vagas e pressiona as empresas a adaptarem sua infraestrutura.' }
+              ]}
             />
 
             <StrapiBlocks content={article.content} />
