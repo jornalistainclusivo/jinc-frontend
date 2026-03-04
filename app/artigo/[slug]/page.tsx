@@ -4,6 +4,7 @@ import StrapiBlocks from '@/components/StrapiBlocks';
 import { ArticleAudioPlayer } from '@/components/news/ArticleAudioPlayer';
 import { ReaderIntelligenceProvider } from '@/components/news/ReaderIntelligenceProvider';
 import { ShareBlock } from '@/components/news/ShareBlock';
+import { ContextualLayer } from '@/components/news/ContextualLayer';
 
 interface ArtigoPageProps {
   params: Promise<{ slug: string }>;
@@ -83,6 +84,11 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
                 </div>
               </div>
             )}
+
+            <ContextualLayer
+              title="O que é o BPC/LOAS?"
+              content="<p>O <strong>Benefício de Prestação Continuada (BPC)</strong>, previsto na Lei Orgânica da Assistência Social (LOAS), é a garantia de um salário mínimo mensal à pessoa com deficiência e ao idoso com 65 anos ou mais que comprovem não possuir meios de prover a própria manutenção.</p><p>Para ter direito, é necessário que a renda por pessoa do grupo familiar seja igual ou inferior a 1/4 do salário-mínimo.</p>"
+            />
 
             <StrapiBlocks content={article.content} />
 

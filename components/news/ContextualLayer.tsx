@@ -1,0 +1,65 @@
+'use client';
+
+import React, { useState, useId } from 'react';
+import { Plus, Minus, Info } from 'lucide-react';
+
+interface ContextualLayerProps {
+    title: string;
+    content: string | React.ReactNode;
+}
+
+export function ContextualLayer({ title, content }: ContextualLayerProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const baseId = useId();
+    const contentId = `context-layer-${baseId}`;
+
+    return (
+        <div className="my-12 border-y-2 border-neutral-900 bg-neutral-50 px-4 sm:px-6">
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                aria-expanded={isOpen}
+                aria-controls={contentId}
+                className="w-full flex items-center justify-between py-6 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-inset group"
+            >
+                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6">
+                    <div className="flex items-center gap-2">
+                        <div className="bg-neutral-900 text-white rounded-full p-1 flex-shrink-0">
+                            <Info className="h-4 w-4" aria-hidden="true" />
+                        </div>
+                        <span className="text-xs font-bold uppercase tracking-widest text-neutral-500 group-hover:text-neutral-700 transition-colors select-none">
+                            Entenda o Contexto
+                        </span>
+                    </div>
+                    <h3 className="text-xl font-serif font-medium text-neutral-900 transition-colors">
+                        {title}
+                    </h3>
+                </div>
+                <div
+                    className="text-neutral-900 flex-shrink-0 p-2 sm:p-3 transition-colors group-hover:bg-neutral-200 rounded-full ml-4"
+                    aria-hidden="true"
+                >
+                    {isOpen ? <Minus className="h-5 w-5 sm:h-6 sm:w-6" /> : <Plus className="h-5 w-5 sm:h-6 sm:w-6" />}
+                </div>
+            </button>
+
+            <div
+                id={contentId}
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                aria-hidden={!isOpen}
+            >
+                <div className="overflow-hidden">
+                    <div className="pb-8 pt-2">
+                        <div className="prose prose-neutral max-w-none font-serif text-neutral-800 leading-relaxed text-lg">
+                            {typeof content === 'string' ? (
+                                <div dangerouslySetInnerHTML={{ __html: content }} />
+                            ) : (
+                                content
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
