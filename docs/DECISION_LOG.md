@@ -24,6 +24,14 @@
 **Decisão:** Implementação de um toggle que altera o layout global da página (fundo off-white, redução de contraste em imagens, ocultação de elementos periféricos).
 **Consequências:** Aumento da acessibilidade cognitiva e conforto visual, sem comprometer a identidade visual do portal.
 
+## ADR-004: Topologia Multi-repo e ISR via Webhooks
+
+**Data:** 2026-03-04
+**Status:** Aceito
+**Contexto:** O portal precisa rodar o Strapi headless conectado com o frontend no Next.js, mantendo resiliência e tempo de resposta otimizado.
+**Decisão:** Criação de `Dockerfile`s multi-stage independentes gerenciados via `docker-compose.yml`. O cache Next.js será atualizado sob demanda via rota `/api/revalidate` que valida um `TOKEN_SECRET`.
+**Consequências:** Deploy autônomo e assíncrono entre serviços. Exige volumes persistentes para uploads no Strapi. O frontend utilizará o modo `standalone` nativo do Next.js.
+
 ## ADR-004: Adoção da biblioteca 'qs' para serialização de filtros do Strapi 5
 
 **Data:** 2026-03-02
