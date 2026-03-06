@@ -58,6 +58,22 @@
     background-color: #FFFF00 !important;
     color: #0A0A0A !important;
   }
+
+  /* Deep Focus Mode */
+  body.deep-focus {
+    background-color: #FDFBF7 !important;
+    color: #262626 !important; /* text-neutral-800 */
+  }
+
+  body.deep-focus img,
+  body.deep-focus video {
+    filter: grayscale(20%) !important;
+  }
+
+  body.deep-focus .contextual-layer-bg {
+    background-color: transparent !important;
+    border-color: #262626 !important;
+  }
 }
 
 @keyframes slide {
