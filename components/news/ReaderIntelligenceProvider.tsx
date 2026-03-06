@@ -12,20 +12,35 @@ const ReaderIntelligenceContext = createContext<ReaderIntelligenceContextType | 
 export function ReaderIntelligenceProvider({ children }: { children: React.ReactNode }) {
     const [isFocusMode, setIsFocusMode] = useState(false);
 
+    useEffect(() => {
+        // Run only on client-side to avoid Hydration Mismatch
+        const stored = localStorage.getItem('jinc_focus_pref');
+        if (stored === 'true') {
+            setIsFocusMode(true);
+        }
+    }, []);
+
     const toggleFocusMode = () => {
-        setIsFocusMode((prev) => !prev);
+        setIsFocusMode((prev) => {
+            const newValue = !prev;
+            localStorage.setItem('jinc_focus_pref', newValue ? 'true' : 'false');
+            return newValue;
+        });
     };
 
     useEffect(() => {
         if (isFocusMode) {
             document.documentElement.setAttribute('data-focus-mode', 'active');
+            document.body.classList.add('deep-focus');
         } else {
             document.documentElement.removeAttribute('data-focus-mode');
+            document.body.classList.remove('deep-focus');
         }
 
         // Cleanup on unmount
         return () => {
             document.documentElement.removeAttribute('data-focus-mode');
+            document.body.classList.remove('deep-focus');
         };
     }, [isFocusMode]);
 

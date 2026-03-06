@@ -39,7 +39,7 @@ export function ContextualLayer({ title, content, columns }: ContextualLayerProp
     };
 
     return (
-        <div className="my-12 border-y-2 border-neutral-900 bg-neutral-50 px-4 sm:px-6">
+        <div className="contextual-layer-bg my-12 border-y-2 border-neutral-900 bg-neutral-50 px-4 sm:px-6">
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 aria-expanded={isOpen}
