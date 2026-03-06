@@ -78,7 +78,14 @@ export async function getArtigoPorSlug(slug: string) {
                 $eq: slug,
             },
         },
-        populate: '*',
+        populate: {
+            capa: true,
+            autor: true,
+            categoria: true,
+            blocos_de_conteudo: {
+                populate: '*'
+            }
+        },
     });
 
     return data?.data?.[0]; // Strapi REST API returns an array for filters

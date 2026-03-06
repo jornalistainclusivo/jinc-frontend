@@ -4,7 +4,7 @@ import StrapiBlocks from '@/components/StrapiBlocks';
 import { ArticleAudioPlayer } from '@/components/news/ArticleAudioPlayer';
 import { ReaderIntelligenceProvider } from '@/components/news/ReaderIntelligenceProvider';
 import { ShareBlock } from '@/components/news/ShareBlock';
-import { ContextualLayer } from '@/components/news/ContextualLayer';
+import { BlockMapper } from '@/components/news/BlockMapper';
 
 interface ArtigoPageProps {
   params: Promise<{ slug: string }>;
@@ -29,42 +29,47 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
       image: articleData.capa?.url
         ? getStrapiURL(articleData.capa.url)
         : 'https://picsum.photos/1920/1080?grayscale',
-      content: articleData.conteudo, // JSON de blocos do Strapi 5
+      blocks: articleData.blocos_de_conteudo || [], // Fallback if no blocks
       simpleSummary: articleData.resumo_simples || null
     };
 
-    // Divisão do array para inserir o ContextualLayer (mock dinâmico) após o parágrafo-alvo
-    let mockInsertIndex = -1;
-    if (Array.isArray(article.content)) {
-      mockInsertIndex = article.content.findIndex((block: any) => {
-        if (block.type === 'paragraph' && block.children) {
-          return block.children.some((child: any) =>
-            child.text && child.text.includes('O Jornalista Inclusivo foi reestruturado para ser')
-          );
+    // Extrai o texto limpo dos blocos para o TTS
+    let plainTextContent = '';
+
+    // Tratamento para a nova Dynamic Zone
+    if (Array.isArray(article.blocks)) {
+      article.blocks.forEach((block: any) => {
+        if (block.__component === 'blocos-materia.texto-livre' && Array.isArray(block.conteudo)) {
+          block.conteudo.forEach((richTextNode: any) => {
+            if (richTextNode.type === 'paragraph' || richTextNode.type === 'heading') {
+              richTextNode.children?.forEach((child: any) => {
+                if (child.text) plainTextContent += child.text + ' ';
+              });
+              plainTextContent += '\n\n';
+            }
+          });
         }
-        return false;
       });
     }
 
-    let contentPart1 = article.content;
-    let contentPart2 = null;
-
-    if (mockInsertIndex !== -1 && Array.isArray(article.content)) {
-      contentPart1 = article.content.slice(0, mockInsertIndex + 1);
-      contentPart2 = article.content.slice(mockInsertIndex + 1);
-    }
-
-    // Extrai o texto limpo dos blocos para o TTS
-    let plainTextContent = '';
-    if (Array.isArray(article.content)) {
-      article.content.forEach((block: any) => {
-        if (block.type === 'paragraph' || block.type === 'heading') {
-          block.children?.forEach((child: any) => {
+    // Tratamento de fallback (caso o field antigo conteudo exista mas as dynamic zones não - compatibilidade)
+    if (!plainTextContent && Array.isArray(articleData.conteudo)) {
+      articleData.conteudo.forEach((richTextNode: any) => {
+        if (richTextNode.type === 'paragraph' || richTextNode.type === 'heading') {
+          richTextNode.children?.forEach((child: any) => {
             if (child.text) plainTextContent += child.text + ' ';
           });
           plainTextContent += '\n\n';
         }
       });
+      // Injete-o como um bloco de texto live retro-compatível se as Dynamic Zones vierem vazias
+      if (article.blocks.length === 0) {
+        article.blocks.push({
+          __component: 'blocos-materia.texto-livre',
+          id: 999999,
+          conteudo: articleData.conteudo
+        });
+      }
     }
 
     return (
@@ -106,18 +111,7 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
               </div>
             )}
 
-            <StrapiBlocks content={contentPart1} />
-
-            <ContextualLayer
-              title="Design Universal (v2.0)"
-              columns={[
-                { icon: 'brain', title: 'O Conceito', content: 'A neuroergonomia aplica a neurociência para projetar interfaces adaptadas à diversidade cognitiva humana.' },
-                { icon: 'scale', title: 'A Regra', content: 'Diretrizes rigorosas baseadas nos pilares de aprovação do consórcio W3C (WCAG nível AAA).' },
-                { icon: 'target', title: 'O Impacto', content: 'Reduz a sobrecarga mental. O Modo Foco isola o layout, priorizando uma leitura linear sem vazamento cognitivo.' }
-              ]}
-            />
-
-            {contentPart2 && <StrapiBlocks content={contentPart2} />}
+            <BlockMapper blocks={article.blocks} />
 
             {article.simpleSummary && (
               <section className="mt-20 p-10 bg-neutral-50 rounded-sm border border-neutral-200 shadow-sm">
