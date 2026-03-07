@@ -79,14 +79,16 @@ export async function getArtigoPorSlug(slug: string) {
             },
         },
         populate: {
+            // Mantemos os relacionamentos de primeiro nível
             capa: true,
-            autor: true,
+            autors: true,
             categoria: true,
+            // Populamos o Dynamic Zone de forma universal, sem depender de strings tipadas
             blocos_de_conteudo: {
                 populate: '*'
             }
         },
     });
 
-    return data?.data?.[0]; // Strapi REST API returns an array for filters
+    return data?.data?.[0];
 }
