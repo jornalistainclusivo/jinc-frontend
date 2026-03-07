@@ -29,14 +29,7 @@ export function ContextualLayer({ title, content, columns }: ContextualLayerProp
         }
     };
 
-    const getColumnContentStyle = (iconType: string) => {
-        switch (iconType) {
-            case 'brain': return "font-serif text-neutral-700 leading-relaxed";
-            case 'scale': return "font-mono text-xs text-neutral-600 leading-relaxed";
-            case 'target': return "font-sans text-neutral-700 leading-relaxed";
-            default: return "font-serif text-neutral-700 leading-relaxed";
-        }
-    };
+
 
     return (
         <div className="contextual-layer-bg my-12 border-y-2 border-neutral-900 bg-neutral-50 px-4 sm:px-6">
@@ -78,11 +71,13 @@ export function ContextualLayer({ title, content, columns }: ContextualLayerProp
                         {columns && columns.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
                                 {columns.map((col, idx) => (
-                                    <div key={idx} className="border-l-2 border-neutral-200 pl-6">
-                                        {renderIcon(col.icon)}
-                                        <h4 className="font-bold text-sm uppercase tracking-widest text-neutral-900 mb-2">{col.title}</h4>
+                                    <div key={idx} className="group border-l-2 border-neutral-200 pl-6 hover:border-neutral-900 transition-colors duration-300">
+                                        <div className="transform group-hover:scale-110 group-hover:-translate-y-1 transition-transform duration-300 origin-left">
+                                            {renderIcon(col.icon)}
+                                        </div>
+                                        <h4 className="font-sans font-bold text-sm uppercase tracking-widest text-neutral-900 mb-3">{col.title}</h4>
                                         <div
-                                            className={getColumnContentStyle(col.icon)}
+                                            className="font-sans text-neutral-700 text-base leading-relaxed prose prose-neutral prose-sm max-w-none"
                                             dangerouslySetInnerHTML={{ __html: col.content }}
                                         />
                                     </div>
