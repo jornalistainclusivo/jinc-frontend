@@ -39,8 +39,8 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
     // Tratamento para a nova Dynamic Zone
     if (Array.isArray(article.blocks)) {
       article.blocks.forEach((block: any) => {
-        if (block.__component === 'blocos-materia.texto-livre' && Array.isArray(block.conteudo)) {
-          block.conteudo.forEach((richTextNode: any) => {
+        if (block.__component === 'blocos-materia.texto-livre' && Array.isArray(block.texto)) {
+          block.texto.forEach((richTextNode: any) => {
             if (richTextNode.type === 'paragraph' || richTextNode.type === 'heading') {
               richTextNode.children?.forEach((child: any) => {
                 if (child.text) plainTextContent += child.text + ' ';
@@ -67,7 +67,7 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
         article.blocks.push({
           __component: 'blocos-materia.texto-livre',
           id: 999999,
-          conteudo: articleData.conteudo
+          texto: articleData.conteudo
         });
       }
     }

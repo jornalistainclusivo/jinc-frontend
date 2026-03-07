@@ -83,7 +83,10 @@ export async function getArtigoPorSlug(slug: string) {
             autor: true,
             categoria: true,
             blocos_de_conteudo: {
-                populate: '*'
+                on: {
+                    'blocos-materia.texto-livre': { populate: '*' },
+                    'blocos-materia.contextual-layer': { populate: '*' }
+                }
             }
         },
     });
