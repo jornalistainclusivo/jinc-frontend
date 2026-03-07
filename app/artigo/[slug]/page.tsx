@@ -22,7 +22,7 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
       title: articleData.titulo || 'Sem título',
       subtitle: articleData.subtitulo || '',
       category: articleData.categoria?.nome || 'Geral',
-      author: articleData.autor?.nome || 'Redação JINC',
+      author: articleData.autors?.[0]?.nome || 'Redação JINC',
       date: articleData.publishedAt
         ? new Date(articleData.publishedAt).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })
         : 'Data não disponível',
