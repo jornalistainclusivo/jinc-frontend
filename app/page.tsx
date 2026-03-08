@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { AutoAltImage } from '@/components/ui/AutoAltImage';
-import { getUltimasPublicacoes, getStrapiURL } from '@/lib/api';
+import { getUltimasPublicacoes, getStrapiMedia } from '@/lib/api';
 
 function formatDate(dateString?: string) {
   if (!dateString) return '';
@@ -9,7 +9,7 @@ function formatDate(dateString?: string) {
 }
 
 function getImageUrl(item: any, fallbackId: string) {
-  return item?.capa?.url ? getStrapiURL(item.capa.url) : `https://picsum.photos/1024/768?random=${fallbackId}`;
+  return item?.capa?.url ? (getStrapiMedia(item.capa.url) || '') : `https://picsum.photos/1024/768?random=${fallbackId}`;
 }
 
 export default async function Home() {
@@ -50,7 +50,7 @@ export default async function Home() {
                     {heroArticle.resumo_simples || heroArticle.subtitulo || 'Leia mais sobre este assunto em nossa plataforma.'}
                   </p>
                   <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-neutral-500 font-medium">
-                    <span>Por {heroArticle.autor?.nome || 'Redação JINC'}</span>
+                    <span>Por {heroArticle.autors?.[0]?.nome || heroArticle.autor?.nome || 'Redação JINC'}</span>
                     <span aria-hidden="true">&middot;</span>
                     <time dateTime={heroArticle.publishedAt}>{formatDate(heroArticle.publishedAt)}</time>
                   </div>
@@ -59,7 +59,7 @@ export default async function Home() {
                 <Link href={`/artigo/${heroArticle.slug}`} tabIndex={-1} aria-hidden="true" className="group relative w-full aspect-video overflow-hidden bg-neutral-100 focus:outline-none rounded-sm block">
                   <AutoAltImage
                     src={getImageUrl(heroArticle, 'hero')}
-                    alt=""
+                    alt={heroArticle.capa?.alternativeText || heroArticle.titulo || ''}
                     fill
                     sizes="(max-width: 1024px) 100vw, 66vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -132,7 +132,7 @@ export default async function Home() {
                 <Link href={`/artigo/${investigativeArticle.slug}`} tabIndex={-1} aria-hidden="true" className="group relative w-full aspect-[4/3] lg:aspect-video overflow-hidden bg-neutral-900 focus:outline-none rounded-sm block">
                   <AutoAltImage
                     src={getImageUrl(investigativeArticle, 'invest')}
-                    alt=""
+                    alt={investigativeArticle.capa?.alternativeText || investigativeArticle.titulo || ''}
                     fill
                     sizes="(max-width: 1024px) 100vw, 60vw"
                     className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-100"
@@ -184,7 +184,7 @@ export default async function Home() {
               <Link href={`/artigo/${accessibilityMain.slug}`} tabIndex={-1} aria-hidden="true" className="group relative w-full aspect-[16/9] overflow-hidden bg-neutral-100 mb-6 focus:outline-none rounded-sm block">
                 <AutoAltImage
                   src={getImageUrl(accessibilityMain, 'accMain')}
-                  alt=""
+                  alt={accessibilityMain.capa?.alternativeText || accessibilityMain.titulo || ''}
                   fill
                   sizes="(max-width: 1024px) 100vw, 60vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -208,7 +208,7 @@ export default async function Home() {
                     <Link href={`/artigo/${item.slug}`} tabIndex={-1} aria-hidden="true" className="group relative w-full aspect-[3/2] overflow-hidden bg-neutral-100 mb-4 focus:outline-none rounded-sm block">
                       <AutoAltImage
                         src={getImageUrl(item, 'accSec')}
-                        alt=""
+                        alt={item.capa?.alternativeText || item.titulo || ''}
                         fill
                         sizes="(max-width: 1024px) 100vw, 30vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -245,7 +245,7 @@ export default async function Home() {
               <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-8">
                 {opinionArticles.map((col: any) => (
                   <article key={col.id} className="flex flex-col">
-                    <span className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-3">{col.autor?.nome || 'Convidado'}</span>
+                    <span className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-3">{col.autors?.[0]?.nome || col.autor?.nome || 'Convidado'}</span>
                     <h3 className="text-xl font-serif font-medium leading-[1.4] text-neutral-900">
                       <Link href={`/artigo/${col.slug}`} className="hover:text-neutral-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">
                         {col.titulo}

@@ -1,4 +1,4 @@
-import { getArtigoPorSlug, getStrapiURL } from '@/lib/api';
+import { getArtigoPorSlug, getStrapiMedia } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import StrapiBlocks from '@/components/StrapiBlocks';
 import { ArticleAudioPlayer } from '@/components/news/ArticleAudioPlayer';
@@ -27,7 +27,7 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
         ? new Date(articleData.publishedAt).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })
         : 'Data não disponível',
       image: articleData.capa?.url
-        ? getStrapiURL(articleData.capa.url)
+        ? (getStrapiMedia(articleData.capa.url) || '')
         : 'https://picsum.photos/1920/1080?grayscale',
       blocks: articleData.blocos_de_conteudo || [], // Fallback if no blocks
       simpleSummary: articleData.resumo_simples || null

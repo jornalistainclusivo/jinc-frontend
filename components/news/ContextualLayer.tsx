@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useMemo } from 'react';
 import { Plus, Minus, Info, Brain, Scale, Target } from 'lucide-react';
 
 export interface ContextualColumn {
@@ -30,6 +30,18 @@ export function ContextualLayer({ title, content, columns }: ContextualLayerProp
     };
 
 
+
+    const sanitizeHtml = (htmlContent: string) => {
+        if (typeof window === 'undefined') return htmlContent; // Skipping sanitization on SSR
+        const doc = new DOMParser().parseFromString(htmlContent, 'text/html');
+        // Basic script injection sanitization fallback 
+        const scripts = doc.getElementsByTagName('script');
+        let i = scripts.length;
+        while (i--) {
+            scripts[i].parentNode?.removeChild(scripts[i]);
+        }
+        return doc.body.innerHTML;
+    };
 
     return (
         <div className="contextual-layer-bg my-12 border-y-2 border-neutral-900 bg-neutral-50 px-4 sm:px-6">
@@ -78,7 +90,7 @@ export function ContextualLayer({ title, content, columns }: ContextualLayerProp
                                         <h4 className="font-sans font-bold text-sm uppercase tracking-widest text-neutral-900 mb-3">{col.title}</h4>
                                         <div
                                             className="font-sans text-neutral-700 text-base leading-relaxed prose prose-neutral prose-sm max-w-none"
-                                            dangerouslySetInnerHTML={{ __html: col.content }}
+                                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(col.content) }}
                                         />
                                     </div>
                                 ))}
@@ -86,7 +98,7 @@ export function ContextualLayer({ title, content, columns }: ContextualLayerProp
                         ) : (
                             <div className="prose prose-neutral max-w-none font-serif text-neutral-800 leading-relaxed text-lg">
                                 {typeof content === 'string' ? (
-                                    <div dangerouslySetInnerHTML={{ __html: content }} />
+                                    <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }} />
                                 ) : (
                                     content
                                 )}

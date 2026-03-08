@@ -1,8 +1,22 @@
 import qs from 'qs';
 
 export function getStrapiURL(path = '') {
-    return `${process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://127.0.0.1:1337'
-        }${path}`;
+    const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://127.0.0.1:1337';
+    // Ensures Node fetch API resolves properly in IPv4 configurations locally
+    return `${baseUrl.replace('localhost', '127.0.0.1')}${path}`;
+}
+
+export function getStrapiMedia(url: string | null) {
+    if (url == null) {
+        return null;
+    }
+    // Return the absolute URL if it already is one
+    if (url.startsWith('http') || url.startsWith('//')) {
+        return url;
+    }
+    // Ensure Client Media fetches bypass 127.0.0.1 CORS/Mixed content local blockers
+    const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+    return `${baseUrl}${url}`;
 }
 
 /**
@@ -13,6 +27,7 @@ export function getStrapiURL(path = '') {
  * @returns Parsed API call response
  */
 export async function fetchAPI(path: string, urlParamsObject = {}, options = {}) {
+    let requestUrl = '';
     try {
         // Merge default and user options
         const mergedOptions = {
@@ -25,7 +40,7 @@ export async function fetchAPI(path: string, urlParamsObject = {}, options = {})
 
         // Build request URL
         const queryString = qs.stringify(urlParamsObject, { encodeValuesOnly: true });
-        const requestUrl = `${getStrapiURL(
+        requestUrl = `${getStrapiURL(
             `/api${path}${queryString ? `?${queryString}` : ''}`
         )}`;
 
@@ -38,8 +53,9 @@ export async function fetchAPI(path: string, urlParamsObject = {}, options = {})
         }
         const data = await response.json();
         return data;
-    } catch (error) {
-        console.error(`Error fetching data from Strapi API`, error);
+    } catch (error: any) {
+        console.error(`Error fetching data from Strapi API at URL: ${requestUrl}`);
+        console.error(`=> Error name: ${error.name}, message: ${error.message}, cause: ${error.cause}`);
         throw error;
     }
 }
@@ -50,7 +66,11 @@ export async function fetchAPI(path: string, urlParamsObject = {}, options = {})
 
 export async function getNoticiasDestacadas(limit = 4) {
     return fetchAPI('/artigos', {
-        populate: '*',
+        populate: {
+            capa: true,
+            categoria: true,
+            autors: true,
+        },
         sort: ['createdAt:desc'],
         pagination: {
             limit: limit,
@@ -62,7 +82,11 @@ export async function getNoticiasDestacadas(limit = 4) {
 
 export async function getUltimasPublicacoes(page = 1, pageSize = 10) {
     return fetchAPI('/artigos', {
-        populate: '*',
+        populate: {
+            capa: true,
+            categoria: true,
+            autors: true,
+        },
         sort: ['createdAt:desc'],
         pagination: {
             page: page,

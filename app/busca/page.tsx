@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Search, ArrowRight, ArrowLeft } from 'lucide-react';
-import { fetchAPI, getStrapiURL } from '@/lib/api';
+import { fetchAPI, getStrapiMedia } from '@/lib/api';
 import { Metadata } from 'next';
 import { AutoAltImage } from '@/components/ui/AutoAltImage';
 
@@ -70,7 +70,7 @@ export default async function BuscaPage({
                 description: postData.resumo_simples || '',
                 category: postData.categoria?.nome || 'Geral',
                 date: postData.publishedAt ? new Date(postData.publishedAt).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }) : '',
-                image: postData.capa?.url ? getStrapiURL(postData.capa.url) : `https://picsum.photos/800/600?random=${postData.id || postData.documentId}`
+                image: postData.capa?.url ? (getStrapiMedia(postData.capa.url) || '') : `https://picsum.photos/800/600?random=${postData.id || postData.documentId}`
               };
 
               let colorClass = 'text-neutral-900';
