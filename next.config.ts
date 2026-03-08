@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   },
   turbopack: {},
   images: {
+    unoptimized: process.env.NODE_ENV === 'development',
     remotePatterns: [
       {
         // Mantido do AI Studio
@@ -26,6 +27,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'http',
         hostname: '127.0.0.1',
+        port: '1337',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
         port: '1337',
         pathname: '/uploads/**',
       },

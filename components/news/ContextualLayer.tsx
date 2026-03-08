@@ -76,7 +76,7 @@ export function ContextualLayer({ title, content, columns }: ContextualLayerProp
                 id={contentId}
                 className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                     }`}
-                aria-hidden={!isOpen}
+                inert={!isOpen ? true : undefined}
             >
                 <div className="overflow-hidden">
                     <div className="pb-8 pt-2">
