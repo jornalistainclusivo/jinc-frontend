@@ -56,7 +56,7 @@ export default async function Home() {
                   </div>
                 </div>
 
-                <Link href={`/artigo/${heroArticle.slug}`} tabIndex={-1} aria-hidden="true" className="group relative w-full aspect-video overflow-hidden bg-neutral-100 focus:outline-none rounded-sm block">
+                <Link href={`/artigo/${heroArticle.slug}`} tabIndex={-1} className="group relative w-full aspect-video overflow-hidden bg-neutral-100 focus:outline-none rounded-sm block">
                   <AutoAltImage
                     src={getImageUrl(heroArticle, 'hero')}
                     alt={heroArticle.capa?.alternativeText || heroArticle.titulo || ''}
@@ -129,7 +129,7 @@ export default async function Home() {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
               <div className="lg:col-span-7 order-2 lg:order-1">
-                <Link href={`/artigo/${investigativeArticle.slug}`} tabIndex={-1} aria-hidden="true" className="group relative w-full aspect-[4/3] lg:aspect-video overflow-hidden bg-neutral-900 focus:outline-none rounded-sm block">
+                <Link href={`/artigo/${investigativeArticle.slug}`} tabIndex={-1} className="group relative w-full aspect-[4/3] lg:aspect-video overflow-hidden bg-neutral-900 focus:outline-none rounded-sm block">
                   <AutoAltImage
                     src={getImageUrl(investigativeArticle, 'invest')}
                     alt={investigativeArticle.capa?.alternativeText || investigativeArticle.titulo || ''}
@@ -153,7 +153,6 @@ export default async function Home() {
                 <Link
                   href={`/artigo/${investigativeArticle.slug}`}
                   tabIndex={-1}
-                  aria-hidden="true"
                   className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-white hover:text-neutral-300 focus:outline-none rounded-sm transition-colors w-fit"
                 >
                   Ler Investigação Completa
@@ -181,7 +180,7 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 lg:ml-8">
             <article className="md:col-span-12 lg:col-span-7 flex flex-col">
-              <Link href={`/artigo/${accessibilityMain.slug}`} tabIndex={-1} aria-hidden="true" className="group relative w-full aspect-[16/9] overflow-hidden bg-neutral-100 mb-6 focus:outline-none rounded-sm block">
+              <Link href={`/artigo/${accessibilityMain.slug}`} tabIndex={-1} className="group relative w-full aspect-[16/9] overflow-hidden bg-neutral-100 mb-6 focus:outline-none rounded-sm block">
                 <AutoAltImage
                   src={getImageUrl(accessibilityMain, 'accMain')}
                   alt={accessibilityMain.capa?.alternativeText || accessibilityMain.titulo || ''}
@@ -205,7 +204,7 @@ export default async function Home() {
               <div className="md:col-span-12 lg:col-span-5 flex flex-col gap-8 lg:border-l lg:border-neutral-200 lg:pl-12">
                 {accessibilitySecondary.map((item: any) => (
                   <article key={item.id} className="flex flex-col border-b border-neutral-200 pb-8 last:border-0 last:pb-0">
-                    <Link href={`/artigo/${item.slug}`} tabIndex={-1} aria-hidden="true" className="group relative w-full aspect-[3/2] overflow-hidden bg-neutral-100 mb-4 focus:outline-none rounded-sm block">
+                    <Link href={`/artigo/${item.slug}`} tabIndex={-1} className="group relative w-full aspect-[3/2] overflow-hidden bg-neutral-100 mb-4 focus:outline-none rounded-sm block">
                       <AutoAltImage
                         src={getImageUrl(item, 'accSec')}
                         alt={item.capa?.alternativeText || item.titulo || ''}

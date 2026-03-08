@@ -55,5 +55,5 @@ export function AutoAltImage({ src, alt, autoAlt = true, ...props }: AutoAltImag
     };
   }, [src, alt, autoAlt]);
 
-  return <Image src={src} alt={finalAlt} {...props} />;
+  return <Image src={src} alt={finalAlt} unoptimized={process.env.NODE_ENV === 'development'} {...props} />;
 }
