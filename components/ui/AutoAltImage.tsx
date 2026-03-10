@@ -55,5 +55,8 @@ export function AutoAltImage({ src, alt, autoAlt = true, ...props }: AutoAltImag
     };
   }, [src, alt, autoAlt]);
 
-  return <Image src={src} alt={finalAlt} unoptimized={process.env.NODE_ENV === 'development'} {...props} />;
+  // Corrige bugs de Mixed Content e Chromium IPv6 para imagens do Strapi local
+  const safeSrc = typeof src === 'string' ? src.replace('127.0.0.1', 'localhost') : src;
+
+  return <Image src={safeSrc} alt={finalAlt} unoptimized={process.env.NODE_ENV === 'development'} {...props} />;
 }

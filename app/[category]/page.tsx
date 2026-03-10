@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { AutoAltImage } from '@/components/ui/AutoAltImage';
+import { getArtigosPorCategoria, getStrapiMedia } from '@/lib/api';
 
 export default async function CategoryPage({
   params,
@@ -8,6 +9,8 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
+  const response = await getArtigosPorCategoria(category, 1, 15);
+  const artigos = response?.data || [];
   
   // Format category slug to Title Case
   const formattedCategory = category
@@ -55,41 +58,45 @@ export default async function CategoryPage({
           
           {/* Main Feed (2 columns) */}
           <div className="lg:col-span-2 flex flex-col gap-y-12">
-            {[1, 2, 3, 4, 5].map((item) => (
-              <article key={item} className="flex flex-col sm:flex-row gap-6 group relative border-b border-neutral-100 pb-12 last:border-0 last:pb-0">
-                <div className="w-full sm:w-2/5 shrink-0">
-                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-100">
-                    <AutoAltImage
-                      src={`https://picsum.photos/800/600?random=${item + 10}`}
-                      alt=""
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 40vw, 33vw"
-                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col justify-center flex-1">
-                  <div className="flex items-center gap-x-3 mb-4">
-                    <span className={`text-[10px] font-bold uppercase tracking-widest ${theme.text}`}>
-                      {formattedCategory}
-                    </span>
-                    <span className="text-xs text-neutral-300">&bull;</span>
-                    <time dateTime="2026-02-25" className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                      25 Fev 2026
-                    </time>
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl font-serif font-medium leading-tight text-neutral-900 group-hover:text-neutral-700 transition-colors mb-4">
-                    <Link href={`/artigo/exemplo-categoria-${item}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm before:absolute before:inset-0">
-                      Título impactante sobre {formattedCategory.toLowerCase()} demonstrando a importância do tema
+            {artigos.length > 0 ? (
+              artigos.map((item: any) => (
+                <article key={item.id} className="flex flex-col sm:flex-row gap-6 group relative border-b border-neutral-100 pb-12 last:border-0 last:pb-0">
+                  <div className="w-full sm:w-2/5 shrink-0">
+                    <Link href={`/artigo/${item.slug}`} tabIndex={-1} className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-100 block focus:outline-none">
+                      <AutoAltImage
+                        src={item.capa?.url ? getStrapiMedia(item.capa.url) || '' : `https://picsum.photos/800/600?random=${item.id}`}
+                        alt={item.capa?.alternativeText || item.titulo || ''}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 40vw, 33vw"
+                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                        referrerPolicy="no-referrer"
+                      />
                     </Link>
-                  </h2>
-                  <p className="text-neutral-600 line-clamp-3 text-base leading-relaxed font-serif">
-                    Um resumo detalhado da matéria que explica o contexto, os principais desafios e as possíveis soluções para a questão abordada, garantindo que o leitor entenda o valor da informação antes de clicar.
-                  </p>
-                </div>
-              </article>
-            ))}
+                  </div>
+                  <div className="flex flex-col justify-center flex-1">
+                    <div className="flex items-center gap-x-3 mb-4">
+                      <span className={`text-[10px] font-bold uppercase tracking-widest ${theme.text}`}>
+                        {item.categoria?.nome || formattedCategory}
+                      </span>
+                      <span className="text-xs text-neutral-300">&bull;</span>
+                      <time dateTime={item.publishedAt} className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+                        {new Date(item.publishedAt).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </time>
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-serif font-medium leading-tight text-neutral-900 group-hover:text-neutral-700 transition-colors mb-4">
+                      <Link href={`/artigo/${item.slug}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm before:absolute before:inset-0">
+                        {item.titulo}
+                      </Link>
+                    </h2>
+                    <p className="text-neutral-600 line-clamp-3 text-base leading-relaxed font-serif">
+                      {item.resumo_simples || item.subtitulo || 'Leia mais sobre este artigo.'}
+                    </p>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <p className="text-neutral-500 text-center py-12">Nenhum artigo encontrado para esta categoria.</p>
+            )}
             
             {/* Pagination (Simulated) */}
             <div className="mt-12 flex items-center justify-between border-t border-neutral-200 pt-8">

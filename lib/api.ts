@@ -12,11 +12,12 @@ export function getStrapiMedia(url: string | null) {
     }
     // Return the absolute URL if it already is one
     if (url.startsWith('http') || url.startsWith('//')) {
-        return url;
+        // Se a Strapi devolveu a URL absoluta mas usando 127.0.0.1, o Chrome vai recusar. Vamos forçar localhost.
+        return url.replace('127.0.0.1', 'localhost');
     }
     // Ensure Client Media fetches bypass 127.0.0.1 CORS/Mixed content local blockers
     const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
-    return `${baseUrl}${url}`;
+    return `${baseUrl.replace('127.0.0.1', 'localhost')}${url}`;
 }
 
 /**
@@ -82,6 +83,28 @@ export async function getNoticiasDestacadas(limit = 4) {
 
 export async function getUltimasPublicacoes(page = 1, pageSize = 10) {
     return fetchAPI('/artigos', {
+        populate: {
+            capa: true,
+            categoria: true,
+            autors: true,
+        },
+        sort: ['createdAt:desc'],
+        pagination: {
+            page: page,
+            pageSize: pageSize,
+        }
+    });
+}
+
+export async function getArtigosPorCategoria(categorySlug: string, page = 1, pageSize = 10) {
+    return fetchAPI('/artigos', {
+        filters: {
+            categoria: {
+                slug: {
+                    $eq: categorySlug
+                }
+            }
+        },
         populate: {
             capa: true,
             categoria: true,
