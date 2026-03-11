@@ -47,7 +47,7 @@ export default async function Home() {
                     </Link>
                   </h1>
                   <p className="text-xl sm:text-2xl text-neutral-700 leading-[1.6] font-light text-balance max-w-[65ch] mb-8">
-                    {heroArticle.resumo_simples || heroArticle.subtitulo || 'Leia mais sobre este assunto em nossa plataforma.'}
+                    {heroArticle.subtitulo || 'Leia mais sobre este assunto em nossa plataforma.'}
                   </p>
                   <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-neutral-500 font-medium">
                     <span>Por {heroArticle.autors?.[0]?.nome || heroArticle.autor?.nome || 'Redação JINC'}</span>
@@ -148,7 +148,7 @@ export default async function Home() {
                   </Link>
                 </h3>
                 <p className="text-lg sm:text-xl text-neutral-400 leading-[1.6] font-light mb-8 text-balance">
-                  {investigativeArticle.resumo_simples || investigativeArticle.subtitulo || 'Uma investigação aprofundada sobre temas relevantes do nosso portal.'}
+                  {investigativeArticle.subtitulo || 'Uma investigação aprofundada sobre temas relevantes do nosso portal.'}
                 </p>
                 <Link
                   href={`/artigo/${investigativeArticle.slug}`}
@@ -196,7 +196,7 @@ export default async function Home() {
                 </Link>
               </h3>
               <p className="text-neutral-700 leading-[1.6] font-light text-lg max-w-[65ch]">
-                {accessibilityMain.resumo_simples || accessibilityMain.subtitulo}
+                {accessibilityMain.subtitulo}
               </p>
             </article>
 
