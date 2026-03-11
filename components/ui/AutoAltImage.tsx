@@ -13,6 +13,7 @@ interface AutoAltImageProps extends Omit<ImageProps, 'alt'> {
 
 export function AutoAltImage({ src, alt, autoAlt = true, ...props }: AutoAltImageProps) {
   const [finalAlt, setFinalAlt] = useState<string>(alt || "Imagem ilustrativa");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -22,6 +23,9 @@ export function AutoAltImage({ src, alt, autoAlt = true, ...props }: AutoAltImag
         if (isMounted) setFinalAlt(altCache.get(imageUrl)!);
         return;
       }
+
+      if (!isMounted) return;
+      setIsLoading(true);
 
       try {
         const response = await fetch('/api/ai/alt-text', {
@@ -41,6 +45,8 @@ export function AutoAltImage({ src, alt, autoAlt = true, ...props }: AutoAltImag
         }
       } catch (error) {
         console.error("Erro ao gerar alt text para", imageUrl, error);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
     };
 
@@ -57,6 +63,7 @@ export function AutoAltImage({ src, alt, autoAlt = true, ...props }: AutoAltImag
 
   // Corrige bugs de Mixed Content e Chromium IPv6 para imagens do Strapi local
   const safeSrc = typeof src === 'string' ? src.replace('127.0.0.1', 'localhost') : src;
+  const combinedClassName = `${props.className || ''} ${isLoading ? 'animate-pulse bg-neutral-100' : ''}`.trim();
 
-  return <Image src={safeSrc} alt={finalAlt} unoptimized={process.env.NODE_ENV === 'development'} {...props} />;
+  return <Image src={safeSrc} alt={finalAlt} unoptimized={process.env.NODE_ENV === 'development'} {...props} className={combinedClassName} />;
 }

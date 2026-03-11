@@ -428,7 +428,7 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
             <button
               onClick={handlePlayPause}
               disabled={isLoading}
-              className="w-8 h-8 flex-shrink-0 bg-[#1F3FA3] text-white rounded-full flex items-center justify-center hover:bg-[#152e7a] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] focus-visible:ring-offset-2 disabled:opacity-50"
+              className="w-8 h-8 flex-shrink-0 bg-neutral-900 text-white rounded-full flex items-center justify-center hover:bg-neutral-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:opacity-50"
               aria-label={isPlaying ? "Pausar áudio" : "Reproduzir áudio"}
             >
               {isLoading ? (
@@ -444,8 +444,8 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
               <label htmlFor="sticky-audio-progress" className="sr-only">Progresso do áudio</label>
               {isStreaming ? (
                 <div className="w-full h-1.5 bg-neutral-200 rounded-lg overflow-hidden relative">
-                  <div className="absolute top-0 left-0 h-full bg-[#1F3FA3]/40 w-full animate-pulse"></div>
-                  <div className="absolute top-0 left-0 h-full bg-[#1F3FA3] w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
+                  <div className="absolute top-0 left-0 h-full bg-neutral-900/40 w-full animate-pulse"></div>
+                  <div className="absolute top-0 left-0 h-full bg-neutral-900 w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
                 </div>
               ) : (
                 <input
@@ -457,7 +457,7 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
                   value={progress}
                   onChange={handleSeek}
                   disabled={!hasAudio}
-                  className="w-full h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-[#1F3FA3] disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3]"
+                  className="w-full h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
                 />
               )}
             </div>
@@ -498,8 +498,8 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
               <label htmlFor="inline-audio-progress" className="sr-only">Progresso do áudio</label>
               {isStreaming ? (
                 <div className="w-full h-2 bg-neutral-200 rounded-lg overflow-hidden relative">
-                  <div className="absolute top-0 left-0 h-full bg-[#1F3FA3]/40 w-full animate-pulse"></div>
-                  <div className="absolute top-0 left-0 h-full bg-[#1F3FA3] w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
+                  <div className="absolute top-0 left-0 h-full bg-neutral-900/40 w-full animate-pulse"></div>
+                  <div className="absolute top-0 left-0 h-full bg-neutral-900 w-1/3 animate-[slide_2s_ease-in-out_infinite]"></div>
                 </div>
               ) : (
                 <input
@@ -511,7 +511,7 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
                   value={progress}
                   onChange={handleSeek}
                   disabled={!hasAudio}
-                  className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-[#1F3FA3] disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50"
+                  className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50"
                 />
               )}
             </div>
@@ -524,7 +524,7 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
                   <button
                     onClick={skipBackward}
                     disabled={!hasAudio}
-                    className="text-[#1F3FA3]/70 hover:text-[#1F3FA3] transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] rounded-full p-1"
+                    className="text-neutral-500 hover:text-neutral-900 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-full p-1"
                     aria-label="Voltar 15 segundos"
                   >
                     <Rewind className="h-5 w-5 fill-current" aria-hidden="true" />
@@ -533,7 +533,7 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
                   <button
                     onClick={handlePlayPause}
                     disabled={isLoading}
-                    className="w-14 h-14 bg-[#1F3FA3] text-white rounded-full flex items-center justify-center hover:bg-[#152e7a] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 disabled:opacity-50 shadow-md"
+                    className="w-14 h-14 bg-neutral-900 text-white rounded-full flex items-center justify-center hover:bg-neutral-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 disabled:opacity-50 shadow-md"
                     aria-label={isPlaying ? "Pausar áudio" : "Reproduzir áudio"}
                   >
                     {isLoading ? (
@@ -548,7 +548,7 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
                   <button
                     onClick={skipForward}
                     disabled={!hasAudio}
-                    className="text-[#1F3FA3]/70 hover:text-[#1F3FA3] transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] rounded-full p-1"
+                    className="text-neutral-500 hover:text-neutral-900 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-full p-1"
                     aria-label="Avançar 15 segundos"
                   >
                     <FastForward className="h-5 w-5 fill-current" aria-hidden="true" />
@@ -572,10 +572,10 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
               {/* Foco Profundo */}
               <button
                 onClick={toggleFocusMode}
-                className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-none border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3]
+                className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-none border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900
                   ${isFocusMode
-                    ? 'bg-[#1F3FA3] text-white border-[#1F3FA3]'
-                    : 'bg-transparent text-[#1F3FA3] border-neutral-300 hover:border-[#1F3FA3]'
+                    ? 'bg-neutral-900 text-white border-neutral-900'
+                    : 'bg-transparent text-neutral-900 border-neutral-300 hover:border-neutral-900'
                   }
                 `}
                 aria-label={isFocusMode ? "Desativar Modo Foco Profundo" : "Ativar Modo Foco Profundo"}
@@ -610,7 +610,7 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
                 <div className="flex items-center gap-3">
                   <button
                     onClick={toggleMute}
-                    className="text-[#1F3FA3]/70 hover:text-[#1F3FA3] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3] rounded p-1 transition-colors"
+                    className="text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded p-1 transition-colors"
                     aria-label={isMuted || volume === 0 ? "Ativar som" : "Silenciar áudio"}
                   >
                     {isMuted || volume === 0 ? <VolumeX className="h-4 w-4" aria-hidden="true" /> : <Volume2 className="h-4 w-4" aria-hidden="true" />}
@@ -624,7 +624,7 @@ export function ArticleAudioPlayer({ text, title }: { text: string, title: strin
                     step="0.05"
                     value={isMuted ? 0 : volume}
                     onChange={handleVolumeChange}
-                    className="w-20 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-[#1F3FA3] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F3FA3]"
+                    className="w-20 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
                   />
                 </div>
               </div>
