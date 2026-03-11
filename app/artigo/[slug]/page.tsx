@@ -30,7 +30,9 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
         ? (getStrapiMedia(articleData.capa.url) || '')
         : 'https://picsum.photos/1920/1080?grayscale',
       blocks: articleData.blocos_de_conteudo || [], // Fallback if no blocks
-      simpleSummary: articleData.resumo_simples || null
+      simpleSummary: articleData.resumo_simples || null,
+      altTextIa: articleData.alt_text_ia || null,
+      descricaoAudio: articleData.descricao_audio || null
     };
 
     // Extrai o texto limpo dos blocos para o TTS
@@ -92,8 +94,23 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
             )}
           </header>
 
+          {article.simpleSummary && (
+            <section className="mb-12 p-8 bg-neutral-50 border-l-4 border-neutral-900 shadow-sm" aria-labelledby="tl-dr-heading">
+              <h2 id="tl-dr-heading" className="text-sm font-bold uppercase tracking-widest text-neutral-900 mb-3 flex items-center gap-2">
+                Em Resumo (Linguagem Simples)
+              </h2>
+              <p className="text-neutral-800 text-lg leading-relaxed font-medium">{article.simpleSummary}</p>
+            </section>
+          )}
+
+          {article.descricaoAudio && (
+            <div className="sr-only" aria-live="polite">
+              <span>Descrição de áudio da imagem de capa:</span> {article.descricaoAudio}
+            </div>
+          )}
+
           <div className="aspect-video relative mb-16 rounded-sm overflow-hidden shadow-xl ring-1 ring-neutral-900/5 bg-neutral-100 transition-[filter,opacity] duration-500 group-data-[focus-mode=active]:grayscale-[20%] group-data-[focus-mode=active]:opacity-90">
-            <img src={article.image} alt={article.title} className="object-cover w-full h-full" />
+            <img src={article.image} alt={article.altTextIa || article.title} className="object-cover w-full h-full" />
           </div>
 
           <div className="max-w-2xl mx-auto">
@@ -112,15 +129,6 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
             )}
 
             <BlockMapper blocks={article.blocks} />
-
-            {article.simpleSummary && (
-              <section className="mt-20 p-10 bg-neutral-50 rounded-sm border border-neutral-200 shadow-sm">
-                <h2 className="text-2xl font-serif font-black text-neutral-900 mb-4 flex items-center gap-2">
-                  Resumo em Linguagem Simples
-                </h2>
-                <p className="text-neutral-700 text-lg leading-relaxed font-light">{article.simpleSummary}</p>
-              </section>
-            )}
           </div>
         </article>
       </ReaderIntelligenceProvider>
