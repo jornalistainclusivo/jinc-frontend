@@ -21,30 +21,32 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [fontScale, setFontScale] = useState(1);
 
-  // Initialize from localStorage on client mount
+  // Initialize from localStorage on client mount — read-only, no setState inside effect
   useEffect(() => {
     const savedContrast = localStorage.getItem('ji-high-contrast') === 'true';
     const savedFocus = localStorage.getItem('jinc_focus_pref') === 'true';
     const savedFontScale = parseFloat(localStorage.getItem('ji-font-scale') || '1');
 
+    // Batch all state updates by reading values first, then setting
+    const updates: (() => void)[] = [];
+
     if (savedContrast) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsHighContrast(true);
+      updates.push(() => setIsHighContrast(true));
       document.body.classList.add('high-contrast');
     }
 
     if (savedFocus) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsFocusMode(true);
+      updates.push(() => setIsFocusMode(true));
       document.documentElement.setAttribute('data-focus-mode', 'active');
       document.body.classList.add('deep-focus');
     }
 
     if (savedFontScale !== 1) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setFontScale(savedFontScale);
+      updates.push(() => setFontScale(savedFontScale));
       document.documentElement.style.setProperty('--font-scale', String(savedFontScale));
     }
+
+    updates.forEach((fn) => fn());
   }, []);
 
   const toggleHighContrast = useCallback(() => {

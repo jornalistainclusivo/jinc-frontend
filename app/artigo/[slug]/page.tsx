@@ -1,5 +1,6 @@
 import { getArtigoPorSlug, getStrapiMedia } from '@/lib/api';
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import StrapiBlocks from '@/components/StrapiBlocks';
 import { ArticleAudioPlayer } from '@/components/news/ArticleAudioPlayer';
 import { ShareBlock } from '@/components/news/ShareBlock';
@@ -108,7 +109,14 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
           )}
 
           <div className="aspect-video relative mb-16 rounded-sm overflow-hidden shadow-xl ring-1 ring-neutral-900/5 bg-neutral-100 transition-[filter,opacity] duration-500 group-data-[focus-mode=active]:grayscale-[20%] group-data-[focus-mode=active]:opacity-90">
-            <img src={article.image} alt={article.altTextIa || article.title} className="object-cover w-full h-full" />
+            <Image
+              src={article.image}
+              alt={article.altTextIa || article.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+              priority
+            />
           </div>
 
           <div className="max-w-2xl mx-auto">
