@@ -54,6 +54,17 @@
   body.high-contrast textarea {
     background-color: #0A0A0A !important;
   }
+
+  /* Structural and floating elements MUST retain a solid background to prevent scroll-overlap readability issues */
+  body.high-contrast header,
+  body.high-contrast footer,
+  body.high-contrast dialog,
+  body.high-contrast [role="dialog"],
+  body.high-contrast [role="menu"],
+  body.high-contrast .sticky,
+  body.high-contrast .fixed {
+    background-color: #0A0A0A !important;
+  }
   
   /* Prevent pseudo-elements from creating solid black boxes over text */
   body.high-contrast *::before,
