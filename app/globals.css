@@ -35,14 +35,49 @@
   body.high-contrast {
     background-color: #0A0A0A !important;
     color: #FFFF00 !important;
+    
     /* Redefining Tailwind variables for consistent High Contrast */
+    --color-white: #0A0A0A;
+    --color-black: #FFFF00;
+    --color-transparent: transparent;
+    
+    /* Theme Brands & Common Colors */
     --color-brand-primary: #FFFF00;
     --color-brand-dark: #FFFF00;
+    
+    --color-blue-50: #0A0A0A;
+    --color-blue-100: #0A0A0A;
+    --color-blue-200: #0A0A0A;
+    --color-blue-300: #0A0A0A;
+    --color-blue-400: #FFFF00;
+    --color-blue-500: #FFFF00;
+    --color-blue-600: #FFFF00;
+    --color-blue-700: #FFFF00;
+    --color-blue-800: #FFFF00;
+    --color-blue-900: #FFFF00;
+    --color-blue-950: #FFFF00;
+    
     --color-neutral-50: #0A0A0A;
     --color-neutral-100: #0A0A0A;
-    --color-neutral-200: #262600;
+    --color-neutral-200: #0A0A0A;
+    --color-neutral-300: #0A0A0A;
+    --color-neutral-400: #FFFF00;
+    --color-neutral-500: #FFFF00;
+    --color-neutral-600: #FFFF00;
     --color-neutral-700: #FFFF00;
+    --color-neutral-800: #FFFF00;
     --color-neutral-900: #FFFF00;
+    --color-neutral-950: #FFFF00;
+  }
+  
+  body.high-contrast * {
+    border-color: #FFFF00 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body.high-contrast *:not(img):not(video) {
+    background-image: none !important;
   }
 
   body.high-contrast img,
