@@ -96,6 +96,32 @@ export async function getUltimasPublicacoes(page = 1, pageSize = 10) {
     });
 }
 
+/**
+ * Busca artigos de uma seção editorial específica, filtrando por slug de categoria.
+ * Usado para montar as seções curadas da home (ex: Reportagem Especial, Acessibilidade Digital).
+ */
+export async function getArtigosPorSecao(categoriaSlug: string, limit = 3) {
+    return fetchAPI('/artigos', {
+        filters: {
+            categoria: {
+                slug: {
+                    $eq: categoriaSlug,
+                },
+            },
+        },
+        populate: {
+            capa: true,
+            categoria: true,
+            autors: true,
+        },
+        sort: ['createdAt:desc'],
+        pagination: {
+            page: 1,
+            pageSize: limit,
+        },
+    });
+}
+
 export async function getArtigosPorCategoria(categorySlug: string, page = 1, pageSize = 10) {
     return fetchAPI('/artigos', {
         filters: {
