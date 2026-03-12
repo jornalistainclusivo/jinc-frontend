@@ -31,26 +31,90 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* High Contrast Mode */
-  body.high-contrast,
-  body.high-contrast * {
+  /* High Contrast Mode - Smart Global Override */
+  body.high-contrast {
     background-color: #0A0A0A !important;
     color: #FFFF00 !important;
-    border-color: #FFFF00 !important;
-  }
-
-  body.high-contrast img,
-  body.high-contrast video,
-  body.high-contrast svg {
-    background-color: transparent !important;
   }
   
+  /* Make all backgrounds transparent to show the body's black, and all text inherit the body's yellow */
+  body.high-contrast *:not(img):not(video):not(svg):not(path):not(circle):not(rect):not(iframe) {
+    background-color: transparent !important; 
+    color: inherit !important; 
+    border-color: #FFFF00 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    background-image: none !important;
+  }
+  
+  /* Form elements need a solid background so they don't look weird if they overlap text */
+  body.high-contrast button, 
+  body.high-contrast input, 
+  body.high-contrast select, 
+  body.high-contrast textarea {
+    background-color: #0A0A0A !important;
+  }
+
+  /* Ensure SVGs get the yellow High Contrast color so icons remain visible */
+  body.high-contrast svg,
+  body.high-contrast path,
+  body.high-contrast polyline,
+  body.high-contrast line,
+  body.high-contrast circle {
+    color: #FFFF00 !important;
+  }
+
+  /* Structural and contextual elements MUST retain a solid background to prevent scroll-overlap readability issues */
+  body.high-contrast header,
+  body.high-contrast footer,
+  body.high-contrast dialog,
+  body.high-contrast [role="dialog"],
+  body.high-contrast [role="menu"],
+  body.high-contrast .bg-white,
+  body.high-contrast .bg-neutral-50,
+  body.high-contrast .bg-neutral-100,
+  body.high-contrast .bg-neutral-900,
+  body.high-contrast .bg-neutral-950 {
+    background-color: #0A0A0A !important;
+  }
+
+  /* Explicitly make overlays transparent */
+  body.high-contrast .bg-black\/20,
+  body.high-contrast .bg-black\/50,
+  body.high-contrast .bg-black\/80 {
+    background-color: transparent !important;
+    border: none !important;
+  }
+  
+  /* Prevent pseudo-elements from creating solid black boxes over text */
+  body.high-contrast *::before,
+  body.high-contrast *::after {
+    background-color: transparent !important;
+    color: inherit !important;
+    border-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Badges and elements that rely on background color to be visible (like category badges) get a solid border */
+  body.high-contrast [class*="bg-"] {
+    border: 1px solid #FFFF00 !important;
+  }
+
+  /* Images must stand out but stay visible */
+  body.high-contrast img,
+  body.high-contrast video {
+    filter: contrast(120%) grayscale(100%) !important;
+  }
+  
+  /* Links and buttons must be obvious */
   body.high-contrast a,
   body.high-contrast button {
     text-decoration: underline !important;
     text-decoration-color: #FFFF00 !important;
   }
 
+  /* Hover states invert the colors locally */
   body.high-contrast a:hover, 
   body.high-contrast button:hover,
   body.high-contrast a:hover *,
@@ -63,6 +127,11 @@
   body.deep-focus {
     background-color: #FDFBF7 !important;
     color: #262626 !important; /* text-neutral-800 */
+    /* Redefining Tailwind variables to soften the page */
+    --color-neutral-50: #FDFBF7;
+    --color-neutral-100: #F6F4EB;
+    --color-neutral-200: #E8E5DD;
+    --color-neutral-900: #262626;
   }
 
   body.deep-focus img,
