@@ -55,15 +55,35 @@
     background-color: #0A0A0A !important;
   }
 
-  /* Structural and floating elements MUST retain a solid background to prevent scroll-overlap readability issues */
+  /* Ensure SVGs get the yellow High Contrast color so icons remain visible */
+  body.high-contrast svg,
+  body.high-contrast path,
+  body.high-contrast polyline,
+  body.high-contrast line,
+  body.high-contrast circle {
+    color: #FFFF00 !important;
+  }
+
+  /* Structural and contextual elements MUST retain a solid background to prevent scroll-overlap readability issues */
   body.high-contrast header,
   body.high-contrast footer,
   body.high-contrast dialog,
   body.high-contrast [role="dialog"],
   body.high-contrast [role="menu"],
-  body.high-contrast .sticky,
-  body.high-contrast .fixed {
+  body.high-contrast .bg-white,
+  body.high-contrast .bg-neutral-50,
+  body.high-contrast .bg-neutral-100,
+  body.high-contrast .bg-neutral-900,
+  body.high-contrast .bg-neutral-950 {
     background-color: #0A0A0A !important;
+  }
+
+  /* Explicitly make overlays transparent */
+  body.high-contrast .bg-black\/20,
+  body.high-contrast .bg-black\/50,
+  body.high-contrast .bg-black\/80 {
+    background-color: transparent !important;
+    border: none !important;
   }
   
   /* Prevent pseudo-elements from creating solid black boxes over text */
