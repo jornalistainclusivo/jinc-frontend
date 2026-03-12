@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Square, Loader2, Volume2, VolumeX, Brain, Rewind, FastForward } from 'lucide-react';
-import { useReaderIntelligence } from '@/components/news/ReaderIntelligenceProvider';
+import { useAccessibility } from '@/components/accessibility/AccessibilityProvider';
 
 function createWavBlob(pcmData: Uint8Array, sampleRate: number): Blob {
   const numChannels = 1;
@@ -40,7 +40,7 @@ function createWavBlob(pcmData: Uint8Array, sampleRate: number): Blob {
 }
 
 export function ArticleAudioPlayer({ text, title }: { text: string, title: string }) {
-  const { isFocusMode, toggleFocusMode } = useReaderIntelligence();
+  const { isFocusMode, toggleFocusMode } = useAccessibility();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);

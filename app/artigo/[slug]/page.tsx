@@ -2,7 +2,6 @@ import { getArtigoPorSlug, getStrapiMedia } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import StrapiBlocks from '@/components/StrapiBlocks';
 import { ArticleAudioPlayer } from '@/components/news/ArticleAudioPlayer';
-import { ReaderIntelligenceProvider } from '@/components/news/ReaderIntelligenceProvider';
 import { ShareBlock } from '@/components/news/ShareBlock';
 import { BlockMapper } from '@/components/news/BlockMapper';
 
@@ -75,7 +74,6 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
     }
 
     return (
-      <ReaderIntelligenceProvider>
         <article className="max-w-4xl mx-auto px-4 py-12">
           <header className="mb-12 border-b border-neutral-200 pb-8">
             <div className="flex items-center justify-center gap-3 mb-6">
@@ -131,7 +129,6 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
             <BlockMapper blocks={article.blocks} />
           </div>
         </article>
-      </ReaderIntelligenceProvider>
     );
   } catch (error) {
     console.error(error);

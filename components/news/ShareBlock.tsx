@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { Twitter, Facebook, Linkedin, Link2 } from 'lucide-react';
-import { useReaderIntelligence } from '@/components/news/ReaderIntelligenceProvider';
+import { useAccessibility } from '@/components/accessibility/AccessibilityProvider';
 
 export function ShareBlock() {
-    const { isFocusMode } = useReaderIntelligence();
+    const { isFocusMode } = useAccessibility();
     const handleCopyLink = () => {
         navigator.clipboard.writeText(window.location.href);
         // You could add a toast notification here

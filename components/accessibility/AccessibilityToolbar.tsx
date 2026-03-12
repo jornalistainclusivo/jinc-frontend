@@ -1,58 +1,17 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
 import { Contrast } from 'lucide-react';
+import { useAccessibility } from './AccessibilityProvider';
 
 export function AccessibilityToolbar() {
-  const [isHighContrast, setIsHighContrast] = useState(false);
-  const [fontScale, setFontScale] = useState(1);
-
-  useEffect(() => {
-    // Load preferences from localStorage if available
-    const savedContrast = localStorage.getItem('ji-high-contrast') === 'true';
-    const savedFontScale = parseFloat(localStorage.getItem('ji-font-scale') || '1');
-    
-    if (savedContrast) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsHighContrast(true);
-      document.body.classList.add('high-contrast');
-    }
-    
-    if (savedFontScale !== 1) {
-      setFontScale(savedFontScale);
-      document.documentElement.style.setProperty('--font-scale', String(savedFontScale));
-    }
-  }, []);
-
-  const toggleHighContrast = useCallback(() => {
-    setIsHighContrast((prev) => {
-      const newValue = !prev;
-      localStorage.setItem('ji-high-contrast', String(newValue));
-      
-      if (newValue) {
-        document.body.classList.add('high-contrast');
-      } else {
-        document.body.classList.remove('high-contrast');
-      }
-      return newValue;
-    });
-  }, []);
-
-  const applyFontScale = useCallback((scale: number) => {
-    setFontScale(scale);
-    localStorage.setItem('ji-font-scale', String(scale));
-    document.documentElement.style.setProperty('--font-scale', String(scale));
-  }, []);
-
-  const increaseFont = () => {
-    if (fontScale < 1.5) applyFontScale(fontScale + 0.1);
-  };
-
-  const decreaseFont = () => {
-    if (fontScale > 0.9) applyFontScale(fontScale - 0.1);
-  };
-
-  const resetFont = () => applyFontScale(1);
+  const {
+    isHighContrast,
+    toggleHighContrast,
+    fontScale,
+    increaseFont,
+    decreaseFont,
+    resetFont,
+  } = useAccessibility();
 
   return (
     <div 
@@ -88,7 +47,7 @@ export function AccessibilityToolbar() {
       <div className="w-px h-4 bg-neutral-800 mx-1" aria-hidden="true"></div>
 
       <button
-        onClick={() => toggleHighContrast()}
+        onClick={toggleHighContrast}
         className="flex items-center gap-2 p-1 rounded hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 transition-colors"
         aria-pressed={isHighContrast}
       >
