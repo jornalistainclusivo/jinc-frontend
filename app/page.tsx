@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { AutoAltImage } from '@/components/ui/AutoAltImage';
-import { getUltimasPublicacoes, getStrapiMedia } from '@/lib/api';
+import { getUltimasPublicacoes, getArtigosPorSecao, getStrapiMedia } from '@/lib/api';
 
 function formatDate(dateString?: string) {
   if (!dateString) return '';
@@ -13,18 +13,28 @@ function getImageUrl(item: any, fallbackId: string) {
 }
 
 export default async function Home() {
-  const response = await getUltimasPublicacoes(1, 25);
-  const artigos = response.data || [];
+  // Parallel fetches: each editorial section queries its own category — no more positional index bugs
+  const [latestResponse, reportagemResponse, acessibilidadeResponse] = await Promise.all([
+    getUltimasPublicacoes(1, 12),
+    getArtigosPorSecao('direitos', 1),
+    getArtigosPorSecao('acessibilidade-digital', 3),
+  ]);
 
-  // Pega os destaques na ordem
+  const artigos = latestResponse.data || [];
+  const reportagemArtigos = reportagemResponse.data || [];
+  const acessibilidadeArtigos = acessibilidadeResponse.data || [];
+
+  // Latest-news sections (no category filter — chronological)
   const heroArticle = artigos[0];
   const secondaryCurated = artigos.slice(1, 4);
   const secondaryHeadlines = artigos.slice(4, 8);
-  const investigativeArticle = artigos[8] || artigos[0]; // fallback to hero if not enough
-  const accessibilityMain = artigos[9] || artigos[0];
-  const accessibilitySecondary = artigos.slice(10, 12);
-  const opinionArticles = artigos.slice(12, 15);
-  const latestPublications = artigos.slice(0, 8); // Just repeating latest 8 at bottom for chronological feed
+  const opinionArticles = artigos.slice(8, 11);
+  const latestPublications = artigos.slice(0, 8);
+
+  // Editorial sections — now properly filtered by category
+  const investigativeArticle = reportagemArtigos[0];
+  const accessibilityMain = acessibilidadeArtigos[0];
+  const accessibilitySecondary = acessibilidadeArtigos.slice(1, 3);
 
   return (
     <div className="bg-white min-h-screen">
