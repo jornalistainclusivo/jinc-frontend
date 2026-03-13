@@ -60,9 +60,9 @@ export default async function Home() {
                     {heroArticle.subtitulo || 'Leia mais sobre este assunto em nossa plataforma.'}
                   </p>
                   <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-neutral-500 font-medium">
-                    <span>Por {heroArticle.autors?.[0]?.nome || heroArticle.autor?.nome || 'Redação JINC'}</span>
+                    <span>Por {heroArticle.autors?.[0]?.nome || 'Redação JINC'}</span>
                     <span aria-hidden="true">&middot;</span>
-                    <time dateTime={heroArticle.publishedAt}>{formatDate(heroArticle.publishedAt)}</time>
+                    <time dateTime={heroArticle.publishedAt ?? undefined}>{formatDate(heroArticle.publishedAt ?? undefined)}</time>
                   </div>
                 </div>
 
@@ -254,7 +254,7 @@ export default async function Home() {
               <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-8">
                 {opinionArticles.map((col: any) => (
                   <article key={col.id} className="flex flex-col">
-                    <span className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-3">{col.autors?.[0]?.nome || col.autor?.nome || 'Convidado'}</span>
+                    <span className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-3">{col.autors?.[0]?.nome || 'Convidado'}</span>
                     <h3 className="text-xl font-serif font-medium leading-[1.4] text-neutral-900">
                       <Link href={`/artigo/${col.slug}`} className="hover:text-neutral-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm">
                         {col.titulo}

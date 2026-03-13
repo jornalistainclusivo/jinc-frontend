@@ -1,4 +1,5 @@
 import qs from 'qs';
+import type { StrapiArtigo, StrapiCategoria, StrapiTag } from './strapi-types';
 
 export function getStrapiURL(path = '') {
     const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://127.0.0.1:1337';
@@ -12,7 +13,7 @@ export function getStrapiMedia(url: string | null) {
     }
     // Return the absolute URL if it already is one
     if (url.startsWith('http') || url.startsWith('//')) {
-        // Se a Strapi devolveu a URL absoluta mas usando 127.0.0.1, o Chrome vai recusar. Vamos forçar localhost.
+        // Se a Strapi devolveu a URL absoluta mas usando 127.0.0.1, o Chrome vai recusar.
         return url.replace('127.0.0.1', 'localhost');
     }
     // Ensure Client Media fetches bypass 127.0.0.1 CORS/Mixed content local blockers
@@ -30,7 +31,6 @@ export function getStrapiMedia(url: string | null) {
 export async function fetchAPI(path: string, urlParamsObject = {}, options = {}) {
     let requestUrl = '';
     try {
-        // Merge default and user options
         const mergedOptions = {
             next: { revalidate: 60 },
             headers: {
@@ -39,13 +39,11 @@ export async function fetchAPI(path: string, urlParamsObject = {}, options = {})
             ...options,
         };
 
-        // Build request URL
         const queryString = qs.stringify(urlParamsObject, { encodeValuesOnly: true });
         requestUrl = `${getStrapiURL(
             `/api${path}${queryString ? `?${queryString}` : ''}`
         )}`;
 
-        // Trigger API call
         const response = await fetch(requestUrl, mergedOptions);
 
         if (!response.ok) {
@@ -54,45 +52,38 @@ export async function fetchAPI(path: string, urlParamsObject = {}, options = {})
         }
         const data = await response.json();
         return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const e = error as Error;
         console.error(`Error fetching data from Strapi API at URL: ${requestUrl}`);
-        console.error(`=> Error name: ${error.name}, message: ${error.message}, cause: ${error.cause}`);
+        console.error(`=> Error name: ${e.name}, message: ${e.message}`);
         throw error;
     }
 }
 
-/**
- * Funções específicas de abstração de conteúdo
- */
+// ─── Populate padrão para listas de artigos ──────────────────────────────────
 
-export async function getNoticiasDestacadas(limit = 4) {
+const ARTIGO_LIST_POPULATE = {
+    capa: true,
+    categoria: true,
+    autors: true,
+    tags: true,
+} as const;
+
+// ─── Artigos ─────────────────────────────────────────────────────────────────
+
+export async function getNoticiasDestacadas(limit = 4): Promise<{ data: StrapiArtigo[] }> {
     return fetchAPI('/artigos', {
-        populate: {
-            capa: true,
-            categoria: true,
-            autors: true,
-        },
+        populate: ARTIGO_LIST_POPULATE,
         sort: ['createdAt:desc'],
-        pagination: {
-            limit: limit,
-        },
-        // Aqui assumimos que no Strapi exista um filtro de campos ou destaque
-        // filters: { destaque: { $eq: true } }
+        pagination: { limit },
     });
 }
 
-export async function getUltimasPublicacoes(page = 1, pageSize = 10) {
+export async function getUltimasPublicacoes(page = 1, pageSize = 10): Promise<{ data: StrapiArtigo[] }> {
     return fetchAPI('/artigos', {
-        populate: {
-            capa: true,
-            categoria: true,
-            autors: true,
-        },
+        populate: ARTIGO_LIST_POPULATE,
         sort: ['createdAt:desc'],
-        pagination: {
-            page: page,
-            pageSize: pageSize,
-        }
+        pagination: { page, pageSize },
     });
 }
 
@@ -100,68 +91,88 @@ export async function getUltimasPublicacoes(page = 1, pageSize = 10) {
  * Busca artigos de uma seção editorial específica, filtrando por slug de categoria.
  * Usado para montar as seções curadas da home (ex: Reportagem Especial, Acessibilidade Digital).
  */
-export async function getArtigosPorSecao(categoriaSlug: string, limit = 3) {
+export async function getArtigosPorSecao(
+    categoriaSlug: string,
+    limit = 3
+): Promise<{ data: StrapiArtigo[] }> {
     return fetchAPI('/artigos', {
         filters: {
-            categoria: {
-                slug: {
-                    $eq: categoriaSlug,
-                },
-            },
+            categoria: { slug: { $eq: categoriaSlug } },
         },
-        populate: {
-            capa: true,
-            categoria: true,
-            autors: true,
-        },
+        populate: ARTIGO_LIST_POPULATE,
         sort: ['createdAt:desc'],
-        pagination: {
-            page: 1,
-            pageSize: limit,
-        },
+        pagination: { page: 1, pageSize: limit },
     });
 }
 
-export async function getArtigosPorCategoria(categorySlug: string, page = 1, pageSize = 10) {
+export async function getArtigosPorCategoria(
+    categorySlug: string,
+    page = 1,
+    pageSize = 10
+): Promise<{ data: StrapiArtigo[] }> {
     return fetchAPI('/artigos', {
         filters: {
-            categoria: {
-                slug: {
-                    $eq: categorySlug
-                }
-            }
+            categoria: { slug: { $eq: categorySlug } },
         },
-        populate: {
-            capa: true,
-            categoria: true,
-            autors: true,
-        },
+        populate: ARTIGO_LIST_POPULATE,
         sort: ['createdAt:desc'],
-        pagination: {
-            page: page,
-            pageSize: pageSize,
-        }
+        pagination: { page, pageSize },
     });
 }
 
-export async function getArtigoPorSlug(slug: string) {
+export async function getArtigoPorSlug(slug: string): Promise<StrapiArtigo | null> {
     const data = await fetchAPI('/artigos', {
         filters: {
-            slug: {
-                $eq: slug,
-            },
+            slug: { $eq: slug },
         },
         populate: {
-            // Mantemos os relacionamentos de primeiro nível
             capa: true,
             autors: true,
             categoria: true,
-            // Populamos o Dynamic Zone de forma universal, sem depender de strings tipadas
+            tags: true,
+            // Componente de mídias digitais (repeatable)
+            midias: {
+                populate: { Media: true },
+            },
+            // Dynamic Zone com populate universal
             blocos_de_conteudo: {
-                populate: '*'
-            }
+                populate: '*',
+            },
         },
     });
 
-    return data?.data?.[0];
+    return data?.data?.[0] ?? null;
+}
+
+// ─── Tags ─────────────────────────────────────────────────────────────────────
+
+export async function getTags(): Promise<{ data: StrapiTag[] }> {
+    return fetchAPI('/tags', {
+        sort: ['tag:asc'],
+        pagination: { limit: 100 },
+    });
+}
+
+export async function getArtigosPorTag(
+    tagSlug: string,
+    page = 1,
+    pageSize = 10
+): Promise<{ data: StrapiArtigo[]; meta: { pagination: { page: number; pageSize: number; pageCount: number; total: number } } }> {
+    return fetchAPI('/artigos', {
+        filters: {
+            tags: { slug: { $eq: tagSlug } },
+        },
+        populate: ARTIGO_LIST_POPULATE,
+        sort: ['createdAt:desc'],
+        pagination: { page, pageSize },
+    });
+}
+
+// ─── Categorias ───────────────────────────────────────────────────────────────
+
+export async function getCategorias(): Promise<{ data: StrapiCategoria[] }> {
+    return fetchAPI('/categorias', {
+        sort: ['nome:asc'],
+        pagination: { limit: 50 },
+    });
 }
