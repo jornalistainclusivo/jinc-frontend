@@ -122,6 +122,33 @@ export async function getArtigosPorSecao(categoriaSlug: string, limit = 3) {
     });
 }
 
+/**
+ * Busca artigos de múltiplas categorias (OR).
+ * Usado para seções que agrupam editorias, como os Secondary Headlines
+ * (ex: Agenda + Eventos + Cultura & Arte).
+ */
+export async function getArtigosPorMultiplasCategorias(slugs: string[], limit = 4) {
+    return fetchAPI('/artigos', {
+        filters: {
+            categoria: {
+                slug: {
+                    $in: slugs,
+                },
+            },
+        },
+        populate: {
+            capa: true,
+            categoria: true,
+            autors: true,
+        },
+        sort: ['createdAt:desc'],
+        pagination: {
+            page: 1,
+            pageSize: limit,
+        },
+    });
+}
+
 export async function getArtigosPorCategoria(categorySlug: string, page = 1, pageSize = 10) {
     return fetchAPI('/artigos', {
         filters: {

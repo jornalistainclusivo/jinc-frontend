@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { AutoAltImage } from '@/components/ui/AutoAltImage';
-import { getUltimasPublicacoes, getArtigosPorSecao, getStrapiMedia } from '@/lib/api';
+import { getUltimasPublicacoes, getArtigosPorSecao, getArtigosPorMultiplasCategorias, getStrapiMedia } from '@/lib/api';
 
 function formatDate(dateString?: string) {
   if (!dateString) return '';
@@ -13,10 +13,13 @@ function getImageUrl(item: any, fallbackId: string) {
 }
 
 export default async function Home() {
-  // Parallel fetches: each editorial section queries its own category — no more positional index bugs
-  const [latestResponse, reportagemResponse, acessibilidadeResponse] = await Promise.all([
-    getUltimasPublicacoes(1, 12),
-    getArtigosPorSecao('direitos', 1),
+  // Parallel fetches: each section queries its own category — no positional index bugs
+  const SECONDARY_SLUGS = ['agenda', 'eventos', 'cultura-e-arte'];
+
+  const [latestResponse, headlinesResponse, reportagemResponse, acessibilidadeResponse] = await Promise.all([
+    getUltimasPublicacoes(1, 8),
+    getArtigosPorMultiplasCategorias(SECONDARY_SLUGS, 4),
+    getArtigosPorSecao('reportagem-especial', 1),
     getArtigosPorSecao('acessibilidade-digital', 3),
   ]);
 
@@ -24,14 +27,18 @@ export default async function Home() {
   const reportagemArtigos = reportagemResponse.data || [];
   const acessibilidadeArtigos = acessibilidadeResponse.data || [];
 
-  // Latest-news sections (no category filter — chronological)
+  // Hero + right column: always latest, no category filter
   const heroArticle = artigos[0];
   const secondaryCurated = artigos.slice(1, 4);
-  const secondaryHeadlines = artigos.slice(4, 8);
-  const opinionArticles = artigos.slice(8, 11);
+
+  // Secondary Headlines: curated editorial mix (Agenda + Eventos + Cultura & Arte)
+  const secondaryHeadlines = headlinesResponse.data || [];
+
+  // Opinion feed: latest articles, any category
+  const opinionArticles = artigos.slice(4, 7);
   const latestPublications = artigos.slice(0, 8);
 
-  // Editorial sections — now properly filtered by category
+  // Editorial sections — filtered by category
   const investigativeArticle = reportagemArtigos[0];
   const accessibilityMain = acessibilidadeArtigos[0];
   const accessibilitySecondary = acessibilidadeArtigos.slice(1, 3);
@@ -237,14 +244,14 @@ export default async function Home() {
         </section>
       )}
 
-      {/* 5. TEXT ONLY LIST (Opinião / Colunas) */}
+      {/* 5. ARTIGOS & OPINIÃO */}
       {opinionArticles.length > 0 && (
         <section className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 mb-24" aria-labelledby="opinion-heading">
           <div className="border-t border-b border-neutral-200 py-16">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
               <div className="lg:col-span-1">
                 <h2 id="opinion-heading" className="text-sm font-bold uppercase tracking-widest text-neutral-900 mb-2">
-                  Opinião & Análise
+                  Artigos & Opinião
                 </h2>
                 <p className="text-neutral-500 text-sm">
                   Vozes plurais sobre os desafios da inclusão no Brasil.
