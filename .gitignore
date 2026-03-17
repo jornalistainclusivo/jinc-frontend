@@ -44,6 +44,8 @@ next-env.d.ts
 # editor directories and files
 .idea
 .vscode
+.reference
+.docs
 *.suo
 *.ntvs*
 *.njsproj
