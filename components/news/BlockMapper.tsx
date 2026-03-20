@@ -6,9 +6,9 @@ import { ShareBlock } from '@/components/news/ShareBlock';
 export type BlockContextualLayer = {
     __component: 'blocos-materia.contextual-layer';
     id: number;
-    conceito: string;
-    regra: string;
-    impacto: string;
+    conceito: any;
+    regra: any;
+    impacto: any;
 };
 
 export type BlockTextoLivre = {
@@ -50,9 +50,9 @@ export function BlockMapper({ blocks }: { blocks: DynamicBlock[] }) {
                                 key={uniqueKey}
                                 title="Desconstruindo o Tema"
                                 columns={[
-                                    { icon: 'brain', title: 'Conceito', content: block.conceito || '' },
-                                    { icon: 'scale', title: 'Regras', content: block.regra || '' },
-                                    { icon: 'target', title: 'Impactos', content: block.impacto || '' }
+                                    { icon: 'brain', title: 'Conceito', content: block.conceito || [] },
+                                    { icon: 'scale', title: 'Regras', content: block.regra || [] },
+                                    { icon: 'target', title: 'Impactos', content: block.impacto || [] }
                                 ]}
                             />
                         );

@@ -2,10 +2,11 @@
 
 import React, { useState, useId, useMemo } from 'react';
 import { Plus, Minus, Info, Brain, Scale, Target } from 'lucide-react';
+import { BlocksRenderer, type BlocksContent } from '@strapi/blocks-react-renderer';
 
 export interface ContextualColumn {
     title: string;
-    content: string;
+    content: string | BlocksContent | any;
     icon: 'brain' | 'scale' | 'target';
 }
 
@@ -88,10 +89,15 @@ export function ContextualLayer({ title, content, columns }: ContextualLayerProp
                                             {renderIcon(col.icon)}
                                         </div>
                                         <h4 className="font-sans font-bold text-sm uppercase tracking-widest text-neutral-900 mb-3">{col.title}</h4>
-                                        <div
-                                            className="font-sans text-neutral-700 text-base leading-relaxed prose prose-neutral prose-sm max-w-none"
-                                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(col.content) }}
-                                        />
+                                        <div className="font-sans text-neutral-700 text-base leading-relaxed prose prose-neutral prose-sm max-w-none">
+                                            {typeof col.content === 'string' ? (
+                                                <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(col.content) }} />
+                                            ) : Array.isArray(col.content) ? (
+                                                <BlocksRenderer content={col.content} />
+                                            ) : (
+                                                col.content
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
