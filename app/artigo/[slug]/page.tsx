@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { ArticleAudioPlayer } from '@/components/news/ArticleAudioPlayer';
-import { ShareBlock } from '@/components/news/ShareBlock';
 import { BlockMapper } from '@/components/news/BlockMapper';
 import { TagList } from '@/components/news/TagBadge';
 import { MediaGallery } from '@/components/news/MediaGallery';
@@ -163,19 +162,13 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
         <div className="mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-200 ease-in-out max-w-[65ch] group-data-[focus-mode=active]/article:max-w-[70ch]">
           
           {/* Audio Container & TL;DR */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 pb-8 border-b transition-colors duration-200 ease-in-out border-neutral-200 group-data-[focus-mode=active]/article:border-neutral-300/50">
-            <div className="flex-1 w-full">
-              {plainTextContent && (
-                <ArticleAudioPlayer 
-                  title={article.title} 
-                  text={plainTextContent} 
-                />
-              )}
-            </div>
-            
-            <div className="flex items-center gap-2 md:pl-6 md:border-l shrink-0 transition-opacity duration-200 ease-in-out border-neutral-200 opacity-100 group-data-[focus-mode=active]/article:border-neutral-300/50 group-data-[focus-mode=active]/article:opacity-30 group-data-[focus-mode=active]/article:hover:opacity-100">
-              <ShareBlock />
-            </div>
+          <div className="mb-12 pb-8 border-b transition-colors duration-200 ease-in-out border-neutral-200 group-data-[focus-mode=active]/article:border-neutral-300/50">
+             {plainTextContent && (
+               <ArticleAudioPlayer 
+                 title={article.title} 
+                 text={plainTextContent} 
+               />
+             )}
           </div>
 
           {article.simpleSummary && (
