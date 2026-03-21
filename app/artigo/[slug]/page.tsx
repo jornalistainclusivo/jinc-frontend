@@ -116,7 +116,7 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-neutral-500 font-medium">
               <div className="flex items-center gap-3">
                 <div className="h-12 w-12 rounded-full bg-neutral-200 overflow-hidden relative shadow-sm">
-                  <AutoAltImage src="https://picsum.photos/100/100?random=author" alt="" fill sizes="48px" className="object-cover" referrerPolicy="no-referrer" />
+                  <AutoAltImage src="https://picsum.photos/100/100?random=author" alt="" autoAlt={false} fill sizes="48px" className="object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div className="text-left">
                   <p className="text-base font-semibold text-neutral-900">{article.author}</p>
