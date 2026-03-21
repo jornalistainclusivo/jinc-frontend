@@ -26,6 +26,7 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
     const article = {
       title: articleData.titulo || 'Sem título',
       subtitle: articleData.subtitulo || '',
+      type: categorySlug, // Mapeia a tipologia exata ('hard-news', etc.)
       category: articleData.categoria?.nome || 'Geral',
       author: articleData.autors?.[0]?.nome || 'Redação JINC',
       date: articleData.publishedAt
@@ -189,7 +190,11 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
           )}
 
           {/* Typography Content */}
-          <div className="prose md:prose-xl max-w-none transition-all duration-200 ease-in-out prose-p:font-serif prose-p:leading-[1.9] prose-p:mb-8 prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-8 prose-h3:text-2xl md:prose-h3:text-3xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-neutral-900 hover:prose-a:text-neutral-700 prose-a:underline-offset-4 prose-a:decoration-neutral-300 hover:prose-a:decoration-neutral-900 prose-li:font-serif prose-li:leading-[1.9] prose-strong:font-semibold prose-neutral prose-p:text-neutral-800 prose-headings:text-neutral-900 prose-li:text-neutral-800 prose-strong:text-neutral-900 prose-lg group-data-[focus-mode=active]/article:prose-neutral group-data-[focus-mode=active]/article:prose-p:text-neutral-900 group-data-[focus-mode=active]/article:prose-headings:text-black group-data-[focus-mode=active]/article:prose-li:text-neutral-900 group-data-[focus-mode=active]/article:prose-strong:text-black group-data-[focus-mode=active]/article:prose-lg group-data-[focus-mode=active]/article:text-lg">
+          <div className={`prose md:prose-xl max-w-none transition-all duration-200 ease-in-out prose-p:font-serif prose-p:leading-[1.9] prose-p:mb-8 prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-8 prose-h3:text-2xl md:prose-h3:text-3xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-neutral-900 hover:prose-a:text-neutral-700 prose-a:underline-offset-4 prose-a:decoration-neutral-300 hover:prose-a:decoration-neutral-900 prose-li:font-serif prose-li:leading-[1.9] prose-strong:font-semibold prose-neutral prose-p:text-neutral-800 prose-headings:text-neutral-900 prose-li:text-neutral-800 prose-strong:text-neutral-900 prose-lg group-data-[focus-mode=active]/article:prose-neutral group-data-[focus-mode=active]/article:prose-p:text-neutral-900 group-data-[focus-mode=active]/article:prose-headings:text-black group-data-[focus-mode=active]/article:prose-li:text-neutral-900 group-data-[focus-mode=active]/article:prose-strong:text-black group-data-[focus-mode=active]/article:prose-lg group-data-[focus-mode=active]/article:text-lg ${
+            ['hard-news', 'noticias'].includes(article.type) 
+              ? '[&_.is-lead-block>p:first-of-type]:font-serif [&_.is-lead-block>p:first-of-type]:text-2xl md:[&_.is-lead-block>p:first-of-type]:text-3xl [&_.is-lead-block>p:first-of-type]:font-light [&_.is-lead-block>p:first-of-type]:leading-[1.6] [&_.is-lead-block>p:first-of-type]:mb-12 [&_.is-lead-block>p:first-of-type]:text-neutral-600 group-data-[focus-mode=active]/article:[&_.is-lead-block>p:first-of-type]:text-neutral-800' 
+              : ''
+          }`}>
             
             <BlockMapper blocks={article.blocks} />
             

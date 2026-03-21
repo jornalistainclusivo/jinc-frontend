@@ -42,7 +42,8 @@ export function BlockMapper({ blocks }: { blocks: DynamicBlock[] }) {
                 
                 switch (block.__component) {
                     case 'blocos-materia.texto-livre':
-                        return <StrapiBlocks key={uniqueKey} content={block.texto} />;
+                        const isFirstText = blocks.findIndex(b => b.__component === 'blocos-materia.texto-livre') === index;
+                        return <StrapiBlocks key={uniqueKey} content={block.texto} isLead={isFirstText} />;
                         
                     case 'blocos-materia.contextual-layer':
                         return (
