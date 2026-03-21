@@ -54,9 +54,10 @@ export async function fetchAPI(path: string, urlParamsObject = {}, options = {})
         return data;
     } catch (error: unknown) {
         const e = error as Error;
-        console.error(`Error fetching data from Strapi API at URL: ${requestUrl}`);
-        console.error(`=> Error name: ${e.name}, message: ${e.message}`);
-        throw error;
+        console.warn(`[Build Warning] Strapi offline ou inacessível no build (URL: ${requestUrl})`);
+        console.warn(`=> Detalhes: ${e.name} - ${e.message}`);
+        console.warn(`=> Retornando payload de fallback vazio para não quebrar o build.`);
+        return { data: [], meta: {} };
     }
 }
 
