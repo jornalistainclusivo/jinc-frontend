@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { ArticleAudioPlayer } from '@/components/news/ArticleAudioPlayer';
-import { ShareBlock } from '@/components/news/ShareBlock';
 import { BlockMapper } from '@/components/news/BlockMapper';
 import { TagList } from '@/components/news/TagBadge';
 import { MediaGallery } from '@/components/news/MediaGallery';
@@ -27,6 +26,7 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
     const article = {
       title: articleData.titulo || 'Sem título',
       subtitle: articleData.subtitulo || '',
+      type: categorySlug, // Mapeia a tipologia exata ('hard-news', etc.)
       category: articleData.categoria?.nome || 'Geral',
       author: articleData.autors?.[0]?.nome || 'Redação JINC',
       date: articleData.publishedAt
@@ -163,19 +163,13 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
         <div className="mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-200 ease-in-out max-w-[65ch] group-data-[focus-mode=active]/article:max-w-[70ch]">
           
           {/* Audio Container & TL;DR */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 pb-8 border-b transition-colors duration-200 ease-in-out border-neutral-200 group-data-[focus-mode=active]/article:border-neutral-300/50">
-            <div className="flex-1 w-full">
-              {plainTextContent && (
-                <ArticleAudioPlayer 
-                  title={article.title} 
-                  text={plainTextContent} 
-                />
-              )}
-            </div>
-            
-            <div className="flex items-center gap-2 md:pl-6 md:border-l shrink-0 transition-opacity duration-200 ease-in-out border-neutral-200 opacity-100 group-data-[focus-mode=active]/article:border-neutral-300/50 group-data-[focus-mode=active]/article:opacity-30 group-data-[focus-mode=active]/article:hover:opacity-100">
-              <ShareBlock />
-            </div>
+          <div className="mb-12 pb-8 border-b transition-colors duration-200 ease-in-out border-neutral-200 group-data-[focus-mode=active]/article:border-neutral-300/50">
+             {plainTextContent && (
+               <ArticleAudioPlayer 
+                 title={article.title} 
+                 text={plainTextContent} 
+               />
+             )}
           </div>
 
           {article.simpleSummary && (
@@ -196,7 +190,11 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
           )}
 
           {/* Typography Content */}
-          <div className="prose md:prose-xl max-w-none transition-all duration-200 ease-in-out prose-p:font-serif prose-p:leading-[1.9] prose-p:mb-8 prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-8 prose-h3:text-2xl md:prose-h3:text-3xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-neutral-900 hover:prose-a:text-neutral-700 prose-a:underline-offset-4 prose-a:decoration-neutral-300 hover:prose-a:decoration-neutral-900 prose-li:font-serif prose-li:leading-[1.9] prose-strong:font-semibold prose-neutral prose-p:text-neutral-800 prose-headings:text-neutral-900 prose-li:text-neutral-800 prose-strong:text-neutral-900 prose-lg group-data-[focus-mode=active]/article:prose-neutral group-data-[focus-mode=active]/article:prose-p:text-neutral-900 group-data-[focus-mode=active]/article:prose-headings:text-black group-data-[focus-mode=active]/article:prose-li:text-neutral-900 group-data-[focus-mode=active]/article:prose-strong:text-black group-data-[focus-mode=active]/article:prose-lg group-data-[focus-mode=active]/article:text-lg">
+          <div className={`prose md:prose-xl max-w-none transition-all duration-200 ease-in-out prose-p:font-serif prose-p:leading-[1.9] prose-p:mb-8 prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-3xl md:prose-h2:text-4xl prose-h2:mt-16 prose-h2:mb-8 prose-h3:text-2xl md:prose-h3:text-3xl prose-h3:mt-12 prose-h3:mb-6 prose-a:text-neutral-900 hover:prose-a:text-neutral-700 prose-a:underline-offset-4 prose-a:decoration-neutral-300 hover:prose-a:decoration-neutral-900 prose-li:font-serif prose-li:leading-[1.9] prose-strong:font-semibold prose-neutral prose-p:text-neutral-800 prose-headings:text-neutral-900 prose-li:text-neutral-800 prose-strong:text-neutral-900 prose-lg group-data-[focus-mode=active]/article:prose-neutral group-data-[focus-mode=active]/article:prose-p:text-neutral-900 group-data-[focus-mode=active]/article:prose-headings:text-black group-data-[focus-mode=active]/article:prose-li:text-neutral-900 group-data-[focus-mode=active]/article:prose-strong:text-black group-data-[focus-mode=active]/article:prose-lg group-data-[focus-mode=active]/article:text-lg ${
+            ['hard-news', 'noticias'].includes(article.type) 
+              ? '[&_.is-lead-block>p:first-of-type]:font-serif [&_.is-lead-block>p:first-of-type]:text-2xl md:[&_.is-lead-block>p:first-of-type]:text-3xl [&_.is-lead-block>p:first-of-type]:font-light [&_.is-lead-block>p:first-of-type]:leading-[1.6] [&_.is-lead-block>p:first-of-type]:mb-12 [&_.is-lead-block>p:first-of-type]:text-neutral-600 group-data-[focus-mode=active]/article:[&_.is-lead-block>p:first-of-type]:text-neutral-800' 
+              : ''
+          }`}>
             
             <BlockMapper blocks={article.blocks} />
             
