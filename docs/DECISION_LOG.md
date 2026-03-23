@@ -3,7 +3,7 @@
 ## ADR-001: Transição para Minimalismo Institucional
 
 **Data:** 2026-02-28
-**Status:** Aceito
+**Status:** Consolidado
 **Contexto:** O uso de cores semânticas por categoria (rosa, verde, âmbar) estava gerando ruído visual e conflitando com a seriedade editorial.
 **Decisão:** Remoção global de cores de categoria. Adoção de paleta neutra (`neutral-900`, `neutral-50`).
 **Consequências:** Maior legibilidade, adequação estrita à WCAG AAA, design mais maduro e focado no conteúdo fotográfico e tipográfico.
@@ -11,7 +11,7 @@
 ## ADR-002: Player de Áudio como Módulo Editorial
 
 **Data:** 2026-02-28
-**Status:** Aceito
+**Status:** Implementado
 **Contexto:** O player de áudio parecia um "widget" flutuante desconectado do texto.
 **Decisão:** Integrar o player ao grid do artigo (`max-w-[70ch]`) e transformar o estado sticky em uma barra de sistema nativa.
 **Consequências:** O player se torna uma extensão natural da leitura, reduzindo a carga cognitiva e melhorando a usabilidade em telas pequenas.
@@ -19,23 +19,39 @@
 ## ADR-003: Adoção do Modo Foco Profundo
 
 **Data:** 2026-02-28
-**Status:** Aceito
+**Status:** Consolidado
 **Contexto:** Usuários com TDAH ou fadiga visual precisavam de uma forma de reduzir distrações durante a leitura de artigos longos.
 **Decisão:** Implementação de um toggle que altera o layout global da página (fundo off-white, redução de contraste em imagens, ocultação de elementos periféricos).
 **Consequências:** Aumento da acessibilidade cognitiva e conforto visual, sem comprometer a identidade visual do portal.
 
-## ADR-004: Topologia Multi-repo e ISR via Webhooks
+## ADR-004: Simplificação do Header e Novas Editorias
 
-**Data:** 2026-03-04
-**Status:** Aceito
-**Contexto:** O portal precisa rodar o Strapi headless conectado com o frontend no Next.js, mantendo resiliência e tempo de resposta otimizado.
-**Decisão:** Criação de `Dockerfile`s multi-stage independentes gerenciados via `docker-compose.yml`. O cache Next.js será atualizado sob demanda via rota `/api/revalidate` que valida um `TOKEN_SECRET`.
-**Consequências:** Deploy autônomo e assíncrono entre serviços. Exige volumes persistentes para uploads no Strapi. O frontend utilizará o modo `standalone` nativo do Next.js.
+**Data:** 2026-03-14
+**Status:** Consolidado
+**Contexto:** O menu principal estava poluído visualmente com muitos itens e termos extensos (ex: "Direitos PCD", "Acessibilidade Digital", "Opinião").
+**Decisão:** Simplificação da navegação principal para exatamente 4 itens: Notícias, Neurodiversidade, Direitos, e Artigos. As demais seções foram integradas como subcategorias ou acessíveis via página inicial. Substituição do botão "Admin" por um ícone de usuário minimalista.
+**Consequências:** Header mais limpo, focado e com menor carga cognitiva.
 
-## ADR-004: Adoção da biblioteca 'qs' para serialização de filtros do Strapi 5
+## ADR-005: Padronização de Cantos Retos (Brutalismo Editorial)
 
-**Data:** 2026-03-02
-**Status:** Aceito
-**Contexto:** A reescrita do JINC (BFF Integration) necessitava realizar consultas dinâmicas complexas (ex: `$or` para busca em múltiplos campos) na API REST do Strapi 5. A API nativa do JS (`URLSearchParams`) é limitada e verbosa para serializar objetos aninhados suportados pelo Strapi.
-**Decisão:** Adoção da biblioteca `qs` (Query String) como dependência frontend (`lib/api.ts`).
-**Consequências:** Requerimento de aprovação prévia via Governança suprido por este documento. A biblioteca é o padrão de mercado indicado pela documentação oficial do Strapi para evitar erros de encoding e falhas de conexão em dinâmicas Client-Server. Sem o uso do `qs`, as conexões estavam reportando `[CMS Connection Error]` para parâmetros aninhados.
+**Data:** 2026-03-14
+**Status:** Em Revisão
+**Contexto:** A mistura de cantos arredondados (`rounded-md`, `rounded-xl`) com elementos retos estava diluindo a identidade visual do portal, que busca inspiração no jornalismo impresso clássico.
+**Decisão:** Adoção estrita de cantos retos (`rounded-none`) para todos os elementos estruturais e de ação principal (botões, modais, imagens de capa, cards, tags de tópicos/categorias). O uso de `rounded-full` foi restrito a elementos secundários (ícones, avatares).
+**Consequências:** Estética mais séria, institucional e alinhada ao design brutalista focado em tipografia e alto contraste.
+
+## ADR-006: Copiloto Editorial de Newsletter
+
+**Data:** 2026-03-14
+**Status:** Postergado
+**Contexto:** A redação perdia muito tempo curando e resumindo matérias para a newsletter semanal.
+**Decisão:** Criação de uma interface administrativa (`/admin/newsletter`) integrada a um Copiloto Editorial alimentado por IA (Gemini). A IA lê as matérias selecionadas e gera um rascunho completo (assunto, editorial, resumos), mantendo o jornalista no controle (Human-in-the-loop) para edição e aprovação final.
+**Consequências:** Ganho expressivo de produtividade editorial e garantia de consistência no tom de voz e na acessibilidade (Linguagem Simples) dos emails enviados.
+
+## ADR-007: Resumo Simples (Acessibilidade Cognitiva via IA)
+
+**Data:** 2026-03-21
+**Status:** Postergado
+**Contexto:** Artigos longos ou com linguagem técnica podem ser excludentes para pessoas com deficiência intelectual, dislexia, TDAH ou baixo letramento.
+**Decisão:** Implementação de uma funcionalidade de "Resumo Simples" integrada ao player de áudio. A ferramenta utiliza a API do Gemini para gerar resumos em bullet points seguindo os princípios de Linguagem Simples (Plain Language).
+**Consequências:** Aumento significativo da acessibilidade cognitiva, permitindo que o usuário escolha entre ler o texto completo, ouvir o áudio ou consumir um resumo simplificado e direto dos pontos principais.

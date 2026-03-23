@@ -20,7 +20,7 @@ export function TagBadge({ tag, variant = 'default' }: TagBadgeProps) {
     <Link
       href={`/tag/${tag.slug}`}
       className={`
-        inline-block rounded-sm border border-neutral-300
+        inline-block rounded-none border border-neutral-300
         text-neutral-600 font-sans font-medium
         hover:border-neutral-900 hover:text-neutral-900 hover:bg-neutral-50
         focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2

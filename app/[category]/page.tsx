@@ -137,7 +137,7 @@ export default async function CategoryPage({
                     <Link
                       key={tag}
                       href={`/tag/${tag.toLowerCase()}`}
-                      className="inline-flex items-center rounded-none bg-neutral-50 border border-neutral-200 px-4 py-2 text-xs font-bold uppercase tracking-widest text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors"
+                      className="inline-flex items-center rounded-none bg-neutral-50 border border-neutral-200 px-4 py-2 text-xs font-bold uppercase tracking-widest text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors"
                     >
                       {tag}
                     </Link>
