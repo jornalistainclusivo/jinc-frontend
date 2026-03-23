@@ -54,7 +54,7 @@ export default async function TagPage({ params }: TagPageProps) {
             <li>
               <Link
                 href="/"
-                className="hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1 rounded-sm"
+                className="hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1 rounded-none"
               >
                 Início
               </Link>
@@ -101,11 +101,11 @@ export default async function TagPage({ params }: TagPageProps) {
                 <article className="group flex flex-col h-full">
                   <Link
                     href={`/artigo/${artigo.slug}`}
-                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded-sm"
+                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded-none"
                     aria-label={`Ler artigo: ${artigo.titulo}`}
                   >
                     {/* Imagem */}
-                    <div className="relative aspect-video overflow-hidden rounded-sm bg-neutral-100 mb-4">
+                    <div className="relative aspect-video overflow-hidden rounded-none bg-neutral-100 mb-4">
                       <Image
                         src={imageUrl}
                         alt={alt}
@@ -117,7 +117,7 @@ export default async function TagPage({ params }: TagPageProps) {
 
                     {/* Meta */}
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="bg-neutral-900 text-neutral-50 text-xs font-bold px-2 py-0.5 rounded-sm font-sans uppercase tracking-tight">
+                      <span className="bg-neutral-900 text-neutral-50 text-xs font-bold px-2 py-0.5 rounded-none font-sans uppercase tracking-tight">
                         {categoria}
                       </span>
                       {date && (
@@ -154,7 +154,7 @@ export default async function TagPage({ params }: TagPageProps) {
         <Link
           href="/"
           className="
-            inline-block border border-neutral-300 rounded-sm px-6 py-2
+            inline-block border border-neutral-300 rounded-none px-6 py-2
             text-sm font-sans text-neutral-700
             hover:border-neutral-900 hover:text-neutral-900
             focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2
