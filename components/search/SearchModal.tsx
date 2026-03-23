@@ -76,7 +76,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
           />
           <button
             type="button"
-            className="absolute right-4 top-4 text-neutral-400 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm p-1 transition-colors"
+            className="absolute right-4 top-4 text-neutral-400 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm p-1 transition-colors"
             onClick={handleClose}
           >
             <span className="sr-only">Fechar busca</span>
@@ -92,7 +92,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <li key={article.id} role="option" aria-selected="false">
                     <Link
                       href={`/artigo/${article.slug}`}
-                      className="block rounded-xl p-4 hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors group"
+                      className="block rounded-xl p-4 hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors group"
                       onClick={handleClose}
                     >
                       <div className="flex items-center gap-2 mb-2">
@@ -100,7 +100,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <span className="text-xs text-neutral-300">&bull;</span>
                         <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{article.date}</span>
                       </div>
-                      <h4 className="text-lg sm:text-xl font-serif font-medium text-neutral-900 group-hover:text-brand-primary transition-colors leading-snug">{article.title}</h4>
+                      <h4 className="text-lg sm:text-xl font-serif font-medium text-neutral-900 group-hover:text-neutral-700 transition-colors leading-snug">{article.title}</h4>
                     </Link>
                   </li>
                 ))}

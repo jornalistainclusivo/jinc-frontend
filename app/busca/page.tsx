@@ -101,7 +101,7 @@ export default async function BuscaPage({
                       </time>
                     </div>
                     <h4 className={`text-2xl font-serif font-medium leading-tight text-neutral-900 ${textHoverClass} transition-colors mb-4`}>
-                      <Link href={`/artigo/${post.slug}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm before:absolute before:inset-0">
+                      <Link href={`/artigo/${post.slug}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm before:absolute before:inset-0">
                         {post.title}
                       </Link>
                     </h4>

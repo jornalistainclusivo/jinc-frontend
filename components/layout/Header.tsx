@@ -112,7 +112,7 @@ export function Header() {
           <div className="flex shrink-0 items-center m-0">
             <Link
               href="/"
-              className="text-xl sm:text-2xl font-serif font-bold text-neutral-900 tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-sm"
+              className="text-xl sm:text-2xl font-serif font-bold text-neutral-900 tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded-sm"
               aria-label="Jornalista Inclusivo - Página Inicial"
             >
               Jornalista Inclusivo.
@@ -125,7 +125,7 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-xs font-bold uppercase tracking-widest text-neutral-600 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-sm px-2 py-1 transition-colors"
+                className="text-xs font-bold uppercase tracking-widest text-neutral-600 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded-sm px-2 py-1 transition-colors"
               >
                 {item.name}
               </Link>
@@ -136,7 +136,7 @@ export function Header() {
           <div className="flex items-center gap-4 lg:gap-6">
             <button
               type="button"
-              className="text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-full p-2 transition-colors"
+              className="text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded-full p-2 transition-colors"
               aria-label="Buscar no site"
               onClick={() => setSearchOpen(true)}
             >
@@ -145,7 +145,7 @@ export function Header() {
 
             <button
               type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 transition-colors"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 transition-colors"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-expanded={menuOpen}
               aria-controls="universal-menu"
@@ -167,12 +167,12 @@ export function Header() {
           <div className="fixed inset-0 z-40 bg-black/20" aria-hidden="true" onClick={() => setMenuOpen(false)} />
           <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-neutral-900/10">
             <div className="flex items-center justify-between">
-              <Link href="/" className="-m-1.5 p-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-sm" onClick={() => setMenuOpen(false)}>
+              <Link href="/" className="-m-1.5 p-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 rounded-sm" onClick={() => setMenuOpen(false)}>
                 <span className="text-xl font-serif font-bold text-neutral-900">Jornalista Inclusivo.</span>
               </Link>
               <button
                 type="button"
-                className="-m-2.5 rounded-md p-2.5 text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 transition-colors"
+                className="-m-2.5 rounded-md p-2.5 text-neutral-500 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
                 <span className="sr-only">Fechar menu</span>
