@@ -11,7 +11,7 @@ export default async function CategoryPage({
   const { category } = await params;
   const response = await getArtigosPorCategoria(category, 1, 15);
   const artigos = response?.data || [];
-  
+
   // Format category slug to Title Case
   const formattedCategory = category
     .split('-')
@@ -19,13 +19,13 @@ export default async function CategoryPage({
     .join(' ');
 
   const getCategoryTheme = (cat: string) => {
-    return { 
-      bg: 'bg-neutral-900', 
-      text: 'text-neutral-900', 
-      hover: 'hover:text-neutral-700', 
-      hoverBg: 'hover:bg-neutral-100', 
-      ring: 'focus:ring-neutral-900', 
-      border: 'border-neutral-900' 
+    return {
+      bg: 'bg-neutral-900',
+      text: 'text-neutral-900',
+      hover: 'hover:text-neutral-700',
+      hoverBg: 'hover:bg-neutral-100',
+      ring: 'focus:ring-neutral-900',
+      border: 'border-neutral-900'
     };
   };
 
@@ -36,8 +36,8 @@ export default async function CategoryPage({
       {/* Category Header */}
       <header className="pt-16 pb-12 sm:pt-24 sm:pb-16 bg-neutral-950 text-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-400 hover:text-white mb-8 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-neutral-950 rounded-sm transition-colors"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
@@ -55,7 +55,7 @@ export default async function CategoryPage({
       {/* Articles Feed */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-16">
         <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-3 lg:gap-x-12">
-          
+
           {/* Main Feed (2 columns) */}
           <div className="lg:col-span-2 flex flex-col gap-y-12">
             {artigos.length > 0 ? (
@@ -97,7 +97,7 @@ export default async function CategoryPage({
             ) : (
               <p className="text-neutral-500 text-center py-12">Nenhum artigo encontrado para esta categoria.</p>
             )}
-            
+
             {/* Pagination (Simulated) */}
             <div className="mt-12 flex items-center justify-between border-t border-neutral-200 pt-8">
               <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm px-2 py-1" disabled>
@@ -137,7 +137,7 @@ export default async function CategoryPage({
                     <Link
                       key={tag}
                       href={`/tag/${tag.toLowerCase()}`}
-                      className="inline-flex items-center rounded-full bg-neutral-50 border border-neutral-200 px-4 py-2 text-xs font-bold uppercase tracking-widest text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors"
+                      className="inline-flex items-center rounded-none bg-neutral-50 border border-neutral-200 px-4 py-2 text-xs font-bold uppercase tracking-widest text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary transition-colors"
                     >
                       {tag}
                     </Link>
