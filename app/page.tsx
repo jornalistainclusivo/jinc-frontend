@@ -177,7 +177,7 @@ export default async function Home() {
       {/* 4. SECTION GRID (Acessibilidade) - Micro-asymmetry applied */}
       {accessibilityMain && (
         <section className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 mb-24 relative" aria-labelledby="section-acessibilidade">
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-brand-primary/10 hidden lg:block" aria-hidden="true"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-neutral-900/10 hidden lg:block" aria-hidden="true"></div>
 
           <div className="flex items-center justify-between mb-12 border-b border-neutral-900 pb-4 lg:ml-8">
             <h2 id="section-acessibilidade" className="text-3xl font-serif font-medium tracking-tight text-neutral-900">

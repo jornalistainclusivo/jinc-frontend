@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { AutoAltImage } from '@/components/ui/AutoAltImage';
-import { getArtigosPorCategoria, getStrapiMedia } from '@/lib/api';
+import { getArtigosPorCategoria, getTags, getStrapiMedia } from '@/lib/api';
+import type { StrapiTag } from '@/lib/strapi-types';
 
 export default async function CategoryPage({
   params,
@@ -9,8 +10,12 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
-  const response = await getArtigosPorCategoria(category, 1, 15);
+  const [response, tagsResponse] = await Promise.all([
+    getArtigosPorCategoria(category, 1, 15),
+    getTags(),
+  ]);
   const artigos = response?.data || [];
+  const tags: StrapiTag[] = tagsResponse?.data || [];
 
   // Format category slug to Title Case
   const formattedCategory = category
@@ -84,7 +89,7 @@ export default async function CategoryPage({
                       </time>
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-serif font-medium leading-tight text-neutral-900 group-hover:text-neutral-700 transition-colors mb-4">
-                      <Link href={`/artigo/${item.slug}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm before:absolute before:inset-0">
+                      <Link href={`/artigo/${item.slug}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm before:absolute before:inset-0">
                         {item.titulo}
                       </Link>
                     </h2>
@@ -100,7 +105,7 @@ export default async function CategoryPage({
 
             {/* Pagination (Simulated) */}
             <div className="mt-12 flex items-center justify-between border-t border-neutral-200 pt-8">
-              <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm px-2 py-1" disabled>
+              <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm px-2 py-1" disabled>
                 <ArrowLeft className="h-4 w-4" /> Anterior
               </button>
               <span className="text-xs font-bold uppercase tracking-widest text-neutral-900">Página 1 de 12</span>
@@ -133,15 +138,19 @@ export default async function CategoryPage({
                   Tópicos Relacionados
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Legislação', 'Inclusão', 'Acessibilidade', 'Direitos Humanos', 'Políticas Públicas'].map((tag) => (
-                    <Link
-                      key={tag}
-                      href={`/tag/${tag.toLowerCase()}`}
-                      className="inline-flex items-center rounded-none bg-neutral-50 border border-neutral-200 px-4 py-2 text-xs font-bold uppercase tracking-widest text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors"
-                    >
-                      {tag}
-                    </Link>
-                  ))}
+                  {tags.length > 0 ? (
+                    tags.map((t) => (
+                      <Link
+                        key={t.id}
+                        href={`/tag/${t.slug}`}
+                        className="inline-flex items-center rounded-none bg-neutral-50 border border-neutral-200 px-4 py-2 text-xs font-bold uppercase tracking-widest text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors"
+                      >
+                        {t.tag}
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="text-neutral-400 text-sm">Nenhum tópico disponível.</p>
+                  )}
                 </div>
               </div>
             </div>

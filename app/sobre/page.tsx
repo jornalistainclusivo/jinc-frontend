@@ -147,7 +147,7 @@ export default function SobrePage() {
                   Adotado por 12 grandes redações
                 </li>
               </ul>
-              <button className="text-xs font-bold uppercase tracking-widest text-neutral-900 group-hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm transition-colors">
+              <button className="text-xs font-bold uppercase tracking-widest text-neutral-900 group-hover:text-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm transition-colors">
                 Conhecer o Guia &rarr;
               </button>
             </div>
@@ -167,7 +167,7 @@ export default function SobrePage() {
                   Parceria com o Ministério Público
                 </li>
               </ul>
-              <button className="text-xs font-bold uppercase tracking-widest text-neutral-900 group-hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-sm transition-colors">
+              <button className="text-xs font-bold uppercase tracking-widest text-neutral-900 group-hover:text-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm transition-colors">
                 Acessar o Observatório &rarr;
               </button>
             </div>
