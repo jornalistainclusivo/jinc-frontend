@@ -2,8 +2,12 @@ import qs from 'qs';
 import type { StrapiArtigo, StrapiCategoria, StrapiTag } from './strapi-types';
 
 export function getStrapiURL(path = '') {
-    const baseUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://127.0.0.1:1337';
-    // Ensures Node fetch API resolves properly in IPv4 configurations locally
+    // Server-side (SSR/Docker): use internal Docker DNS to reach CMS container
+    // Client-side (browser): use public URL accessible from the host machine
+    const isServer = typeof window === 'undefined';
+    const baseUrl = isServer
+        ? (process.env.INTERNAL_STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://127.0.0.1:1337')
+        : (process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337');
     return `${baseUrl.replace('localhost', '127.0.0.1')}${path}`;
 }
 
