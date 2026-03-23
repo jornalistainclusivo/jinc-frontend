@@ -36,6 +36,13 @@ const nextConfig: NextConfig = {
         port: '1337',
         pathname: '/uploads/**',
       },
+      {
+        // AWS S3 bucket for Strapi media uploads
+        protocol: 'https',
+        hostname: 'jinc-cms-media-assets.s3.us-east-2.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   output: 'standalone',
