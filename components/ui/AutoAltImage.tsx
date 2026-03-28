@@ -50,7 +50,7 @@ export function AutoAltImage({ src, alt, autoAlt = true, ...props }: AutoAltImag
       }
     };
 
-    if ((!alt || alt.trim() === '') && autoAlt && typeof src === 'string' && src.startsWith('http')) {
+    if ((!alt || alt.trim() === '') && autoAlt && typeof src === 'string' && (src.startsWith('http') || src.startsWith('/'))) {
       generateAltText(src);
     } else if (alt) {
       setFinalAlt(alt);
