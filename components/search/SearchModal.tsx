@@ -3,8 +3,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Search, X, ArrowRight } from 'lucide-react';
-import { articles } from '@/lib/mockData';
+import { Search, X, ArrowRight, Loader2 } from 'lucide-react';
+import { searchArtigosMenu } from '@/lib/api';
+import type { StrapiArtigo } from '@/lib/strapi-types';
+import { formatDate } from '@/lib/utils';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -13,6 +15,8 @@ interface SearchModalProps {
 
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState<StrapiArtigo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -41,13 +45,30 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   if (!isOpen) return null;
 
-  const results = query.trim() === '' 
-    ? [] 
-    : articles.filter(a => 
-        a.title.toLowerCase().includes(query.toLowerCase()) || 
-        a.description.toLowerCase().includes(query.toLowerCase()) ||
-        a.category.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 5);
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (!trimmed) {
+      setResults([]);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        const response = await searchArtigosMenu(trimmed);
+        if (response?.data) {
+          setResults(response.data);
+        }
+      } catch (e) {
+        console.error('Error fetching search results:', e);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [query]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,33 +106,44 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         </form>
 
         {query.trim() !== '' && (
-          <div className="overflow-y-auto p-4 sm:p-6 flex-1">
-            {results.length > 0 ? (
+          <div className="overflow-y-auto p-4 sm:p-6 flex-1 shrink-0">
+            {isLoading ? (
+              <div className="flex h-32 items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-neutral-300" aria-hidden="true" />
+                <span className="sr-only">Buscando resultados...</span>
+              </div>
+            ) : results.length > 0 ? (
               <ul className="space-y-4" role="listbox">
-                {results.map((article) => (
-                  <li key={article.id} role="option" aria-selected="false">
-                    <Link
-                      href={`/artigo/${article.slug}`}
-                      className="block rounded-xl p-4 hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors group"
-                      onClick={handleClose}
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">{article.category}</span>
-                        <span className="text-xs text-neutral-300">&bull;</span>
-                        <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{article.date}</span>
-                      </div>
-                      <h4 className="text-lg sm:text-xl font-serif font-medium text-neutral-900 group-hover:text-neutral-700 transition-colors leading-snug">{article.title}</h4>
-                    </Link>
-                  </li>
-                ))}
+                {results.map((article) => {
+                  const dataRaw = article.data_publicacao || article.createdAt;
+                  const formattedDate = dataRaw ? formatDate(dataRaw as string) : '';
+                  const catNome = article.categoria?.nome || 'Editorial';
+
+                  return (
+                    <li key={article.documentId || article.id} role="option" aria-selected="false">
+                      <Link
+                        href={`/artigo/${article.slug}`}
+                        className="block rounded-xl p-4 hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors group"
+                        onClick={handleClose}
+                      >
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">{catNome}</span>
+                          <span className="text-xs text-neutral-300">&bull;</span>
+                          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{formattedDate}</span>
+                        </div>
+                        <h4 className="text-lg sm:text-xl font-serif font-medium text-neutral-900 group-hover:text-neutral-700 transition-colors leading-snug">{article.titulo}</h4>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             ) : (
-              <div className="py-12 text-center text-neutral-500 font-sans">
+              <div className="py-12 text-center text-neutral-500 font-sans" role="status">
                 Nenhum resultado encontrado para &quot;<span className="font-semibold text-neutral-900">{query}</span>&quot;.
               </div>
             )}
             
-            {results.length > 0 && (
+            {!isLoading && results.length > 0 && (
               <div className="mt-6 border-t border-neutral-100 pt-6">
                 <button
                   type="button"
