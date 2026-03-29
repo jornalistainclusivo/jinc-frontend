@@ -173,20 +173,20 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
           </div>
 
           {article.simpleSummary && (
-            <section
-              className="mb-12 p-8 bg-neutral-50 border-l-4 border-neutral-900 shadow-sm"
-              aria-labelledby="tl-dr-heading"
+            <details
+              className="mb-12 group border-l-4 border-neutral-900 bg-neutral-50 shadow-sm open:bg-neutral-100 transition-colors rounded-none"
             >
-              <h2
-                id="tl-dr-heading"
-                className="text-sm font-bold uppercase tracking-widest text-neutral-900 mb-3 flex items-center gap-2"
+              <summary
+                className="cursor-pointer p-6 sm:p-8 text-sm font-bold uppercase tracking-widest text-neutral-900 hover:text-neutral-700 outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-inset border-b border-transparent group-open:border-neutral-200 transition-colors"
               >
-                Em Resumo (Linguagem Simples)
-              </h2>
-              <p className="text-neutral-800 text-lg leading-relaxed font-medium">
-                {article.simpleSummary}
-              </p>
-            </section>
+                Em Resumo (Linguagem Simples) - Gerado por IA
+              </summary>
+              <div className="p-6 sm:p-8 pt-6">
+                <div className="text-neutral-800 text-lg leading-relaxed font-medium whitespace-pre-line prose prose-neutral max-w-none prose-p:mb-4 prose-li:mb-2">
+                  {article.simpleSummary}
+                </div>
+              </div>
+            </details>
           )}
 
           {/* Typography Content */}

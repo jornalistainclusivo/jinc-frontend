@@ -51,10 +51,11 @@
 ## ADR-007: Resumo Simples (Acessibilidade Cognitiva via IA)
 
 **Data:** 2026-03-21
-**Status:** Postergado
+**Atualizado:** 2026-03-28
+**Status:** Implementado
 **Contexto:** Artigos longos ou com linguagem técnica podem ser excludentes para pessoas com deficiência intelectual, dislexia, TDAH ou baixo letramento.
-**Decisão:** Implementação de uma funcionalidade de "Resumo Simples" integrada ao player de áudio. A ferramenta utiliza a API do Gemini para gerar resumos em bullet points seguindo os princípios de Linguagem Simples (Plain Language).
-**Consequências:** Aumento significativo da acessibilidade cognitiva, permitindo que o usuário escolha entre ler o texto completo, ouvir o áudio ou consumir um resumo simplificado e direto dos pontos principais.
+**Decisão:** Implementação de uma funcionalidade de "Resumo Simples" na página. A ferramenta utiliza a API do Gemini via backend do Strapi ("Lifecycle hooks" em rascunhos) para gerar resumos em bullet points seguindo os princípios de Linguagem Simples (Plain Language), sem publicar automaticamente, o que foi renderizado em um Collapsible em HTML5 Acessível.
+**Consequências:** Aumento significativo da acessibilidade cognitiva, permitindo que o usuário decida entre ler o texto completo ou acionar o `<details>` e consumir um resumo simplificado direto dos pontos principais.
 
 ## ADR-008: Fallbacks Descritivos via IA na Migração de Imagens
 
