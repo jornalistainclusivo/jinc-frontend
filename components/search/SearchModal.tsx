@@ -43,8 +43,6 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleClose]);
 
-  if (!isOpen) return null;
-
   useEffect(() => {
     const trimmed = query.trim();
     if (!trimmed) {
@@ -69,6 +67,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
+
+  if (!isOpen) return null;
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
