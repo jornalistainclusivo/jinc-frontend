@@ -82,7 +82,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
       <div className="fixed inset-0 bg-neutral-900/80 backdrop-blur-sm transition-opacity" onClick={handleClose} aria-hidden="true" />
       
-      <div className="relative w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all mx-4 flex flex-col max-h-[80vh] border border-neutral-200">
+      <div className="relative w-full max-w-2xl transform overflow-hidden rounded-none bg-white shadow-2xl transition-all mx-4 flex flex-col max-h-[80vh] border border-neutral-200">
         <h2 id="search-modal-title" className="sr-only">Busca no site</h2>
         <form onSubmit={handleSearch} className="relative border-b border-neutral-200 shrink-0">
           <Search className="pointer-events-none absolute left-6 top-5 h-6 w-6 text-neutral-400" aria-hidden="true" />
@@ -97,7 +97,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
           />
           <button
             type="button"
-            className="absolute right-4 top-4 text-neutral-400 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-sm p-1 transition-colors"
+            className="absolute right-4 top-4 text-neutral-400 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 rounded-none p-1 transition-colors"
             onClick={handleClose}
           >
             <span className="sr-only">Fechar busca</span>
@@ -123,7 +123,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     <li key={article.documentId || article.id} role="option" aria-selected="false">
                       <Link
                         href={`/artigo/${article.slug}`}
-                        className="block rounded-xl p-4 hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors group"
+                        className="block rounded-none p-4 hover:bg-neutral-50 focus:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 transition-colors group"
                         onClick={handleClose}
                       >
                         <div className="flex items-center gap-2 mb-2">
@@ -148,7 +148,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <button
                   type="button"
                   onClick={handleSearch}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-neutral-900 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 transition-colors"
+                  className="flex w-full items-center justify-center gap-2 rounded-none bg-neutral-900 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 transition-colors"
                 >
                   Ver todos os resultados para &quot;{query}&quot;
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
