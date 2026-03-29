@@ -66,6 +66,7 @@ export type BlocoConteudo = BlocoTextoLivre | BlocoContextualLayer;
 
 export interface StrapiArtigo {
   id: number;
+  documentId?: string;
   titulo: string;
   subtitulo?: string | null;
   slug: string;

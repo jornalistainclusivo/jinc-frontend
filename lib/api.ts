@@ -181,3 +181,19 @@ export async function getCategorias(): Promise<{ data: StrapiCategoria[] }> {
         pagination: { limit: 50 },
     });
 }
+
+// ─── Busca ────────────────────────────────────────────────────────────────────
+
+export async function searchArtigosMenu(query: string, limit = 5): Promise<{ data: StrapiArtigo[] }> {
+    return fetchAPI('/artigos', {
+        filters: {
+            $or: [
+                { titulo: { $containsi: query } },
+                { subtitulo: { $containsi: query } },
+            ],
+        },
+        populate: ARTIGO_LIST_POPULATE,
+        sort: ['data_publicacao:desc', 'createdAt:desc'],
+        pagination: { limit },
+    });
+}
