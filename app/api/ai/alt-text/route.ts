@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenAI } from '@google/genai';
+import { generateAltText } from '../../../../lib/ai-provider';
 
 export async function POST(req: NextRequest) {
     try {
@@ -25,22 +25,8 @@ export async function POST(req: NextRequest) {
         const base64Data = buffer.toString('base64');
         const mimeType = imgRes.headers.get('content-type') || 'image/jpeg';
 
-        const ai = new GoogleGenAI({ apiKey });
-        const result = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: [
-                {
-                    parts: [
-                        { text: 'Crie um texto alternativo (alt text) acessível e descritivo para esta imagem, voltado para pessoas com deficiência visual. Seja direto, objetivo e descreva os elementos principais. Não use frases como "A imagem mostra" ou "Foto de". Máximo de 2 frases curtas.' },
-                        {
-                            inlineData: { data: base64Data, mimeType: mimeType }
-                        }
-                    ]
-                }
-            ]
-        });
+        const altText = await generateAltText(base64Data, mimeType);
 
-        const altText = result.text?.trim() || "Imagem ilustrativa";
         return NextResponse.json({ altText });
     } catch (error) {
         console.error("Alt text API error:", error);
