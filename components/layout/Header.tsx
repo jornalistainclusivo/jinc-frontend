@@ -18,31 +18,22 @@ const hamburgerMenu = [
     name: 'Notícias',
     href: '/noticias',
     subItems: [
-      { name: 'Últimas Notícias', href: '/noticias/ultimas-noticias' },
-      { name: 'Mercado de Trabalho', href: '/noticias/mercado-trabalho' },
-      { name: 'Entrevistas', href: '/noticias/entrevistas' }
+      { name: 'Hard News', href: '/hard-news' },
+      { name: 'Entrevistas', href: '/entrevistas' }
     ]
   },
+  { name: 'Mercado & Trabalho', href: '/mercado-e-trabalho' },
   { name: 'Neurodiversidade', href: '/neurodiversidade' },
   { name: 'Saúde', href: '/saude' },
   { name: 'Educação', href: '/educacao' },
+  { name: 'Paradesporto', href: '/paradesporto' },
   {
     name: 'Direitos PCD',
     href: '/direitos-pcd',
-    subItems: [
-      { name: 'Advogada Responde', href: '/direitos-pcd/advogada-responde' },
-      { name: 'Direito Inclusivo', href: '/direitos-pcd/direito-inclusivo' }
-    ]
   },
-  {
-    name: 'Artigos',
-    href: '/artigos',
-    subItems: [
-      { name: 'Moda Inclusiva', href: '/artigos/moda-inclusiva' },
-      { name: 'Sem Barreiras', href: '/artigos/sem-barreiras' },
-      { name: 'Sem Filtro & Com Afeto', href: '/artigos/sem-filtro-com-afeto' },
-      { name: 'Psicologia Inclusiva', href: '/artigos/psicologia-inclusiva' }
-    ]
+  { 
+    name: 'Artigos', 
+    href: '/artigos' 
   },
 ];
 
