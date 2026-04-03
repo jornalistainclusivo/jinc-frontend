@@ -36,6 +36,29 @@ export default async function CategoryPage({
 
   const theme = getCategoryTheme(formattedCategory);
 
+  // Mapeamento de nomes de exibição para categorias com acentuação ou formatação especial
+  const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
+    'saude': 'Saúde',
+    'noticias': 'Notícias',
+    'hard-news': 'Hard News',
+    'direitos-pcd': 'Direitos PCD',
+    'neurodiversidade': 'Neurodiversidade',
+    'educacao': 'Educação'
+  };
+
+  const displayName = CATEGORY_DISPLAY_NAMES[category] || formattedCategory;
+
+  // Mapeamento dinâmico de descrições baseadas no slug exato
+  const CATEGORY_DESCRIPTIONS: Record<string, string> = {
+    'noticias': 'Acompanhe as principais notícias que impactam a população com deficiência no Brasil e no mundo.',
+    'hard-news': 'Acompanhe as últimas notícias sobre Diversidade, Equidade e Inclusão no Brasil e no mundo.',
+    'agenda': 'Acompanhe os principais eventos, peças teatrais e festivais com recursos de acessibilidade no Brasil.',
+    'artigos': 'Opinião & Análise - Vozes plurais sobre os desafios da inclusão no Brasil.',
+    'saude': 'Acompanhe as últimas reportagens, análises e entrevistas sobre Saúde no Brasil e no mundo.'
+  };
+
+  const categoryDescription = CATEGORY_DESCRIPTIONS[category] || `Acompanhe as últimas reportagens, análises e entrevistas sobre ${formattedCategory.toLowerCase()} no Brasil e no mundo.`;
+
   return (
     <div className="bg-white min-h-screen pb-24">
       {/* Category Header */}
@@ -49,10 +72,10 @@ export default async function CategoryPage({
             Voltar para a Home
           </Link>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-medium tracking-tighter text-white leading-[1.1] mb-6">
-            {formattedCategory}
+            {displayName}
           </h1>
           <p className="text-xl text-neutral-400 leading-[1.6] font-light max-w-[55ch]">
-            Acompanhe as últimas reportagens, análises e entrevistas sobre {formattedCategory.toLowerCase()} no Brasil e no mundo.
+            {categoryDescription}
           </p>
         </div>
       </header>
@@ -122,7 +145,7 @@ export default async function CategoryPage({
               <div className="bg-white rounded-none p-8 border border-neutral-200 shadow-xl">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-900 mb-4">Assine a Newsletter</h3>
                 <p className="text-neutral-600 text-sm mb-8 leading-relaxed font-serif">
-                  Receba os melhores conteúdos sobre {formattedCategory.toLowerCase()} diretamente no seu e-mail.
+                  Receba os melhores conteúdos sobre {displayName.toLowerCase()} diretamente no seu e-mail.
                 </p>
                 <Link
                   href="/newsletter"
