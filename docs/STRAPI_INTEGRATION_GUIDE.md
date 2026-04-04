@@ -1,99 +1,102 @@
-# Guia de Integração: Next.js 16 + Strapi Headless CMS
+# Guia de Integração: Next.js 16 + Strapi 5 Headless CMS
 
-Este documento estabelece a arquitetura de integração entre o frontend (Next.js) e o backend editorial (Strapi), garantindo alta performance, SEO e governança de dados.
+Este documento estabelece a arquitetura de integração entre o frontend (Next.js) e o backend editorial (Strapi 5), garantindo alta performance, SEO e governança de dados via **Vibe-Coding**.
 
-## 🏗️ 1. Topologia do Projeto (Multi-repo vs Monorepo)
+## 🏗️ 1. Topologia do Projeto (Hybrid Monorepo)
 
-Recomendamos a abordagem **Multi-repo** (repositórios separados) para isolar o ciclo de deploy:
-- `jornalista-inclusivo-web` (Next.js -> Deploy na Vercel)
-- `jornalista-inclusivo-cms` (Strapi -> Deploy na AWS/Render/DigitalOcean)
+O projeto utiliza uma estrutura de monorepo para desenvolvimento local, mas mantém repositórios independentes para deploy:
 
-## ⚙️ 2. Setup do Strapi (Backend)
+- `jinc-infra` (Monorepo Root / Docker) -> Público.
+- `jinc-frontend` (Next.js 16) -> Público (Deploy Vercel).
+- `cms` (Strapi 5) -> **Privado** (Deploy AWS/Render).
 
-No seu terminal (fora da pasta do Next.js), inicialize o Strapi:
+## ⚙️ 2. Setup & Seeding Automático (Backend)
 
-```bash
-npx create-strapi-app@latest jornalista-inclusivo-cms --quickstart
-```
+O Strapi 5 foi configurado para ser resiliente e "zero-config" para o desenvolvedor frontend.
 
-### Plugins Recomendados para a Redação:
-- **GraphQL:** `npm run strapi install graphql` (Para queries otimizadas).
-- **SEO:** `@strapi/plugin-seo` (Para gerenciar meta tags e Open Graph).
-- **Publisher:** Para agendamento de publicações.
+### A. Idempotent Seeding
+
+O arquivo `cms/src/index.ts` executa um script de `bootstrap()` que:
+
+1. Verifica se as categorias essenciais (`noticias`, `direitos-pcd`, `mercado-e-trabalho`, `saude`, etc.) existem.
+2. Cria os registros faltantes com slugs padronizados.
+3. **Permissões Públicas**: Configura automaticamente as permissões de `find` e `findOne` para a role `Public` na coleção de Categorias e Artigos, eliminando a necessidade de configuração manual no Admin Panel.
+
+### B. Plugins Mandatórios
+
+- **SEO:** `@strapi-community/plugin-seo` (Configurado com o componente `shared.seo`).
+- **Publisher:** Para agendamento e gerenciamento de workflow editorial.
 
 ## 🗄️ 3. Modelagem de Dados Editorial (Content-Types)
 
-Crie os seguintes *Collection Types* no painel do Strapi:
+O backend utiliza o **Strapi 5** com o plugin de SEO instalado. Abaixo, a definição técnica dos tipos principais baseada no `schema.json`:
 
-### A. Article (Artigo)
-- `title` (Text - Short) - Obrigatório
-- `slug` (UID - atrelado ao title) - Obrigatório
-- `subtitle` (Text - Long)
-- `content` (Rich Text ou Blocks) - O corpo da matéria
-- `coverImage` (Media - Single)
-- `publishedAt` (Date)
-- **Relações:** Tem 1 `Category`, Tem 1 ou mais `Authors`.
+### A. Artigo (`api::artigo.artigo`)
 
-### B. Category (Editoria)
-- `name` (Text - Short) - Ex: "Direitos PcD"
-- `slug` (UID)
-- `description` (Text - Long)
+Este é o core da plataforma, integrando acessibilidade por IA e blocos dinâmicos.
 
-### C. Author (Autor)
-- `name` (Text - Short)
-- `bio` (Text - Long)
-- `avatar` (Media - Single)
+- **Campos Base:**
+  - `titulo` (String): Título principal.
+  - `slug` (UID): Identificador de URL (UID baseado no `titulo`).
+  - `subtitulo` (String): Sutiã ou apoio do título.
+  - `data_publicacao` (Date): Data de exibição no portal.
+  - `capa` (Media): Imagem de destaque (Single).
 
-## 🔗 4. Integração no Next.js (VS Code)
+- **Blocos Dinâmicos (`blocos_de_conteudo`):** Zona dinâmica para montagem de matérias:
+  - `blocos-materia.contextual-layer`: Camada de contexto cognitivo.
+  - `blocos-materia.texto-livre`: Rich text padrão.
+  - `blocos-materia.pull-quote`: Destaque tipográfico.
+  - `blocos-materia.share-block`: Botões de compartilhamento localizados.
 
-No repositório do Next.js, crie as variáveis de ambiente no `.env.local`:
+- **Acessibilidade & IA:**
+  - `descricao_audio` (Text): Armazena o roteiro/transcrição para o audioplayer.
+  - `resumo_simples` (Text): Armazena os bullet-points gerados para Linguagem Simples.
+  - `alt_text_ia` (Text): Cache da descrição visual gerada pelo Gemini.
+
+- **Relações:**
+  - `categoria` (OneToOne): Vinculado a 1 Categoria.
+  - `autors` (OneToMany): Vinculado a 1 ou mais Autores.
+  - `tags` (OneToMany): Vinculado a múltiplas Tags.
+
+- **SEO:**
+  - `seo` (Component `shared.seo`): Gerenciamento de Meta Tags, Open Graph e NoIndex.
+
+### B. Categoria (`api::categoria.categoria`)
+
+- **Campos Base:**
+  - `nome` (String): Nome visível.
+  - `slug` (UID): Identificador técnico.
+  - `descricao` (Text): Meta descrição rica para a indexação da editoria.
+- **Hierarquia:**
+  - Suporta relação com categoria `pai`.
+
+## 🔗 4. Integração no Next.js (Flat Routing)
+
+O Frontend utiliza o **Next.js App Router** com uma arquitetura de rotas dinâmicas simplificada:
+
+### A. Arquitetura de Rotas
+
+- `app/[category]/page.tsx`: Captura qualquer slug de categoria (ex: `/saude`, `/noticias`).
+- **Display Names**: O frontend mantém um dicionário `CATEGORY_DISPLAY_NAMES` para garantir a acentuação correta de slugs (ex: `saude` -> `Saúde`) e `CATEGORY_DESCRIPTIONS` para metadados ricos.
+
+### B. Variáveis de Ambiente
 
 ```env
 NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337
-STRAPI_API_TOKEN=seu_token_gerado_no_painel_do_strapi
+STRAPI_API_TOKEN=...
 ```
 
-### Exemplo de Fetcher Otimizado (Next.js 16)
+## 🤖 5. O Papel da IA (Gemini) no Fluxo
 
-Crie um arquivo `lib/api.ts` para centralizar as chamadas:
+1. **AutoAltImage:** Fallback para descrições de imagem via Gemini Vision.
+2. **Contextual Layer:** A IA lê o `conteudo` do Strapi para gerar resumos de acessibilidade cognitiva.
 
-```typescript
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL;
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
+## ⚡ 6. Desenvolvimento Local (Modo Vibe-Coding)
 
-export async function fetchAPI(path: string, urlParamsObject = {}, options = {}) {
-  const mergedOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${STRAPI_TOKEN}`,
-    },
-    ...options,
-  };
+Para rodar o ambiente completo com Hot Module Replacement (HMR) funcional no Windows/WSL:
 
-  // Construção da URL com qs (query-string)
-  const queryString = new URLSearchParams(urlParamsObject).toString();
-  const requestUrl = `${STRAPI_URL}/api${path}${queryString ? `?${queryString}` : ''}`;
+1. Use `docker compose up`.
+2. O frontend roda em estágio `builder` com `npm run dev`.
+3. **Limpeza de Cache**: Se houver "shadowing" de arquivos antigos, execute `rm -rf jinc-frontend/.next` no host para forçar a recompilação total.
 
-  const response = await fetch(requestUrl, mergedOptions);
-
-  if (!response.ok) {
-    console.error(response.statusText);
-    throw new Error(`Erro ao buscar dados do Strapi`);
-  }
-  const data = await response.json();
-  return data;
-}
-```
-
-## 🤖 5. O Papel da IA (Gemini) no Novo Fluxo
-
-Com o Strapi assumindo o conteúdo, a IA Generativa atuará como um **Middleware de Enriquecimento**:
-
-1. **AutoAltImage:** Quando o Next.js renderizar uma imagem vinda do Strapi que não possua `alternativeText` preenchido pelo jornalista, o componente fará o fallback para a API do Gemini Vision.
-2. **ArticleAudioPlayer:** O texto rico (`content`) vindo do Strapi será limpo (strip HTML) e enviado em blocos para o Gemini TTS gerar o áudio dinamicamente.
-
-## ⚡ 6. Revalidação de Cache (ISR)
-
-Para garantir que o site seja ultrarrápido, mas atualizado quando uma notícia for publicada:
-- Configure **Webhooks** no Strapi para disparar requisições POST para uma Rota de API do Next.js (ex: `/api/revalidate`) sempre que um Artigo for criado ou atualizado.
-- O Next.js usará `revalidatePath('/artigo/[slug]')` para atualizar o cache da borda (Edge) instantaneamente.
+---

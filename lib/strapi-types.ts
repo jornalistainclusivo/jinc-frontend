@@ -76,6 +76,7 @@ export interface StrapiArtigo {
   resumo_simples?: string | null;
   alt_text_ia?: string | null;
   descricao_audio?: string | null;
+  legenda_capa?: string | null;
   capa?: StrapiMedia | null;
   autors?: StrapiAutor[];
   categoria?: StrapiCategoria | null;
