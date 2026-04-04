@@ -1,17 +1,21 @@
 # Color System & Chromatic Governance
 
 ## Filosofia (v2.0.0+)
-O Jornalista Inclusivo adotou a diretriz **Modern Institutional Minimalist**. 
+
+O Jornalista Inclusivo adotou a diretriz **Modern Institutional Minimalist**.
 A cor deixou de ser um elemento de categorização temática para se tornar uma ferramenta estrita de **hierarquia, foco e acessibilidade**.
 
 ### O Fim das Cores por Categoria
-Na v1.x, utilizávamos cores específicas para editorias (ex: Rosa para Notícias, Âmbar para Neurodiversidade). 
+
+Na v1.x, utilizávamos cores específicas para editorias (ex: Rosa para Notícias, Âmbar para Neurodiversidade).
 
 **Decisão Arquitetural (ADR-001):** Esta abordagem foi descontinuada.
+
 * **Motivo:** O excesso de variação cromática gerava ruído cognitivo, competia com o conteúdo fotográfico e reduzia a percepção de autoridade institucional.
 * **Nova Abordagem:** Categorias são agora diferenciadas exclusivamente por tipografia, labels textuais explícitos (ex: `text-xs font-bold uppercase tracking-widest`) e posicionamento espacial.
 
 ## Paleta Global (Structural Neutrals)
+
 A interface é construída sobre uma fundação monocromática de alto contraste.
 
 | Token | Valor Tailwind | Uso Semântico | Contraste (Fundo Branco) |
@@ -26,6 +30,8 @@ A interface é construída sobre uma fundação monocromática de alto contraste
 | `border-focus` | `border-neutral-900` | Estados de focus, active, bordas de ênfase | N/A |
 
 ## Acessibilidade Cromática
-- Nenhum elemento interativo ou informativo depende exclusivamente da cor para ser compreendido.
-- O contraste mínimo aceitável para texto é **7:1 (AAA)** para corpo de texto e **4.5:1 (AA)** para textos grandes/UI.
-- O estado de `:focus-visible` deve sempre utilizar o anel de foco de alto contraste: `focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2`.
+
+* Nenhum elemento interativo ou informativo depende exclusivamente da cor para ser compreendido.
+
+* O contraste mínimo aceitável para texto é **7:1 (AAA)** para corpo de texto e **4.5:1 (AA)** para textos grandes/UI.
+* O estado de `:focus-visible` deve sempre utilizar o anel de foco de alto contraste: `focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2`.

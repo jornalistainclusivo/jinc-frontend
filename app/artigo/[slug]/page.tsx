@@ -41,8 +41,9 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
         : 'https://picsum.photos/1920/1080?grayscale',
       blocks: articleData.blocos_de_conteudo || [],
       simpleSummary: articleData.resumo_simples || null,
-      altTextIa: articleData.alt_text_ia || articleData.titulo,
+      altTextIa: articleData.alt_text_ia || null,
       descricaoAudio: articleData.descricao_audio || null,
+      legendaCapa: articleData.legenda_capa || null,
       tags: articleData.tags || [],
       midias: articleData.midias || [],
       readTime: '5 min de leitura', // Mocked readTime or calculated later
@@ -144,16 +145,16 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
           <figure className="relative w-full aspect-[16/9] sm:aspect-[21/9] overflow-hidden rounded-none bg-neutral-100 shadow-2xl">
             <AutoAltImage
               src={article.image}
-              alt={article.altTextIa || article.title}
+              alt={article.altTextIa || article.descricaoAudio || article.title}
               fill
               sizes="100vw"
               className="object-cover"
               priority
               referrerPolicy="no-referrer"
             />
-            {article.altTextIa && (
-              <figcaption className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 pt-20 text-sm text-white/90 font-medium">
-                {article.altTextIa}
+            {article.legendaCapa && (
+              <figcaption className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 pt-20 text-sm italic text-white/90 font-medium">
+                {article.legendaCapa}
               </figcaption>
             )}
           </figure>

@@ -64,3 +64,34 @@
 **Contexto:** Imagens legadas migradas para o CMS frequentemente não possuíam o atributo `alt` preenchido, falhando em prover acessibilidade para usuários de leitores de tela.
 **Decisão:** Expansão do acionamento da IA (Gemini) no componente `<AutoAltImage>` para permitir a geração de descrição (alt-text) também em caminhos relativos locais (`/uploads/...`), viabilizando a mesma política de fallbacks usada em imagens externas para todo acervo da migração que dependia do Strapi.
 **Consequências:** Solução do gargalo retroativo de acessibilidade visual de imagens antigas sem edição manual em massa no CMS, atuando em conformidade com o JINC Protocol e requisitos WCAG AAA.
+
+## ADR-009: Global Flat Routing & Category Consolidation
+
+**Data:** 2026-04-03
+**Status:** Implementado
+**Contexto:** A navegação original possuía submenus complexos em "Artigos" e redirecionamentos aninhados (ex: `/noticias/x`) que fragmentavam o SEO e a manutenção.
+**Decisão:** Consolidação de todas as categorias em rotas de nível 1 em `app/[category]/page.tsx`. Remoção de subcategorias no Header e no Menu Hamburger para focar na simplicidade e acessibilidade cognitiva.
+**Consequências:**
+
+- URLs mais diretas e amigáveis ao SEO.
+- Uso mandatório do dicionário `CATEGORY_DISPLAY_NAMES` no frontend para garantir acentuação ortográfica (ex: `saude` -> `Saúde`) independente do slug do CMS.
+
+## ADR-010: Vibe-Coding Dev Stack (Docker HMR & Builder Targets)
+
+**Data:** 2026-04-03
+**Status:** Implementado
+**Contexto:** O desenvolvimento era lento devido à falta de Hot Module Replacement (HMR) funcional no Docker em hosts Windows e ao cache persistente do Next.js entre builds de containers.
+**Decisão:**
+
+- Configuração do `docker-compose.yml` para rodar no estágio `builder` (Next.js Dev Server).
+- Ativação de `WATCHPACK_POLLING: 1000` para detectar mudanças de arquivo no Windows.
+- Remoção de volumes persistentes da pasta `.next` para evitar conflitos de cache "shadowing".
+**Consequências:** Ciclo de feedback instantâneo (Vibe-Coding) restabelecido.
+
+## ADR-011: Automated Idempotent CMS Seeding (Index Lifecycle)
+
+**Data:** 2026-04-03
+**Status:** Implementado
+**Contexto:** A divergência manual de categorias e permissões entre ambientes de dev/staging/prod causava falhas no frontend.
+**Decisão:** Implementação de um fluxo de `bootstrap()` em `cms/src/index.ts` que verifica a existência da taxonomia base e configura permissões de acesso público (`find/findOne`) programaticamente na inicialização.
+**Consequências:** Ambientes CMS são agora auto-provisionáveis e resilientes a reinícios de banco de dados (SQLite).
