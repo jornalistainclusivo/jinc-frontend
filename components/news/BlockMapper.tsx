@@ -1,14 +1,14 @@
 import StrapiBlocks from '@/components/StrapiBlocks';
-import { ContextualLayer, ContextualColumn } from '@/components/news/ContextualLayer';
+import ContextualLayer from '@/components/news/ContextualLayer';
 import { PullQuote } from '@/components/news/PullQuote';
 import { ShareBlock } from '@/components/news/ShareBlock';
 
 export type BlockContextualLayer = {
     __component: 'blocos-materia.contextual-layer';
     id: number;
-    conceito: any;
-    regra: any;
-    impacto: any;
+    title?: string;
+    layout: 'single_column' | 'multi_column';
+    items: any[];
 };
 
 export type BlockTextoLivre = {
@@ -49,12 +49,9 @@ export function BlockMapper({ blocks }: { blocks: DynamicBlock[] }) {
                         return (
                             <ContextualLayer
                                 key={uniqueKey}
-                                title="Desconstruindo o Tema"
-                                columns={[
-                                    { icon: 'brain', title: 'Conceito', content: block.conceito || [] },
-                                    { icon: 'scale', title: 'Regras', content: block.regra || [] },
-                                    { icon: 'target', title: 'Impactos', content: block.impacto || [] }
-                                ]}
+                                title={block.title || "Desconstruindo o Tema"}
+                                layout={block.layout || 'multi_column'}
+                                items={block.items || []}
                             />
                         );
                         

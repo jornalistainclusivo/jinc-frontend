@@ -55,9 +55,9 @@ export interface BlocoTextoLivre {
 export interface BlocoContextualLayer {
   __component: 'blocos-materia.contextual-layer';
   id: number;
-  conceito: string;
-  regra: string;
-  impacto: string;
+  title?: string;
+  layout: 'single_column' | 'multi_column';
+  items: any[];
 }
 
 export type BlocoConteudo = BlocoTextoLivre | BlocoContextualLayer;
